@@ -1,8 +1,6 @@
 name: CI/CD Next.js → Azure App Service
-
 on:
-  push:
-    branches: [ "main" ]
+  push: { branches: [ "main" ] }
   workflow_dispatch:
 
 env:
@@ -14,28 +12,21 @@ env:
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-      - name: Setup Node
-        uses: actions/setup-node@v4
+      - uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
-          cache: "npm"
+          cache: npm
 
-      - name: Install deps (dev)
+      - name: Install deps
         run: npm ci
 
-      - name: Build Next.js
+      - name: Build
         run: npm run build
 
-      # Install only production deps for runtime
-      - name: Install prod deps
-        run: npm ci --omit=dev
-
-      # Bundle minimal runtime: .next, public, node_modules, configs
+      # 👉 bundel runtime: .next, public, node_modules, package.json, lockfile
       - name: Prepare deploy bundle
         run: |
           mkdir -p deploy
@@ -52,8 +43,7 @@ jobs:
           cd deploy
           zip -r ../out.zip .
 
-      - name: Azure login (Service Principal)
-        uses: azure/login@v1
+      - uses: azure/login@v1
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
 
