@@ -1,4 +1,4 @@
-name: Deploy Next.js to Azure App Service (SP)
+name: CI/CD Next.js → Azure App Service
 
 on:
   push:
@@ -25,16 +25,32 @@ jobs:
           node-version: ${{ env.NODE_VERSION }}
           cache: "npm"
 
-      - name: Install deps
+      - name: Install deps (dev)
         run: npm ci
 
-      - name: Build
+      - name: Build Next.js
         run: npm run build
 
-      - name: Archive app (zip)
+      # Install only production deps for runtime
+      - name: Install prod deps
+        run: npm ci --omit=dev
+
+      # Bundle minimal runtime: .next, public, node_modules, configs
+      - name: Prepare deploy bundle
         run: |
-          mkdir -p out
-          zip -r out/app.zip . -x ".git/*" ".github/*" "node_modules/*"
+          mkdir -p deploy
+          cp -r .next deploy/.next
+          [ -d public ] && cp -r public deploy/public || true
+          cp package.json package-lock.json deploy/
+          [ -f next.config.ts ] && cp next.config.ts deploy/ || true
+          [ -f next.config.js ] && cp next.config.js deploy/ || true
+          [ -f tsconfig.json ] && cp tsconfig.json deploy/ || true
+          cp -r node_modules deploy/node_modules
+
+      - name: Zip bundle
+        run: |
+          cd deploy
+          zip -r ../out.zip .
 
       - name: Azure login (Service Principal)
         uses: azure/login@v1
@@ -42,15 +58,7 @@ jobs:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
 
       - name: Deploy ZIP to App Service
-        uses: azure/cli@v2
+        uses: azure/webapps-deploy@v3
         with:
-          inlineScript: |
-            az webapp deploy \
-              --resource-group "${{ env.AZURE_RESOURCE_GROUP }}" \
-              --name "${{ env.AZURE_WEBAPP_NAME }}" \
-              --type zip \
-              --src-path out/app.zip
-
-      - name: Logout
-        if: always()
-        run: az logout
+          app-name: ${{ env.AZURE_WEBAPP_NAME }}
+          package: out.zip
