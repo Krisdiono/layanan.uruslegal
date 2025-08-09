@@ -1,22 +1,60 @@
-# ...
-- name: Install deps
-  run: npm ci
+name: CI/CD Next.js → Azure App Service
 
-- name: Build
-  run: npm run build
+on:
+  push:
+    branches: [ "main" ]
+  workflow_dispatch:
 
-# 👉 Bundle minimal untuk runtime Next standalone
-- name: Prepare deploy bundle (standalone)
-  run: |
-    rm -rf deploy && mkdir -p deploy/.next
-    cp -r .next/standalone deploy/.next/standalone
-    cp -r .next/static deploy/.next/static
-    [ -d public ] && cp -r public deploy/public || true
+env:
+  AZURE_WEBAPP_NAME: idwebappnext02
+  AZURE_RESOURCE_GROUP: IDRG_URUSLEGAL01
+  NODE_VERSION: "20"
+  NEXT_TELEMETRY_DISABLED: "1"
 
-- name: Zip bundle
-  run: |
-    cd deploy
-    zip -r ../out.zip .
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
 
-# login & deploy tetap sama
-# ...
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "${{ env.NODE_VERSION }}"
+          cache: "npm"
+
+      - name: Install deps
+        run: npm ci
+
+      - name: Build
+        run: npm run build
+
+      # Bundle Next.js standalone output
+      - name: Prepare deploy bundle (standalone)
+        run: |
+          rm -rf deploy && mkdir -p deploy/.next
+          cp -r .next/standalone deploy/.next/standalone
+          cp -r .next/static deploy/.next/static
+          [ -d public ] && cp -r public deploy/public || true
+          cp package.json package-lock.json deploy/ || true
+          [ -f next.config.ts ] && cp next.config.ts deploy/ || true
+          [ -f next.config.js ] && cp next.config.js deploy/ || true
+
+      - name: Zip bundle
+        run: |
+          cd deploy
+          zip -r ../out.zip .
+
+      - name: Azure login (Service Principal)
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Deploy ZIP to App Service
+        uses: azure/webapps-deploy@v3
+        with:
+          app-name: "${{ env.AZURE_WEBAPP_NAME }}"
+          package: out.zip
+
+
