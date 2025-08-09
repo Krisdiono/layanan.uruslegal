@@ -1,4 +1,4 @@
-name: CI/CD Next.js → Azure App Service
+name: CI/CD Next.js → Azure App Service (standalone, Node 22)
 
 on:
   push:
@@ -7,16 +7,18 @@ on:
 
 env:
   AZURE_WEBAPP_NAME: idwebappnext02
-  NODE_VERSION: "20"
+  NODE_VERSION: "22"
   NEXT_TELEMETRY_DISABLED: "1"
 
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout
+        uses: actions/checkout@v4
 
-      - uses: actions/setup-node@v4
+      - name: Setup Node ${{ env.NODE_VERSION }}
+        uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: npm
@@ -24,16 +26,19 @@ jobs:
       - name: Install deps
         run: npm ci
 
-      - name: Build (standalone)
+      - name: Build (Next.js standalone)
         run: npm run build
 
       - name: Verify standalone output
         run: |
+          echo "Listing .next"
           ls -la .next || true
+          echo "Listing .next/standalone"
           ls -la .next/standalone || (echo "❌ .next/standalone NOT FOUND" && exit 1)
+          echo "Listing .next/static"
           ls -la .next/static || (echo "❌ .next/static NOT FOUND" && exit 1)
 
-      - name: Prepare deploy bundle (standalone)
+      - name: Prepare deploy bundle
         run: |
           rm -rf deploy && mkdir -p deploy/.next
           cp -r .next/standalone deploy/.next/standalone
@@ -45,7 +50,8 @@ jobs:
           cd deploy
           zip -r ../out.zip .
 
-      - uses: azure/login@v1
+      - name: Azure login (Service Principal)
+        uses: azure/login@v1
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
 
