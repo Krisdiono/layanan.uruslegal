@@ -1,19 +1,41 @@
-import Link from "next/link";
 import services from "@/data/services.json";
+import Link from "next/link";
 
-export default function Home() {
+type Layanan = { title:string; summary?:string; slug:string; price?:number; link?:string };
+
+export default async function Home() {
+  const list = services as Layanan[];
+  const tpl = process.env.CHECKOUT_URL_TEMPLATE || "https://solusi.uruslegal.id/checkout?service={slug}";
+
   return (
-    <div className="space-y-6">
-      <h1 className="text-2xl font-semibold">Katalog Layanan</h1>
-      <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
-        {services.map((s:any) => (
-          <Link key={s.slug} href={`/layanan/${s.slug}`} className="block border rounded-2xl p-4 hover:shadow-md">
-            <div className="font-medium">{s.title}</div>
-            <p className="text-sm text-slate-600 mt-1 line-clamp-3">{s.summary}</p>
-            {s.price ? <div className="mt-3 text-emerald-700 font-semibold">Rp {s.price.toLocaleString("id-ID")}</div> : null}
-          </Link>
-        ))}
-      </div>
+    <div className="space-y-8">
+      <section className="text-center space-y-3">
+        <h1 className="text-3xl font-bold">Katalog Layanan</h1>
+        <p className="text-gray-600">Transparan, cepat, & terpercaya.</p>
+      </section>
+
+      <section className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
+        {list.map((svc) => {
+          const checkoutUrl = tpl.replace("{slug}", svc.slug);
+          const wa = `https://wa.me/6281142677700?text=${encodeURIComponent(`Halo UrusLegal, saya ingin tanya tentang: ${svc.title}`)}`;
+          return (
+            <article key={svc.slug} className="card flex flex-col gap-3">
+              <div>
+                <h2 className="font-semibold">{svc.title}</h2>
+                {svc.summary && <p className="text-sm text-gray-600 mt-1 line-clamp-2">{svc.summary}</p>}
+                {typeof svc.price === "number" && (
+                  <p className="mt-2 text-emerald-700 font-semibold">Rp {svc.price.toLocaleString("id-ID")}</p>
+                )}
+              </div>
+              <div className="mt-auto flex gap-2">
+                <Link href={`/layanan/${svc.slug}`} className="px-4 py-2 rounded-lg border text-sm hover:bg-gray-50">Detail</Link>
+                <Link href={wa} className="px-4 py-2 rounded-lg border text-sm hover:bg-gray-50">Tanya</Link>
+                <Link href={checkoutUrl} prefetch={false} className="btn-brand text-sm ml-auto">Ajukan Proses</Link>
+              </div>
+            </article>
+          );
+        })}
+      </section>
     </div>
   );
 }
