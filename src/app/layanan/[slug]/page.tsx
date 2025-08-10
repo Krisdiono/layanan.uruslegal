@@ -29,8 +29,8 @@ export default async function Detail(props: any) {
         <Link href={wa} className="px-4 py-2 rounded-xl border hover:bg-slate-50 text-sm">
           Tanya (WhatsApp)
         </Link>
-        <Link href={`/checkout/${svc.slug}`} className="px-4 py-2 rounded-xl bg-emerald-600 text-white text-sm">
-          Ajukan Proses
+        <Link href={checkoutUrl} className="px-4 py-2 rounded-xl bg-emerald-600 text-white text-sm" prefetch={false}>
+         Ajukan Proses
         </Link>
       </div>
 
