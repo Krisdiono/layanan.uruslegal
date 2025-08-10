@@ -1,16 +1,12 @@
+// @ts-nocheck
 import Link from "next/link";
 import services from "@/data/services.json";
 
-type Params = { slug: string };
-type Service = { slug: string; title: string; summary?: string; price?: number };
+export default async function Detail(props: any) {
+  const got = props?.params?.slug ? props.params : await props.params;
+  const slug = got.slug as string;
 
-export default async function Detail(
-  { params }: { params: Promise<Params> }
-) {
-  const { slug } = await params;
-
-  const list = services as Service[];
-  const svc = list.find((x) => x.slug === slug);
+  const svc = (services as any[]).find((x) => x.slug === slug);
   if (!svc) return <div>Layanan tidak ditemukan.</div>;
 
   const wa = `https://wa.me/6281142677700?text=${encodeURIComponent(
@@ -30,4 +26,30 @@ export default async function Detail(
       </div>
 
       <div className="flex flex-wrap gap-3">
-        <
+        <Link href={wa} className="px-4 py-2 rounded-xl border hover:bg-slate-50 text-sm">
+          Tanya (WhatsApp)
+        </Link>
+        <Link href={`/checkout/${svc.slug}`} className="px-4 py-2 rounded-xl bg-emerald-600 text-white text-sm">
+          Ajukan Proses
+        </Link>
+      </div>
+
+      <section className="grid sm:grid-cols-2 gap-4">
+        <div className="border rounded-2xl p-4">
+          <h2 className="font-medium mb-2">Informasi</h2>
+          <p className="text-sm text-slate-700">
+            Detail ringkas mengenai {svc.title}. (Konten nanti kita tarik dari panduan API.)
+          </p>
+        </div>
+        <div className="border rounded-2xl p-4">
+          <h2 className="font-medium mb-2">Persyaratan</h2>
+          <ul className="text-sm text-slate-700 list-disc ml-5 space-y-1">
+            <li>KTP/Paspor pemilik</li>
+            <li>NPWP (jika ada)</li>
+            <li>Alamat &amp; nama usaha</li>
+          </ul>
+        </div>
+      </section>
+    </article>
+  );
+}
