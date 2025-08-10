@@ -1,8 +1,9 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  output: "standalone",
   eslint: { ignoreDuringBuilds: true },
-  typescript: { ignoreBuildErrors: true }, // ⟵ ini matiin TS error saat build
+  typescript: { ignoreBuildErrors: true },
 };
 
 export default nextConfig;
