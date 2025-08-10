@@ -1,0 +1,21 @@
+- name: Build Next.js
+  env:
+    NEXT_TELEMETRY_DISABLED: "1"
+  run: npm run build
+
+- name: Verify standalone output
+  run: |
+    echo "Listing .next"
+    ls -la .next
+    echo "Listing .next/standalone"
+    ls -la .next/standalone
+
+- name: Create deployment package (standalone)
+  run: |
+    mkdir -p dist
+    zip -r dist/app.zip \
+      .next/standalone \
+      .next/static \
+      public \
+      package.json package-lock.json \
+      --exclude "**/.git/**" "**/.github/**" "**/node_modules/**"
