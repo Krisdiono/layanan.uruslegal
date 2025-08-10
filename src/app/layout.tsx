@@ -1,21 +1,26 @@
 import "./globals.css";
-export const metadata = { title: "UrusLegal — Layanan", description: "Katalog layanan UrusLegal" };
+import Link from "next/link";
+
+export const metadata = { title: "UrusLegal — Katalog Layanan", description: "Layanan legal & perizinan" };
+
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="id">
-      <body className="bg-white text-slate-800">
-        <header className="border-b">
-          <div className="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
-            <a href="/" className="font-semibold text-xl">UrusLegal</a>
-            <nav className="flex gap-4 text-sm">
-              <a href="/" className="hover:underline">Layanan</a>
-              <a href="https://wa.me/6281142677700" className="hover:underline">Tanya</a>
-            </nav>
-          </div>
+      <body className="min-h-screen">
+        <header className="border-b bg-white">
+          <nav className="max-w-6xl mx-auto px-4 lg:px-8 h-14 flex items-center justify-between">
+            <Link href="/" className="font-semibold">UrusLegal</Link>
+            <div className="flex items-center gap-6 text-sm">
+              <Link href="/">Layanan</Link>
+              <Link href="https://wa.me/6281142677700">Tanya</Link>
+            </div>
+          </nav>
         </header>
-        <main className="max-w-6xl mx-auto px-4 py-8">{children}</main>
-        <footer className="border-t mt-12">
-          <div className="max-w-6xl mx-auto px-4 py-6 text-sm text-slate-500">
+
+        <main className="max-w-6xl mx-auto px-4 lg:px-8 py-10">{children}</main>
+
+        <footer className="mt-16 border-t text-sm text-gray-500">
+          <div className="max-w-6xl mx-auto px-4 lg:px-8 h-14 flex items-center">
             © {new Date().getFullYear()} UrusLegal
           </div>
         </footer>
