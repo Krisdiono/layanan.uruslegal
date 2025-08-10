@@ -3,12 +3,12 @@
     NEXT_TELEMETRY_DISABLED: "1"
   run: npm run build
 
-- name: Verify build assets (CSS & standalone)
+- name: Verify standalone output
   run: |
-    echo "== .next/static/css =="
-    ls -la .next/static/css || true
-    echo "== .next/standalone =="
-    ls -la .next/standalone || true
+    echo "Listing .next"
+    ls -la .next
+    echo "Listing .next/standalone"
+    ls -la .next/standalone
 
 - name: Create deployment package (standalone)
   run: |
@@ -19,3 +19,4 @@
       public \
       package.json package-lock.json \
       --exclude "**/.git/**" "**/.github/**" "**/node_modules/**"
+
