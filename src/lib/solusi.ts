@@ -1,45 +1,36 @@
-// @ts-nocheck
-import localServices from "@/data/services.json";
+export type Layanan = {
+  id: string | number;
+  slug: string;
+  title: string;
+  summary?: string;
+  price?: string | number;
+  description?: string;
+};
 
-export type Layanan = { slug: string; title: string; summary?: string; price?: number };
+const BASE = process.env.SOLUSI_API_BASE!; // set di Vercel
 
-export async function getLayananList(): Promise<Layanan[]> {
-  try {
-    // ganti "layanan" sesuai endpoint Perfex kamu (mis. "products")
-    const res = await fetch(`/api/solusi/layanan`, { next: { revalidate: 60 } });
-    if (!res.ok) throw new Error("bad status");
-    const data = await res.json();
-
-    // TODO: mapping sesuai response Perfex kamu
-    return (Array.isArray(data) ? data : data?.data || []).map((x: any) => ({
-      slug: x.slug || x.id || String(x.product_id),
-      title: x.title || x.name,
-      summary: x.summary || x.description,
-      price: Number(x.price ?? x.amount ?? 0) || undefined,
-    }));
-  } catch {
-    return (localServices as any[]).map((x) => ({
-      slug: x.slug,
-      title: x.title,
-      summary: x.summary,
-      price: x.price,
-    }));
-  }
+async function get<T>(path: string, init?: RequestInit): Promise<T> {
+  const r = await fetch(`${BASE}${path}`, {
+    next: { revalidate: 300 },
+    ...init,
+  });
+  if (!r.ok) throw new Error(`Fetch ${path} failed: ${r.status}`);
+  return r.json();
 }
 
-export async function getLayananBySlug(slug: string): Promise<Layanan | null> {
+export async function listLayanan(): Promise<Layanan[]> {
+  const data = await get<Layanan[]>('/layanan');
+  return data.map(d => ({
+    ...d,
+    price: typeof d.price === 'string' ? Number(d.price) : d.price,
+  }));
+}
+
+export async function getLayanan(slug: string): Promise<Layanan | null> {
   try {
-    const res = await fetch(`/api/solusi/layanan/${slug}`, { cache: "no-store" });
-    if (res.ok) {
-      const x = await res.json();
-      return {
-        slug: x.slug || x.id || String(x.product_id),
-        title: x.title || x.name,
-        summary: x.summary || x.description,
-        price: Number(x.price ?? x.amount ?? 0) || undefined,
-      };
-    }
-  } catch {}
-  const list = await getLayananList();
-  return list.find((s) => s.slug == slug) || null;
+    const d = await get<Layanan>(`/layanan/${encodeURIComponent(slug)}`);
+    return { ...d, price: typeof d.price === 'string' ? Number(d.price) : d.price };
+  } catch {
+    return null;
+  }
 }
