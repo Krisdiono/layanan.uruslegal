@@ -1,42 +1,52 @@
-// @ts-nocheck
 import Link from "next/link";
-import { getLayananBySlug } from "@/lib/solusi";
+import { getLayanan } from "@/lib/solusi";
+import { notFound } from "next/navigation";
 
-export default async function Detail({ params }) {
-  const got = params?.then ? await params : params;
-  const svc = await getLayananBySlug(got.slug);
-  if (!svc) return <div>Layanan tidak ditemukan.</div>;
+type Params = { params: { slug: string } };
 
-  const wa = `https://wa.me/6281142677700?text=${encodeURIComponent(`Halo UrusLegal, saya ingin tanya tentang: ${svc.title}`)}`;
-  const tpl = process.env.CHECKOUT_URL_TEMPLATE || "https://solusi.uruslegal.id/checkout?service={slug}";
-  const checkoutUrl = tpl.replace("{slug}", svc.slug);
+export default async function DetailPage({ params }: Params) {
+  const svc = await getLayanan(params.slug);
+  if (!svc) return notFound();
+
+  const wa = `https://wa.me/6281142677700?text=${encodeURIComponent(
+    `Halo UrusLegal, saya ingin tanya tentang: ${svc.title}`
+  )}`;
 
   return (
-    /* …(UI yang sudah cakep) ganti variabelnya pakai `svc` dari API … */
-    /* (biar singkat, UI yang kemarin kita pakai tetap sama) */
-    <div className="max-w-6xl mx-auto grid lg:grid-cols-3 gap-8">
-      {/* kiri: judul/summary/price + CTA */}
-      <div className="lg:col-span-2 space-y-8">
-        <div>
-          <h1 className="text-3xl font-bold text-gray-900">{svc.title}</h1>
-          {svc.summary && <p className="mt-2 text-lg text-gray-600">{svc.summary}</p>}
-          {typeof svc.price === "number" && (
-            <p className="mt-4 text-emerald-700 font-semibold text-xl">
-              Mulai Rp {svc.price.toLocaleString("id-ID")}
-            </p>
-          )}
-          <div className="flex gap-3 mt-6">
-            <Link href={checkoutUrl} prefetch={false} className="px-6 py-3 rounded-lg text-white font-medium shadow bg-[var(--brand)] hover:bg-[var(--brand-2)]">
-              Ajukan Proses
-            </Link>
-            <Link href={wa} className="px-6 py-3 rounded-lg border font-medium hover:bg-gray-50">
-              Tanya via WhatsApp
-            </Link>
+    <main className="max-w-3xl mx-auto p-6 space-y-6">
+      <Link href="/" className="inline-flex items-center gap-2 text-sm border rounded-xl px-3 py-2">
+        ← Kembali
+      </Link>
+
+      <header>
+        <h1 className="text-3xl font-semibold">{svc.title}</h1>
+        {svc.price ? (
+          <div className="text-emerald-700 font-semibold mt-2">
+            Mulai Rp {Number(svc.price).toLocaleString("id-ID")}
           </div>
-        </div>
-        {/* …sections lainnya tetap… */}
+        ) : null}
+      </header>
+
+      <article className="prose prose-slate max-w-none">
+        {svc.description ? (
+          // description dari API saat ini string JSON; render simpel dulu
+          <p className="text-slate-700">Deskripsi belum tersedia.</p>
+        ) : (
+          <p className="text-slate-700">Deskripsi belum tersedia.</p>
+        )}
+      </article>
+
+      <div className="flex gap-3">
+        <Link
+          href={`https://solusi.uruslegal.id/checkout?service=${encodeURIComponent(svc.slug)}`}
+          className="px-4 py-2 rounded-xl bg-emerald-600 text-white"
+        >
+          Ajukan Proses
+        </Link>
+        <Link href={wa} className="px-4 py-2 rounded-xl border">
+          Tanya via WhatsApp
+        </Link>
       </div>
-      {/* sidebar tetap… */}
-    </div>
+    </main>
   );
 }
