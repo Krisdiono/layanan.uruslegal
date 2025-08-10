@@ -1,7 +1,31 @@
 import "./globals.css";
 import Link from "next/link";
 
-export const metadata = { title: "UrusLegal — Katalog Layanan", description: "Layanan legal & perizinan" };
+export const metadata = {
+  metadataBase: new URL("https://layanan.uruslegal.id"),
+  title: {
+    default: "UrusLegal — Katalog Layanan Legal & Perizinan",
+    template: "%s · UrusLegal",
+  },
+  description:
+    "Katalog layanan legal & perizinan. Transparan, cepat, terpercaya. Tanya dulu atau langsung ajukan proses.",
+  openGraph: {
+    title: "UrusLegal — Katalog Layanan",
+    description:
+      "Transparan, cepat, dan terpercaya. Pilih layanan legal, lihat detail, lalu ajukan proses.",
+    url: "https://layanan.uruslegal.id",
+    siteName: "UrusLegal",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "UrusLegal — Katalog Layanan",
+    description:
+      "Transparan, cepat, dan terpercaya. Pilih layanan legal, lihat detail, lalu ajukan proses.",
+  },
+  icons: { icon: "/favicon.ico" },
+  themeColor: "#1ab69d",
+};
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
