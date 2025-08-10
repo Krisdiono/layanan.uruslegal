@@ -1,10 +1,8 @@
-import services from "@/data/services.json";
 import Link from "next/link";
-
-type Layanan = { title:string; summary?:string; slug:string; price?:number };
+import { getLayananList } from "@/lib/solusi";
 
 export default async function Home() {
-  const list = services as Layanan[];
+  const list = await getLayananList();
   const tpl = process.env.CHECKOUT_URL_TEMPLATE || "https://solusi.uruslegal.id/checkout?service={slug}";
 
   return (
@@ -17,9 +15,7 @@ export default async function Home() {
       <section className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
         {list.map((svc) => {
           const checkoutUrl = tpl.replace("{slug}", svc.slug);
-          const wa = `https://wa.me/6281142677700?text=${encodeURIComponent(
-            `Halo UrusLegal, saya ingin tanya tentang: ${svc.title}`
-          )}`;
+          const wa = `https://wa.me/6281142677700?text=${encodeURIComponent(`Halo UrusLegal, saya ingin tanya tentang: ${svc.title}`)}`;
           return (
             <article key={svc.slug} className="border rounded-2xl p-5 bg-white shadow-sm hover:shadow-md transition flex flex-col gap-3">
               <div>
