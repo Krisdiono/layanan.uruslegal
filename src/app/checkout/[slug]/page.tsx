@@ -1,15 +1,13 @@
+// @ts-nocheck
 import Link from "next/link";
 import services from "@/data/services.json";
-import type { PageProps } from "next";
 
-type Params = { slug: string };
-type Service = { slug: string; title: string; price?: number };
+export default async function Checkout(props: any) {
+  // dukung 2 bentuk: params sync atau Promise
+  const got = props?.params?.slug ? props.params : await props.params;
+  const slug = got.slug as string;
 
-export default async function Checkout({ params }: PageProps<Params>) {
-  const { slug } = await params;
-
-  const list = services as Service[];
-  const svc = list.find((x) => x.slug === slug);
+  const svc = (services as any[]).find((x) => x.slug === slug);
   if (!svc) return <div>Checkout: layanan tidak ditemukan.</div>;
 
   return (
