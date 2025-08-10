@@ -1,41 +1,43 @@
 import Link from "next/link";
-import { getLayananList } from "@/lib/solusi";
+import { listLayanan } from "@/lib/solusi";
 
 export default async function Home() {
-  const list = await getLayananList();
-  const tpl = process.env.CHECKOUT_URL_TEMPLATE || "https://solusi.uruslegal.id/checkout?service={slug}";
+  const items = await listLayanan();
 
   return (
-    <div className="space-y-8">
-      <section className="text-center space-y-3">
-        <h1 className="text-3xl font-bold">Katalog Layanan</h1>
-        <p className="text-gray-600">Transparan, cepat, & terpercaya.</p>
-      </section>
+    <main className="max-w-5xl mx-auto p-6 space-y-6">
+      <header className="flex items-center justify-between">
+        <h1 className="text-2xl font-semibold">Katalog Layanan</h1>
+        <nav className="text-sm">
+          <Link href="/tanya" className="hover:underline">Tanya</Link>
+        </nav>
+      </header>
 
-      <section className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
-        {list.map((svc) => {
-          const checkoutUrl = tpl.replace("{slug}", svc.slug);
-          const wa = `https://wa.me/6281142677700?text=${encodeURIComponent(`Halo UrusLegal, saya ingin tanya tentang: ${svc.title}`)}`;
-          return (
-            <article key={svc.slug} className="border rounded-2xl p-5 bg-white shadow-sm hover:shadow-md transition flex flex-col gap-3">
-              <div>
-                <h2 className="font-semibold">{svc.title}</h2>
-                {svc.summary && <p className="text-sm text-gray-600 mt-1">{svc.summary}</p>}
-                {typeof svc.price === "number" && (
-                  <p className="mt-2 text-emerald-700 font-semibold">Rp {svc.price.toLocaleString("id-ID")}</p>
-                )}
+      <section className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        {items.map(s => (
+          <article key={s.slug} className="border rounded-2xl p-4 hover:shadow-sm">
+            <h2 className="font-medium">{s.title}</h2>
+            {s.price ? (
+              <div className="text-emerald-700 font-semibold mt-1">
+                Rp {Number(s.price).toLocaleString("id-ID")}
               </div>
-              <div className="mt-auto flex flex-wrap gap-2">
-                <Link href={`/layanan/${svc.slug}`} className="px-4 py-2 rounded-lg border text-sm hover:bg-gray-50">Detail</Link>
-                <Link href={wa} className="px-4 py-2 rounded-lg border text-sm hover:bg-gray-50">Tanya</Link>
-                <Link href={checkoutUrl} prefetch={false} className="px-5 py-2 rounded-lg text-white font-medium shadow bg-[var(--brand)] hover:bg-[var(--brand-2)] text-sm ml-auto">
-                  Ajukan Proses
-                </Link>
-              </div>
-            </article>
-          );
-        })}
+            ) : null}
+            <p className="text-sm text-slate-600 mt-2 line-clamp-2">{s.summary}</p>
+
+            <div className="flex gap-2 mt-4">
+              <Link href={`/layanan/${s.slug}`} className="px-3 py-2 rounded-xl border text-sm">
+                Detail
+              </Link>
+              <Link
+                href={`https://solusi.uruslegal.id/checkout?service=${encodeURIComponent(s.slug)}`}
+                className="px-3 py-2 rounded-xl bg-emerald-600 text-white text-sm"
+              >
+                Ajukan Proses
+              </Link>
+            </div>
+          </article>
+        ))}
       </section>
-    </div>
+    </main>
   );
 }
