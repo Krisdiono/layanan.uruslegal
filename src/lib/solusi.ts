@@ -1,3 +1,4 @@
+// src/lib/solusi.ts
 export type Layanan = {
   id: string | number;
   slug: string;
@@ -7,11 +8,11 @@ export type Layanan = {
   description?: string;
 };
 
-const BASE = process.env.SOLUSI_API_BASE!; // set di Vercel
+const BASE = process.env.SOLUSI_API_BASE!; // e.g. https://portal.uruslegal.id/ul/api
 
 async function get<T>(path: string, init?: RequestInit): Promise<T> {
   const r = await fetch(`${BASE}${path}`, {
-    next: { revalidate: 300 },
+    next: { revalidate: 300 }, // cache 5 menit
     ...init,
   });
   if (!r.ok) throw new Error(`Fetch ${path} failed: ${r.status}`);
