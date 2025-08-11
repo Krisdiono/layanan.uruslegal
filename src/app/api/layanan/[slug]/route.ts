@@ -1,7 +1,6 @@
 import { NextResponse } from "next/server";
 const BASE = process.env.SOLUSI_API_BASE!;
 export const revalidate = 300;
-
 export async function GET(_: Request, { params }: { params: { slug: string } }) {
   const r = await fetch(`${BASE}/layanan/${params.slug}`, { cache: "force-cache" });
   const j = await r.json();
