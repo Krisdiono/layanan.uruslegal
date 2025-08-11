@@ -18,10 +18,21 @@ export async function POST(req: Request) {
     const svc = svcSchema.parse(await rs.json());
 
     // 2) Hitung fee di server (jangan percaya angka client)
-    const feePct = parseFloat(process.env.GATEWAY_FEE_PCT ?? "0.03"); // server-only
-    const basePrice = svc.price;
-    const gatewayFee = Math.round(basePrice * feePct);
-    const grossAmount = basePrice + gatewayFee;
+// app/api/checkout/create/route.ts (di dalam handler)
+const svc = svcSchema.parse(await rs.json());
+const { final } = effectivePrice(svc);
+const feePct = parseFloat(process.env.GATEWAY_FEE_PCT ?? "0.03");
+const gatewayFee = Math.round(final * feePct);
+const grossAmount = final + gatewayFee;
+
+const body = {
+  transaction_details: { order_id: orderId, gross_amount: grossAmount },
+  item_details: [
+    { id: svc.id, name: svc.title, price: final, quantity: 1 },
+    { id: "fee", name: "Biaya Gateway", price: gatewayFee, quantity: 1 },
+  ],
+  // ...
+};
 
     // 3) Buat order id unik
     const orderId = `${slug}-${Date.now()}`;
