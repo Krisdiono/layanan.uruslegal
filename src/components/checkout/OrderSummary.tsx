@@ -17,10 +17,18 @@ export default function OrderSummary({ svc }: { svc: Svc }) {
 
       {/* ...rincian biaya seperti sebelumnya... */}
 
-      <div className="flex justify-between items-center text-base font-semibold border-t pt-3">
-        <span>Total</span>
-        <span>{idr(total)}</span>
-      </div>
+<div className="flex justify-between text-sm">
+  <span className="text-gray-600">Harga Layanan</span>
+  <span>{idr(final)}</span>
+</div>
+<div className="flex justify-between text-sm">
+  <span className="text-gray-600">Biaya Gateway (±{Math.round(feePct*100)}%)</span>
+  <span>{idr(gatewayFee)}</span>
+</div>
+<div className="flex justify-between items-center text-base font-semibold border-t pt-3">
+  <span>Total</span>
+  <span>{idr(total)}</span>
+</div>
 
       {/* Actions: Bayar + WhatsApp */}
       <OrderActions svc={svc} amount={total} />
