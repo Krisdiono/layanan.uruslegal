@@ -9,8 +9,7 @@ export const priceBreakdownSchema = z.object({
 // Skema 1 layanan
 export const svcSchema = z.object({
   // ...
-  price: z.number(),
-  fee_discount: z.number().optional(),
+  description: z.string().optional(),     // fallback dari root
   detail: z.object({
     description: z.string().optional(),
     inclusions: z.array(z.string()).optional(),
@@ -23,3 +22,6 @@ export const svcListSchema = z.array(svcSchema);
 
 // Type untuk digunakan di komponen
 export type SvcParsed = z.infer<typeof svcSchema>;
+
+
+
