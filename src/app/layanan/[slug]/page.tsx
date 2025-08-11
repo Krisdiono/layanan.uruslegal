@@ -5,6 +5,9 @@ type Props = { params: Promise<{ slug: string }> }; // <- perbaiki di sini
 
 export default async function DetailPage({ params }: Props) {
   const { slug } = await params;                      // <- await params
+  
+export { revalidate } from "../../[slug]/page";
+export { default } from "../../[slug]/page";
 
   const svc = await getLayanan(slug);
   if (!svc) {
