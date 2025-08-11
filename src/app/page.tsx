@@ -50,12 +50,16 @@ export default async function Page() {
                 <Link href={`/${svc.slug}`} className="rounded-lg border px-3 py-1.5 text-sm hover:bg-gray-50">
                   Detail
                 </Link>
-                <Link
-                  href={`/${svc.slug}#bayar`}
-                  className="rounded-lg bg-emerald-600 px-3 py-1.5 text-sm text-white hover:bg-emerald-700"
-                >
-                  Ajukan Proses
-                </Link>
+<Link href={`/layanan/${svc.slug}`} className="rounded-lg border px-3 py-1.5 text-sm hover:bg-gray-50">
+  Detail
+</Link>
+<Link
+  href={`/layanan/${svc.slug}#bayar`}
+  className="rounded-lg bg-emerald-600 px-3 py-1.5 text-sm text-white hover:bg-emerald-700"
+>
+  Ajukan Proses
+</Link>
+
               </div>
             </div>
           );
