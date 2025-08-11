@@ -1,18 +1,17 @@
 import { NextResponse } from "next/server";
-const BASE = process.env.SOLUSI_API_BASE!; // https://portal.uruslegal.id/ul/api
+const BASE = process.env.SOLUSI_API_BASE!;
 
 export async function POST(req: Request) {
   try {
     const { slug } = (await req.json()) as { slug?: string };
     if (!slug) return NextResponse.json({ error: "Missing slug" }, { status: 400 });
 
-    // Ambil harga authoritative dari Perfex
     const rs = await fetch(`${BASE}/layanan/${slug}`, { cache: "no-store" });
     if (!rs.ok) return NextResponse.json({ error: "Service not found" }, { status: 404 });
     const svc = await rs.json();
 
     const basePrice = parseFloat(String(svc?.price ?? 0)) || 0;
-    const discount = parseFloat(String(svc?.fee_discount ?? 0)) || 0; // kalau gak ada, 0
+    const discount = parseFloat(String(svc?.fee_discount ?? 0)) || 0; // jika tidak ada, 0
     const final = Math.max(0, basePrice - discount);
 
     const feePct = parseFloat(process.env.GATEWAY_FEE_PCT ?? "0.03");
@@ -20,7 +19,6 @@ export async function POST(req: Request) {
     const grossAmount = final + gatewayFee;
 
     const orderId = `${slug}-${Date.now()}`;
-
     const serverKey = process.env.MIDTRANS_SERVER_KEY!;
     const auth = Buffer.from(serverKey + ":").toString("base64");
 
