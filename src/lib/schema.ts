@@ -8,19 +8,14 @@ export const priceBreakdownSchema = z.object({
 
 // Skema 1 layanan
 export const svcSchema = z.object({
-  id: z.string(),
-  slug: z.string(),
-  title: z.string(),
-  summary: z.string().optional(),
-
-  // Harga real dari solusi.uruslegal
+  // ...
   price: z.number(),
-
-  // Diskon / potongan harga jika ada
   fee_discount: z.number().optional(),
-
-  // Rincian harga (untuk tab Harga Transparan)
-  breakdown: z.array(priceBreakdownSchema).optional(),
+  detail: z.object({
+    description: z.string().optional(),
+    inclusions: z.array(z.string()).optional(),
+    process: z.array(z.string()).optional(),
+  }).optional(),
 });
 
 // Skema list layanan
