@@ -54,7 +54,8 @@ export default async function Page() {
   Detail
 </Link>
 <Link
-  href={`/layanan/${svc.slug}#bayar`}
+  <div id="bayar" />
+<OrderSummary svc={svc} /> href={`/layanan/${svc.slug}#bayar`}
   className="rounded-lg bg-emerald-600 px-3 py-1.5 text-sm text-white hover:bg-emerald-700"
 >
   Ajukan Proses
