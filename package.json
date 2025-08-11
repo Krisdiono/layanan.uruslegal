@@ -2,13 +2,11 @@
   "name": "layanan.uruslegal",
   "version": "0.1.0",
   "private": true,
-  "scripts": {
-    "dev": "next dev",
-    "build": "next build --no-lint",
-    "start": "node .next/standalone/server.js",
-    "lint": "next lint",
-    "typecheck": "tsc --noEmit"
-  },
+"scripts": {
+  "dev": "next dev",
+  "build": "next build",
+  "start": "next start"
+}
   "dependencies": {
     "next": "15.4.6",
     "react": "19.1.0",
