@@ -2,7 +2,7 @@
 import PayButton from "@/components/checkout/PayButton";
 import type { Svc } from "@/types/service";
 
-export default function OrderActions({ svc, amount }: { svc: Svc; amount: number }) {
+export default function OrderActions({ svc }: { svc: Svc }) {
   const base = process.env.NEXT_PUBLIC_BASE_URL || "";
   const wa = process.env.NEXT_PUBLIC_WA_NUMBER || "6281142677700";
 
@@ -14,16 +14,12 @@ export default function OrderActions({ svc, amount }: { svc: Svc; amount: number
   const msg = encodeURIComponent(`${svc.slug} - ${pageUrl}`);
   const waUrl = `https://wa.me/${wa}?text=${msg}`;
 
-  const order = {
-    id: `${svc.slug}-${Date.now()}`, // unik
-    amount,
-    customer: {}, // bisa diisi nama/email/phone kalau sudah ada form
-    items: [{ id: svc.id ?? svc.slug, name: svc.title, price: amount, qty: 1 }],
-  };
+  // OrderId dibuat di server; di client cukup bawa slug
+  const orderInput = { slug: svc.slug };
 
   return (
     <div className="mt-4 grid gap-3 sm:grid-cols-2">
-      <PayButton order={order} />
+      <PayButton input={orderInput} />
       <a
         href={waUrl}
         target="_blank"
