@@ -1,0 +1,39 @@
+// /src/data/services.fallback.json
+[
+  {
+    "id": "svc-pt",
+    "slug": "pendirian-pt",
+    "title": "Pendirian PT (Perseroan Terbatas)",
+    "summary": "Layanan pendirian PT sesuai peraturan berlaku.",
+    "price": 4500000,
+    "breakdown": [
+      { "label": "Jasa Pengurusan", "amount": 3000000 },
+      { "label": "Biaya Administrasi", "amount": 1000000 },
+      { "label": "Materai & Misc", "amount": 500000 }
+    ]
+  },
+  {
+    "id": "svc-merk",
+    "slug": "pendaftaran-merek",
+    "title": "Pendaftaran Merek Dagang",
+    "summary": "Pendaftaran merek dagang satu kelas.",
+    "price": 2500000,
+    "breakdown": [
+      { "label": "Biaya Pemeriksaan", "amount": 1000000 },
+      { "label": "Jasa Pengajuan", "amount": 1200000 },
+      { "label": "Lainnya", "amount": 300000 }
+    ]
+  },
+  {
+    "id": "svc-pbg",
+    "slug": "pengurusan-pbg",
+    "title": "Pengurusan PBG/IMB",
+    "summary": "Perizinan PBG sesuai ketentuan.",
+    "price": 7500000,
+    "breakdown": [
+      { "label": "Survey & Dokumen", "amount": 2000000 },
+      { "label": "Jasa Pengurusan", "amount": 4500000 },
+      { "label": "Admin", "amount": 1000000 }
+    ]
+  }
+]
