@@ -1,3 +1,4 @@
+// /src/types/service.ts
 export type PriceBreakdown = { label: string; amount: number };
 
 export type Svc = {
