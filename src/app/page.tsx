@@ -1,43 +1,23 @@
+// /src/app/page.tsx
 import Link from "next/link";
-import { listLayanan } from "@/lib/solusi";
+import { safeFetchServices } from "@/lib/fetcher";
 
-export default async function Home() {
-  const items = await listLayanan();
+export const revalidate = 300; // ISR 5 menit
+
+export default async function Page() {
+  const services = await safeFetchServices();
 
   return (
-    <main className="max-w-5xl mx-auto p-6 space-y-6">
-      <header className="flex items-center justify-between">
-        <h1 className="text-2xl font-semibold">Katalog Layanan</h1>
-        <nav className="text-sm">
-          <Link href="/tanya" className="hover:underline">Tanya</Link>
-        </nav>
-      </header>
-
-      <section className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
-        {items.map(s => (
-          <article key={s.slug} className="border rounded-2xl p-4 hover:shadow-sm">
-            <h2 className="font-medium">{s.title}</h2>
-            {s.price ? (
-              <div className="text-emerald-700 font-semibold mt-1">
-                Rp {Number(s.price).toLocaleString("id-ID")}
-              </div>
-            ) : null}
-            <p className="text-sm text-slate-600 mt-2 line-clamp-2">{s.summary}</p>
-
-            <div className="flex gap-2 mt-4">
-              <Link href={`/layanan/${s.slug}`} className="px-3 py-2 rounded-xl border text-sm">
-                Detail
-              </Link>
-              <Link
-                href={`https://solusi.uruslegal.id/checkout?service=${encodeURIComponent(s.slug)}`}
-                className="px-3 py-2 rounded-xl bg-emerald-600 text-white text-sm"
-              >
-                Ajukan Proses
-              </Link>
-            </div>
-          </article>
+    <main className="max-w-6xl mx-auto p-6">
+      <h1 className="text-2xl font-semibold mb-6">Daftar Layanan</h1>
+      <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
+        {services.map((svc) => (
+          <Link key={svc.id} href={`/${svc.slug}`} className="rounded-2xl border p-5 hover:shadow-md transition">
+            <h2 className="font-medium mb-2">{svc.title}</h2>
+            <p className="text-sm text-gray-600 line-clamp-3">{svc.summary ?? ""}</p>
+          </Link>
         ))}
-      </section>
+      </div>
     </main>
   );
 }
