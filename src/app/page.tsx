@@ -15,7 +15,7 @@ function effectivePrice(svc: { price: number; fee_discount?: number; discount_pe
   return { base, final: byPercent, discountAmount: base - byPercent };
 }
 
-export const revalidate = 300;
+export const revalidate = 300; // ISR 5 menit
 
 export default async function Page() {
   const services = await safeFetchServices();
@@ -31,7 +31,7 @@ export default async function Page() {
             <div key={svc.id} className="rounded-2xl border p-5 hover:shadow-md transition">
               <h2 className="font-medium mb-1">{svc.title}</h2>
 
-              {/* HARGA (dengan strike-through bila diskon) */}
+              {/* Harga (dengan strike-through bila diskon) */}
               <div className="mt-1">
                 {discountAmount > 0 ? (
                   <div className="flex items-baseline gap-2">
@@ -43,23 +43,23 @@ export default async function Page() {
                 )}
               </div>
 
-              {/* Deskripsi singkat; JANGAN render slug/kategori */}
+              {/* Ringkasan (tanpa slug/kategori kecil) */}
               {svc.summary && <p className="text-sm text-gray-600 line-clamp-3 mt-2">{svc.summary}</p>}
 
+              {/* Actions */}
               <div className="mt-4 flex gap-2">
-                <Link href={`/${svc.slug}`} className="rounded-lg border px-3 py-1.5 text-sm hover:bg-gray-50">
+                <Link
+                  href={`/layanan/${svc.slug}`}
+                  className="rounded-lg border px-3 py-1.5 text-sm hover:bg-gray-50"
+                >
                   Detail
                 </Link>
-<Link href={`/layanan/${svc.slug}`} className="rounded-lg border px-3 py-1.5 text-sm hover:bg-gray-50">
-  Detail
-</Link>
-<Link
-  <div id="bayar" />
-<OrderSummary svc={svc} /> href={`/layanan/${svc.slug}#bayar`}
-  className="rounded-lg bg-emerald-600 px-3 py-1.5 text-sm text-white hover:bg-emerald-700>
-  Ajukan Proses
-</Link>
-
+                <Link
+                  href={`/layanan/${svc.slug}#bayar`}
+                  className="rounded-lg bg-emerald-600 px-3 py-1.5 text-sm text-white hover:bg-emerald-700"
+                >
+                  Ajukan Proses
+                </Link>
               </div>
             </div>
           );
