@@ -3,11 +3,7 @@ import { useEffect } from "react";
 
 declare global { interface Window { snap: any } }
 
-export default function PayButton({ order }: { order: {
-  id: string; amount: number;
-  customer?: { name?: string; email?: string; phone?: string };
-  items?: { id: string; name: string; price: number; qty?: number }[];
-}}) {
+export default function PayButton({ input }: { input: { slug: string } }) {
   useEffect(() => {
     const s = document.createElement("script");
     s.src = "https://app.sandbox.midtrans.com/snap/snap.js";
@@ -20,12 +16,10 @@ export default function PayButton({ order }: { order: {
     const r = await fetch("/api/checkout/create", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        orderId: order.id, amount: order.amount,
-        customer: order.customer, items: order.items
-      })
+      body: JSON.stringify(input) // { slug }
     });
-    const { token, redirect_url } = await r.json();
+    const { token, redirect_url, error } = await r.json();
+    if (error) return alert(error);
     if (!token && redirect_url) return (window.location.href = redirect_url);
     window.snap.pay(token, {
       onSuccess: () => (window.location.href = "/payment/success"),
@@ -35,5 +29,9 @@ export default function PayButton({ order }: { order: {
     });
   };
 
-  return <button onClick={pay} className="w-full rounded-xl bg-emerald-600 text-white py-3">Bayar Sekarang</button>;
+  return (
+    <button onClick={pay} className="w-full rounded-xl bg-emerald-600 text-white py-3">
+      Bayar Sekarang
+    </button>
+  );
 }
