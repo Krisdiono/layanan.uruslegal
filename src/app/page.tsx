@@ -29,7 +29,7 @@ export default async function Page() {
           const { base, final, discountAmount } = effectivePrice(svc);
           return (
             <div key={svc.id} className="rounded-2xl border p-5 hover:shadow-md transition">
-              <h2 className="font-medium mb-1">{svc.title}</h2>
+              <h2 className="font-medium mb-1"></h2>
 
               {/* Harga (dengan strike-through bila diskon) */}
               <div className="mt-1">
@@ -54,7 +54,7 @@ export default async function Page() {
                 >
                   Detail
                 </Link>
-                <Link href={`/layanan/${svc.slug}`}
+                <Link href={`/layanan/${svc.slug}#bayar`}
                   className="rounded-lg bg-emerald-600 px-3 py-1.5 text-sm text-white hover:bg-emerald-700"
                 >
                   Ajukan Proses
