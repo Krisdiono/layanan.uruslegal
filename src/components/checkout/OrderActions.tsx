@@ -14,12 +14,12 @@ export default function OrderActions({ svc }: { svc: Svc }) {
   const msg = encodeURIComponent(`${svc.slug} - ${pageUrl}`);
   const waUrl = `https://wa.me/${wa}?text=${msg}`;
 
-  // OrderId dibuat di server; di client cukup bawa slug
-  const orderInput = { slug: svc.slug };
+  // server akan generate orderId & ambil harga real; client cukup kirim slug
+  const input = { slug: svc.slug };
 
   return (
     <div className="mt-4 grid gap-3 sm:grid-cols-2">
-      <PayButton input={orderInput} />
+      <PayButton input={input} />
       <a
         href={waUrl}
         target="_blank"
