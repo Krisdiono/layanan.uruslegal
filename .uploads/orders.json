@@ -1,0 +1,19 @@
+[
+  {
+    "id": "UL-dummy-1",
+    "status": "pending",
+    "service": {
+      "slug": "pendirian-pt-perorangan-umkm",
+      "title": "PT UMKM"
+    },
+    "amounts": {
+      "subtotal": 3500000,
+      "total": 3500000
+    },
+    "customer": {
+      "name": "Tester",
+      "email": "t@x.com"
+    },
+    "createdAt": "2025-08-12T21:47:53.550Z"
+  }
+]

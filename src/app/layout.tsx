@@ -1,5 +1,6 @@
 // src/app/layout.tsx
 import "./globals.css";
+import ChatDrawer from "@/components/ChatDrawer";
 import type { Metadata, Viewport } from "next";
 
 export const metadata: Metadata = {

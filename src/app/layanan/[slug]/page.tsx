@@ -119,12 +119,18 @@ export default async function LayananDetail({
                           : "Minta Penawaran"}
                       </td>
                     </tr>
-                    <tr>
-                      <td className="py-2 text-slate-500">Biaya lain</td>
-                      <td className="py-2 text-right text-slate-500">
-                        Sesuai kebutuhan & regulasi
-                      </td>
-                    </tr>
+                    <tr className="border-b">
+  <td className="py-2">e-Materai</td>
+  <td className="py-2 text-right">Rp{(await import("@/lib/costs")).E_STAMP_PRICE.toLocaleString("id-ID")}/lembar (opsional)</td>
+</tr>
+<tr className="border-b">
+  <td className="py-2">e-Sign</td>
+  <td className="py-2 text-right">Rp{(await import("@/lib/costs")).E_SIGN_PRICE.toLocaleString("id-ID")}/tanda tangan (opsional)</td>
+</tr>
+<tr>
+  <td className="py-2 text-slate-500">Biaya Pemerintah</td>
+  <td className="py-2 text-right text-slate-500">Sesuai kebutuhan & regulasi</td>
+</tr>
                   </tbody>
                 </table>
               </div>
