@@ -1,71 +1,84 @@
 // @ts-nocheck
-import Link from "next/link";
-import services from "@/data/services.json";
-import FormSection from "@/components/checkout/FormSection";
-import UploadBox from "@/components/checkout/UploadBox";
-import OrderSummary from "@/components/checkout/OrderSummary";
+"use client";
+import { useState } from "react";
+import { getLayananBySlugSync } from "@/lib/services"; // client-safe copy
+import Script from "next/script";
 
-export default async function Checkout({ params }) {
-  const gotParams = params?.then ? await params : params; // Next 15 support
-  const slug = gotParams.slug;
+export default function Checkout({ params }) {
+  const svc = getLayananBySlugSync(params.slug);
+  const [files, setFiles] = useState<File[]>([]);
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const price = typeof svc?.price === "number" ? svc.price : 0;
+  const fee = Math.round(price * 0.03);
+  const total = price + fee;
 
-  const svc = (services || []).find((x) => x.slug === slug);
-  if (!svc) return <div className="max-w-3xl mx-auto p-6">Checkout: layanan tidak ditemukan.</div>;
+  const onPay = async () => {
+    const res = await fetch("/api/midtrans/create-transaction", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        serviceSlug: svc.slug,
+        serviceTitle: svc.title,
+        amount: total,
+        customer: { name, email }
+      })
+    });
+    const { token } = await res.json();
+    window.snap.pay(token);
+  };
 
   return (
-    <div className="max-w-6xl mx-auto px-4 lg:px-8 py-10 grid lg:grid-cols-3 gap-8">
-      {/* KIRI: FORM */}
-      <div className="lg:col-span-2 space-y-6">
-        <header>
-          <h1 className="text-2xl font-bold text-gray-900">Checkout — {svc.title}</h1>
-          <p className="text-gray-600 mt-1">
-            Lengkapi data berikut untuk melanjutkan proses {svc.title}. Dokumen bisa diunggah sekarang atau nanti.
-          </p>
-        </header>
+    <div className="container mx-auto px-4 py-8">
+      <h1 className="text-2xl font-semibold mb-4">Checkout: {svc.title}</h1>
 
-        <div className="border rounded-xl p-6 bg-white shadow-sm">
-          <FormSection />
-        </div>
+      <div className="grid lg:grid-cols-3 gap-6">
+        <section className="lg:col-span-2 space-y-6">
+          <div className="rounded-xl border p-4">
+            <div className="font-medium mb-2">Data Pemesan</div>
+            <div className="grid md:grid-cols-2 gap-3">
+              <input className="input" placeholder="Nama Lengkap" value={name} onChange={e=>setName(e.target.value)} />
+              <input className="input" placeholder="Email" value={email} onChange={e=>setEmail(e.target.value)} />
+            </div>
+          </div>
 
-        <div className="border rounded-xl p-6 bg-white shadow-sm">
-          <h2 className="font-semibold text-lg mb-4">Unggah Dokumen Pendukung</h2>
-          <p className="text-sm text-gray-600 mb-3">
-            File yang umum dibutuhkan: KTP, NPWP (jika ada), dokumen pendukung lain sesuai layanan.
-          </p>
-          <UploadBox />
-          <p className="text-xs text-gray-500 mt-3">
-            *Batas maksimal 10MB per file. Format: PDF/JPG/PNG. (Nanti kita simpan ke Azure Blob Storage.)
-          </p>
-        </div>
+          <div className="rounded-xl border p-4">
+            <div className="font-medium mb-2">Upload Dokumen (KTP, NPWP, dsb.)</div>
+            <input
+              type="file" multiple
+              onChange={e => setFiles(Array.from(e.target.files || []))}
+            />
+            {files.length>0 && (
+              <ul className="text-sm mt-2 list-disc pl-5">
+                {files.map((f,i)=><li key={i}>{f.name} — {(f.size/1024).toFixed(0)} KB</li>)}
+              </ul>
+            )}
+          </div>
+        </section>
 
-        <div className="border rounded-xl p-6 bg-white shadow-sm">
-          <h2 className="font-semibold text-lg mb-4">Catatan Tambahan</h2>
-          <textarea
-            className="w-full rounded-lg border px-3 py-2 focus:outline-none focus:ring-2 focus:ring-emerald-600"
-            rows={4}
-            placeholder="Tulis informasi tambahan, preferensi nama, atau detail khusus lainnya..."
-          />
-        </div>
+        <aside className="rounded-xl border p-4 h-fit">
+          <div className="font-medium mb-3">Ringkasan</div>
+          <div className="flex justify-between text-sm py-1"><span>Harga</span><span>Rp{price.toLocaleString("id-ID")}</span></div>
+          <div className="flex justify-between text-sm py-1"><span>Biaya gateway (3%)</span><span>Rp{fee.toLocaleString("id-ID")}</span></div>
+          <div className="flex justify-between py-2 font-semibold border-t mt-2">
+            <span>Total</span><span>Rp{total.toLocaleString("id-ID")}</span>
+          </div>
 
-        <div className="flex flex-wrap gap-3">
-          <Link href={`/layanan/${svc.slug}`} className="px-5 py-3 rounded-lg border font-medium hover:bg-gray-50">
-            Kembali ke Detail
-          </Link>
-          <Link
+          <button className="btn btn-primary w-full mt-3" onClick={onPay}>Bayar Sekarang</button>
+          <a
+            className="btn w-full mt-2"
+            target="_blank"
             href={`https://wa.me/6281142677700?text=${encodeURIComponent(
-              `Halo UrusLegal, saya ingin tanya tentang: ${svc.title}`
+              `Halo, saya ingin ajukan proses ${svc.title}. Nama: ${name || "-"}, Email: ${email || "-"}.`
             )}`}
-            className="px-5 py-3 rounded-lg border font-medium hover:bg-gray-50"
           >
             Tanya via WhatsApp
-          </Link>
-        </div>
+          </a>
+        </aside>
       </div>
 
-      {/* KANAN: RINGKASAN ORDER */}
-      <aside className="lg:col-span-1">
-        <OrderSummary svc={svc} />
-      </aside>
+      {/* Midtrans Snap */}
+      <Script src="https://app.sandbox.midtrans.com/snap/snap.js" data-client-key={process.env.NEXT_PUBLIC_MIDTRANS_CLIENT_KEY} />
     </div>
   );
 }
