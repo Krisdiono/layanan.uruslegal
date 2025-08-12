@@ -115,26 +115,23 @@ export default async function LayananDetail({
     </td>
   </tr>
 
-  {/* Biaya lain: e-Materai & e-Sign (opsional) */}
+  {/* Biaya lain (opsional) */}
   <tr className="border-b">
     <td className="py-2">e-Materai</td>
-    <td className="py-2 text-right">
-      Rp{E_STAMP_PRICE.toLocaleString("id-ID")}/lembar (opsional)
-    </td>
+    <td className="py-2 text-right">Rp{(await import("@/lib/costs")).E_STAMP_PRICE.toLocaleString("id-ID")}/lembar (opsional)</td>
   </tr>
   <tr className="border-b">
     <td className="py-2">e-Sign</td>
-    <td className="py-2 text-right">
-      Rp{E_SIGN_PRICE.toLocaleString("id-ID")}/tanda tangan (opsional)
-    </td>
+    <td className="py-2 text-right">Rp{(await import("@/lib/costs")).E_SIGN_PRICE.toLocaleString("id-ID")}/tanda tangan (opsional)</td>
   </tr>
 
-  {/* Biaya pemerintah */}
+  {/* Pemerintah */}
   <tr>
     <td className="py-2 text-slate-500">Biaya Pemerintah</td>
     <td className="py-2 text-right text-slate-500">Sesuai kebutuhan & regulasi</td>
   </tr>
 </tbody>
+
 <p className="mt-2 text-xs text-slate-500">
   e-Materai & e-Sign ditambahkan saat checkout sesuai kebutuhan dokumen.
 </p>
