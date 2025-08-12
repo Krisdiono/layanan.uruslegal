@@ -3,11 +3,11 @@ import fs from "fs";
 import path from "path";
 import vm from "vm";
 
-const SRC = path.resolve("tools/script.js");     // <-- file panduan kamu
+const SRC = path.resolve("tools/script.js");
 const OUT_DIR = path.resolve("src/data");
 fs.mkdirSync(OUT_DIR, { recursive: true });
 
-const AUTO_SUMMARY = true; // true = ambil kalimat pertama dari definisi
+const AUTO_SUMMARY = true;
 
 function slugify(s) {
   return String(s)
@@ -17,19 +17,53 @@ function slugify(s) {
     .replace(/\s+/g, "-")
     .replace(/-+/g, "-");
 }
-
 function firstSentence(htmlOrText) {
   const plain = String(htmlOrText || "")
     .replace(/<[^>]+>/g, " ")
     .replace(/\s+/g, " ")
     .trim();
-  const m = plain.match(/^(.{0,180}?[\.\!\?])\s|^.{0,180}$/); // max ~180 chars
+  const m = plain.match(/^(.{0,180}?[\.\!\?])\s|^.{0,180}$/);
   return (m && m[1]) ? m[1].trim() : plain.slice(0, 180);
 }
 
-// Load tools/script.js yang mendefinisikan global `knowledgeBase`
-const code = fs.readFileSync(SRC, "utf8");
-const sandbox = { knowledgeBase: undefined, console };
+// --- DOM stub (no-op) ---
+const nodeStub = () => ({
+  innerHTML: "",
+  textContent: "",
+  value: "",
+  style: {},
+  classList: { add(){}, remove(){}, toggle(){}, contains(){return false;} },
+  appendChild(){},
+  removeChild(){},
+  setAttribute(){},
+  addEventListener(){},
+  querySelector(){ return nodeStub(); },
+  querySelectorAll(){ return []; },
+});
+const documentStub = {
+  getElementById(){ return nodeStub(); },
+  querySelector(){ return nodeStub(); },
+  querySelectorAll(){ return []; },
+  createElement(){ return nodeStub(); },
+};
+const windowStub = { document: documentStub, addEventListener(){}, removeEventListener(){}, location: {} };
+
+// --- load & normalize script.js ---
+let code = fs.readFileSync(SRC, "utf8");
+// pastikan knowledgeBase jadi global var
+code = code
+  .replace(/\bconst\s+knowledgeBase\s*=\s*/g, "knowledgeBase = ")
+  .replace(/\blet\s+knowledgeBase\s*=\s*/g, "knowledgeBase = ")
+  .replace(/\bvar\s+knowledgeBase\s*=\s*/g, "knowledgeBase = ");
+code += "\n;this.knowledgeBase = (typeof knowledgeBase !== 'undefined') ? knowledgeBase : this.knowledgeBase;";
+
+const sandbox = {
+  knowledgeBase: undefined,
+  console,
+  document: documentStub,
+  window: windowStub,
+  setTimeout(){}, clearTimeout(){}, setInterval(){}, clearInterval(){},
+};
 vm.createContext(sandbox);
 vm.runInContext(code, sandbox);
 
@@ -38,6 +72,7 @@ if (!sandbox.knowledgeBase) {
   process.exit(1);
 }
 
+// --- extract ---
 const catalog = [];
 const prices = [];
 
@@ -60,7 +95,7 @@ for (const [category, catObj] of Object.entries(sandbox.knowledgeBase)) {
         inclusions: Array.isArray(s.yangDidapat) ? s.yangDidapat : [],
         process: Array.isArray(s.proses) ? s.proses : [],
       },
-      timeline: s.timeline || ""
+      timeline: s.timeline || "",
     });
 
     const base = Number(s.biayaJasa);
@@ -74,6 +109,6 @@ fs.writeFileSync(path.join(OUT_DIR, "catalog.json"), JSON.stringify(catalog, nul
 fs.writeFileSync(path.join(OUT_DIR, "prices.json"), JSON.stringify(prices, null, 2));
 
 console.log(`✅ Done.
-  - catalog.json: ${catalog.length} items
-  - prices.json : ${prices.length} items
-  → lokasi: src/data/`);
+- catalog.json: ${catalog.length} items
+- prices.json : ${prices.length} items
+→ lokasi: src/data/`);
