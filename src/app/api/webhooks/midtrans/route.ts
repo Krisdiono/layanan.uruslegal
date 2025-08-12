@@ -17,7 +17,6 @@ export async function POST(req: Request) {
     const ok = updateStatus(orderId, status, body);
     if (!ok) return NextResponse.json({ ok:false, error:"order_not_found" }, { status:404 });
 
-    // Optional: push ke Perfex lewat modul ulcatalog kalau SOLUSI_API_BASE ada
     try {
       const BASE = process.env.SOLUSI_API_BASE || "";
       if (BASE && status==="success") {
