@@ -129,36 +129,33 @@ export default async function LayananDetail({
         </div>
 
         {/* Sidebar Ringkasan */}
-        <aside className="card p-5 h-fit space-y-4">
-          <div className="text-sm text-slate-500">Ringkasan</div>
-          <div className="text-2xl font-bold">
-            {typeof svc.price === "number"
-              ? `Rp${svc.price.toLocaleString("id-ID")}`
-              : "Minta Penawaran"}
-          </div>
+<aside className="card p-5 h-fit space-y-4">
+  <div className="text-sm text-slate-500">Ringkasan</div>
 
-          {/* CTA */}
-          <div className="flex flex-col gap-2" id="ajukan">
-            <Link
-              prefetch
-              href={`/checkout/${svc.slug}`}
-              className={`w-full btn ${
-                typeof svc.price === "number"
-                  ? "btn-primary"
-                  : "border-emerald-600 text-emerald-700 hover:bg-emerald-50"
-              }`}
-            >
-              {typeof svc.price === "number" ? "Ajukan Proses" : "Minta Penawaran"}
-            </Link>
-            <a
-              href={`https://wa.me/${wa}?text=${waText}`}
-              target="_blank"
-              className="btn w-full"
-            >
-              Tanya via WhatsApp
-            </a>
-          </div>
-        </aside>
+  {typeof svc.price === "number" && (
+    <div className="text-2xl font-bold">
+      {`Rp${svc.price.toLocaleString("id-ID")}`}
+    </div>
+  )}
+
+  <div className="flex flex-col gap-2" id="ajukan">
+    <Link
+      prefetch
+      href={`/checkout/${svc.slug}`}
+      className={`w-full btn ${typeof svc.price === "number" ? "btn-primary" : "btn-outline"}`}
+    >
+      {typeof svc.price === "number" ? "Ajukan Proses" : "Minta Penawaran"}
+    </Link>
+    <a
+      href={`https://wa.me/${wa}?text=${waText}`}
+      target="_blank"
+      className="btn w-full"
+    >
+      Tanya via WhatsApp
+    </a>
+  </div>
+</aside>
+
       </div>
     </div>
   );
