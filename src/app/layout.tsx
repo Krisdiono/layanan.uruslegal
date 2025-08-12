@@ -7,10 +7,6 @@ export const metadata: Metadata = {
   description: "Layanan legal yang cepat & mudah",
 };
 
-export const viewport: Viewport = {
-  themeColor: "#1ab69d",
-};
-
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="id">
