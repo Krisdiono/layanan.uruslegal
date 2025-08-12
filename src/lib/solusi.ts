@@ -22,3 +22,11 @@ export async function getLayananBySlug(
   const calc = computeFinal(pr);
   return { ...it, price: calc.rfq ? null : calc.final };
 }
+
+export function getLayananBySlugSync(slug: string): Layanan | undefined {
+  const it = getCatalog(slug);
+  if (!it) return undefined;
+  const pr = getPrice(it.slug);
+  const calc = computeFinal(pr);
+  return { ...it, price: calc.rfq ? null : calc.final };
+}
