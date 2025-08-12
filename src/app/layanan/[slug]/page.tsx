@@ -1,3 +1,4 @@
+import { E_STAMP_PRICE, E_SIGN_PRICE } from "@/lib/costs";
 // /src/app/layanan/[slug]/page.tsx
 // @ts-nocheck
 import Link from "next/link";
@@ -111,27 +112,27 @@ export default async function LayananDetail({
               <div className="overflow-x-auto">
                 <table className="w-full text-sm table-zebra">
                   <tbody>
-                    <tr className="border-b">
-                      <td className="py-2">Harga Layanan</td>
-                      <td className="py-2 text-right">
-                        {typeof svc.price === "number"
-                          ? `Rp${svc.price.toLocaleString("id-ID")}`
-                          : "Minta Penawaran"}
-                      </td>
-                    </tr>
-                    <tr className="border-b">
-  <td className="py-2">e-Materai</td>
-  <td className="py-2 text-right">Rp{(await import("@/lib/costs")).E_STAMP_PRICE.toLocaleString("id-ID")}/lembar (opsional)</td>
-</tr>
-<tr className="border-b">
-  <td className="py-2">e-Sign</td>
-  <td className="py-2 text-right">Rp{(await import("@/lib/costs")).E_SIGN_PRICE.toLocaleString("id-ID")}/tanda tangan (opsional)</td>
-</tr>
-<tr>
-  <td className="py-2 text-slate-500">Biaya Pemerintah</td>
-  <td className="py-2 text-right text-slate-500">Sesuai kebutuhan & regulasi</td>
-</tr>
-                  </tbody>
+  <tbody>
+    <tr className="border-b">
+      <td className="py-2">Harga Layanan</td>
+      <td className="py-2 text-right">
+        {typeof svc.price === "number" ? `Rp${svc.price.toLocaleString("id-ID")}` : "Minta Penawaran"}
+      </td>
+    </tr>
+    <tr className="border-b">
+      <td className="py-2">e-Materai</td>
+      <td className="py-2 text-right">Rp{E_STAMP_PRICE.toLocaleString("id-ID")}/lembar (opsional)</td>
+    </tr>
+    <tr className="border-b">
+      <td className="py-2">e-Sign</td>
+      <td className="py-2 text-right">Rp{E_SIGN_PRICE.toLocaleString("id-ID")}/tanda tangan (opsional)</td>
+    </tr>
+    <tr>
+      <td className="py-2 text-slate-500">Biaya Pemerintah</td>
+      <td className="py-2 text-right text-slate-500">Sesuai kebutuhan & regulasi</td>
+    </tr>
+  </tbody>
+</tbody>
                 </table>
               </div>
             )}
