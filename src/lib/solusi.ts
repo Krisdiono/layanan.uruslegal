@@ -1,60 +1,52 @@
 // src/lib/solusi.ts
-import local from "@/data/services.json"; // <-- pastikan file ini ada
+import type { Svc } from "@/types/service";
 
-export type Layanan = {
-  id: string | number;
-  slug: string;
-  title: string;
-  summary?: string;
-  price?: string | number;
-  description?: string;
-};
+const layanan: Svc[] = [
+  {
+    slug: "pendirian-pt",
+    title: "Pendirian PT",
+    price: 3500000,
+    summary: "Paket lengkap pendirian Perseroan Terbatas.",
+    description: "Deskripsi lengkap pendirian PT...",
+    detail: {
+      inclusions: ["Draft akta", "SK Kemenkumham", "NPWP", "NIB"],
+      process: ["Pengumpulan dokumen", "Drafting akta", "Pengesahan"],
+    },
+    timeline: "7-10 hari kerja",
+    category: "Badan Usaha"
+  },
+  {
+    slug: "pendirian-cv",
+    title: "Pendirian CV",
+    price: 2500000,
+    summary: "Layanan pendirian CV cepat & ringkas.",
+    description: "Deskripsi lengkap pendirian CV...",
+    detail: {
+      inclusions: ["Draft akta", "SK Kemenkumham", "NPWP", "NIB"],
+      process: ["Pengumpulan dokumen", "Drafting akta", "Pengesahan"],
+    },
+    timeline: "5-7 hari kerja",
+    category: "Badan Usaha"
+  },
+  {
+    slug: "pendaftaran-merek",
+    title: "Pendaftaran Merek",
+    price: 1800000,
+    summary: "Urus merek dagang sampai submit DJKI.",
+    description: "Deskripsi lengkap pendaftaran merek...",
+    detail: {
+      inclusions: ["Pengecekan awal", "Penyusunan dokumen", "Submit DJKI"],
+      process: ["Cek ketersediaan", "Pengajuan", "Monitoring"],
+    },
+    timeline: "2-3 hari kerja",
+    category: "Kekayaan Intelektual"
+  }
+];
 
-const BASE = process.env.SOLUSI_API_BASE ?? "https://portal.uruslegal.id/ul/api"; // fallback aman
-
-async function get<T>(path: string, init?: RequestInit): Promise<T> {
-  const url = `${BASE}${path}`;
-  const r = await fetch(url, { next: { revalidate: 300 }, ...init });
-  if (!r.ok) throw new Error(`Fetch ${url} failed: ${r.status}`);
-  return r.json();
+export async function listLayanan(): Promise<Svc[]> {
+  return layanan;
 }
 
-export async function listLayanan(): Promise<Layanan[]> {
-  try {
-    const data = await get<Layanan[]>("/layanan");
-    return data.map(d => ({
-      ...d,
-      price: typeof d.price === "string" ? Number(d.price) : d.price,
-    }));
-  } catch {
-    // Fallback ke static JSON agar build tidak gagal
-    return (local as any[]).map((d, i) => ({
-      id: d.id ?? i + 1,
-      slug: d.slug,
-      title: d.title,
-      summary: d.summary,
-      price: typeof d.price === "string" ? Number(d.price) : d.price,
-      description: d.description,
-    }));
-  }
-}
-
-export async function getLayanan(slug: string): Promise<Layanan | null> {
-  try {
-    const d = await get<Layanan>(`/layanan/${encodeURIComponent(slug)}`);
-    return { ...d, price: typeof d.price === "string" ? Number(d.price) : d.price };
-  } catch {
-    // Fallback cari dari static JSON
-    const d = (local as any[]).find(x => x.slug === slug);
-    return d
-      ? {
-          id: d.id ?? 0,
-          slug: d.slug,
-          title: d.title,
-          summary: d.summary,
-          price: typeof d.price === "string" ? Number(d.price) : d.price,
-          description: d.description,
-        }
-      : null;
-  }
+export async function getLayanan(slug: string): Promise<Svc | undefined> {
+  return layanan.find(s => s.slug === slug);
 }
