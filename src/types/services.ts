@@ -1,13 +1,16 @@
-// /src/types/service.ts
-export type PriceBreakdown = { label: string; amount: number };
-
-export type Svc = {
-  id: string;
+export type Layanan = {
   slug: string;
   title: string;
   summary?: string;
-  price?: number;
-  breakdown?: PriceBreakdown[];
-  // allow other fields from API without breaking typing
-  [k: string]: any;
+  description?: string;
+  detail?: {
+    inclusions?: string[];
+    process?: string[];
+  };
+  timeline?: string;
+  category?: string;
+  price?: number | null;
 };
+
+// alias kalau nanti kamu butuh
+export type Svc = Layanan;
