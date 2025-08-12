@@ -111,6 +111,21 @@ const total    = subtotal + extras;
               </ul>
             )}
           </div>
+          <div className="grid grid-cols-2 gap-3 mt-4">
+  <label className="flex items-center justify-between card p-3">
+    <span>e-Materai (Rp10.000)</span>
+    <input type="number" min={0} value={eStampQty}
+           onChange={(e)=>setEStampQty(parseInt(e.target.value||"0",10))}
+           className="input input-bordered w-24 text-right" />
+  </label>
+  <label className="flex items-center justify-between card p-3">
+    <span>e-Sign (Rp5.000)</span>
+    <input type="number" min={0} value={eSignQty}
+           onChange={(e)=>setESignQty(parseInt(e.target.value||"0",10))}
+           className="input input-bordered w-24 text-right" />
+  </label>
+</div>
+
         </section>
 
         <aside className="rounded-xl border p-4 h-fit">
