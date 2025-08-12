@@ -34,3 +34,24 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+
+
+## Quick Start (Checkout + Midtrans)
+
+1. Copy `.env.local.example` ke `.env.local` dan isi kunci Midtrans (sandbox atau live).
+
+2. Jalankan development:
+
+   ```bash
+pnpm i
+pnpm dev
+```
+
+3. Buka `/layanan` → pilih layanan → **Ajukan Proses** → halaman **Checkout**.
+
+4. Gunakan tombol **Bayar** untuk memunculkan Midtrans Snap (sandbox).
+
+
+
+> Webhook Midtrans sudah tersedia di `/api/webhooks/midtrans`.
+
