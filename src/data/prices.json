@@ -1,1 +1,251 @@
+[
+  {
+    "title": "Pendirian PT Perorangan (UMKM)",
+    "price": 999000
+  },
+  {
+    "title": "Pendirian PT Biasa (Non-Perorangan)",
+    "price": 2500000
+  },
+  {
+    "title": "Pendirian CV",
+    "price": 2500000
+  },
+  {
+    "title": "Pendirian PT PMA (Asing)",
+    "price": 5000000
+  },
+  {
+    "title": "Pendirian Yayasan",
+    "price": 3000000
+  },
+  {
+    "title": "Pendirian Perkumpulan",
+    "price": 5000000
+  },
+  {
+    "title": "Pendirian Koperasi",
+    "price": 2500000
+  },
+  {
+    "title": "Pembubaran PT",
+    "price": "Minta Penawaran"
+  },
+  {
+    "title": "Asisten Pajak & Pembukuan Bulanan",
+    "price": 750000
+  },
+  {
+    "title": "Pelaporan LKPM (Laporan Kegiatan Penanaman Modal)",
+    "price": 1000000
+  },
+  {
+    "title": "Paket Kepatuhan Tahunan",
+    "price": 2000000
+  },
+  {
+    "title": "Asisten Legal On-Demand",
+    "price": 250000
+  },
+  {
+    "title": "Media Release / Pengumuman Koran",
+    "price": 1500000
+  },
+  {
+    "title": "Pendaftaran NIB",
+    "price": 850000
+  },
+  {
+    "title": "Pendaftaran PSE",
+    "price": 1000000
+  },
+  {
+    "title": "Pendaftaran Merk Dagang",
+    "price": 1500000
+  },
+  {
+    "title": "Pendaftaran Hak Cipta",
+    "price": 750000
+  },
+  {
+    "title": "Pendaftaran PATEN",
+    "price": 5000000
+  },
+  {
+    "title": "Pendaftaran Desain Industri",
+    "price": 1200000
+  },
+  {
+    "title": "Perpanjangan Merk",
+    "price": 1000000
+  },
+  {
+    "title": "Pembuatan Perjanjian Kerja (PKWT/PKWTT)",
+    "price": 800000
+  },
+  {
+    "title": "Penyusunan Peraturan Perusahaan (PP)",
+    "price": 2500000
+  },
+  {
+    "title": "Konsultasi Hukum Ketenagakerjaan",
+    "price": 300000
+  },
+  {
+    "title": "Pembuatan Perjanjian Outsource",
+    "price": 1500000
+  },
+  {
+    "title": "Pembuatan Surat PHK",
+    "price": 750000
+  },
+  {
+    "title": "Pembuatan Akta Kuasa",
+    "price": 500000
+  },
+  {
+    "title": "Pembuatan Akta Perjanjian Umum",
+    "price": 1000000
+  },
+  {
+    "title": "Legalisir Dokumen",
+    "price": 150000
+  },
+  {
+    "title": "Akta Hibah / Akta Pengakuan / Pengesahan Anak",
+    "price": 1500000
+  },
+  {
+    "title": "Perubahan KBLI",
+    "price": 2000000
+  },
+  {
+    "title": "Perubahan Struktur Direksi",
+    "price": 2500000
+  },
+  {
+    "title": "Peralihan Saham",
+    "price": 1500000
+  },
+  {
+    "title": "Perubahan Akta",
+    "price": 2000000
+  },
+  {
+    "title": "Perubahan Modal Dasar",
+    "price": 2500000
+  },
+  {
+    "title": "Pendampingan RUPS",
+    "price": 4500000
+  },
+  {
+    "title": "Jasa Apostile",
+    "price": 1500000
+  },
+  {
+    "title": "Jasa Waarmerking",
+    "price": 3000000
+  },
+  {
+    "title": "Pengurusan NIB & Perizinan Usaha",
+    "price": 850000
+  },
+  {
+    "title": "Pengurusan NPWP (Orang & Badan)",
+    "price": 800000
+  },
+  {
+    "title": "Perubahan Data Perusahaan",
+    "price": 2850000
+  },
+  {
+    "title": "Pengukuhan PKP",
+    "price": 1499000
+  },
+  {
+    "title": "Pengurusan PBG / IMB",
+    "price": "Minta Penawaran"
+  },
+  {
+    "title": "Pengurusan SBUJK",
+    "price": "Minta Penawaran"
+  },
+  {
+    "title": "Pengurusan IUJP",
+    "price": "Minta Penawaran"
+  },
+  {
+    "title": "Pengurusan Izin Sektoral / Khusus",
+    "price": "Minta Penawaran"
+  },
+  {
+    "title": "Pembuatan Akta Jual beli (AJB)",
+    "price": "Minta Penawaran"
+  },
+  {
+    "title": "Balik Nama Sertifikat",
+    "price": "Minta Penawaran"
+  },
+  {
+    "title": "Pengurusan Hak Tanggungan / ROYA",
+    "price": "Minta Penawaran"
+  },
+  {
+    "title": "Peningkatan Hak (HGB ke SHM)",
+    "price": "Minta Penawaran"
+  },
+  {
+    "title": "Pengecekan Sertifikat Tanah",
+    "price": 250000
+  },
+  {
+    "title": "Perubahan Zona Tanah / Tata Ruang",
+    "price": "Minta Penawaran"
+  },
+  {
+    "title": "Pengurusan LSD (Lahan Sawah Dilindungi)",
+    "price": "Minta Penawaran"
+  },
+  {
+    "title": "Pemisahan / Pecah Sertifikat",
+    "price": 1900000
+  },
+  {
+    "title": "Perubahan Sertifikat Tanah Elektronik",
+    "price": 3250000
+  },
+  {
+    "title": "Pengurusan Girik Menjadi SHM",
+    "price": "Minta Penawaran"
+  },
+  {
+    "title": "Penyusunan Kebijakan Privasi & Syarat Ketentuan (Website/Aplikasi)",
+    "price": 1500000
+  },
+  {
+    "title": "Perjanjian Lisensi Software / Aplikasi",
+    "price": 2000000
+  },
+  {
+    "title": "Pendaftaran Penyelenggara Sistem Elektronik (PSE)",
+    "price": 1000000
+  },
+  {
+    "title": "Review Legal untuk Aplikasi/Platform Digital",
+    "price": 3000000
+  },
+  {
+    "title": "Penyusunan Perjanjian Kerjasama IT/Developer",
+    "price": 2500000
+  },
+  {
+    "title": "Pembuatan Web Company Profile",
+    "price": 2500000
+  },
+  {
+    "title": "Pendaftaran D-U-N-S",
+    "price": 6250000
+  }
+]
 
