@@ -1,3 +1,4 @@
+// /src/app/layanan/[slug]/page.tsx
 // @ts-nocheck
 import Link from "next/link";
 import { getLayananBySlug } from "@/lib/solusi";
@@ -37,14 +38,16 @@ export default async function LayananDetail({
       <h1 className="text-3xl font-semibold mt-4">{svc.title}</h1>
 
       <div className="grid lg:grid-cols-3 gap-6 mt-6">
-        {/* Tabs */}
+        {/* Konten dengan tabs */}
         <div className="lg:col-span-2 card">
           <div className="flex gap-2 p-2 border-b overflow-x-auto">
             {tabs.map((t) => (
               <Link
                 key={t}
                 href={`?tab=${t}`}
-                className={`px-4 py-2 rounded-lg ${active === t ? "bg-emerald-600 text-white" : "hover:bg-gray-100"}`}
+                className={`px-4 py-2 rounded-lg ${
+                  active === t ? "bg-emerald-600 text-white" : "hover:bg-gray-100"
+                }`}
               >
                 {t}
               </Link>
@@ -63,7 +66,9 @@ export default async function LayananDetail({
                   <>
                     <h3 className="text-lg font-semibold">Yang Anda Dapatkan</h3>
                     <ul className="list-disc pl-6 space-y-1">
-                      {svc.detail.inclusions.map((x: string, i: number) => <li key={i}>{x}</li>)}
+                      {svc.detail.inclusions.map((x: string, i: number) => (
+                        <li key={i}>{x}</li>
+                      ))}
                     </ul>
                   </>
                 ) : null}
@@ -73,17 +78,29 @@ export default async function LayananDetail({
             {active === "Persyaratan" && (
               svc.detail?.requirements?.length ? (
                 <ul className="list-disc pl-6 space-y-1">
-                  {svc.detail.requirements.map((x: string, i: number) => <li key={i}>{x}</li>)}
+                  {svc.detail.requirements.map((x: string, i: number) => (
+                    <li key={i}>{x}</li>
+                  ))}
                 </ul>
-              ) : <div className="text-slate-500">Persyaratan akan diinformasikan saat konsultasi.</div>
+              ) : (
+                <div className="text-slate-500">
+                  Persyaratan akan diinformasikan saat konsultasi.
+                </div>
+              )
             )}
 
             {active === "Proses" && (
               svc.detail?.process?.length ? (
                 <ol className="list-decimal pl-6 space-y-1">
-                  {svc.detail.process.map((x: string, i: number) => <li key={i}>{x}</li>)}
+                  {svc.detail.process.map((x: string, i: number) => (
+                    <li key={i}>{x}</li>
+                  ))}
                 </ol>
-              ) : <div className="text-slate-500">Proses pengajuan mengikuti regulasi terbaru.</div>
+              ) : (
+                <div className="text-slate-500">
+                  Proses pengajuan mengikuti regulasi terbaru.
+                </div>
+              )
             )}
 
             {active === "Biaya" && (
@@ -93,12 +110,16 @@ export default async function LayananDetail({
                     <tr className="border-b">
                       <td className="py-2">Harga Layanan</td>
                       <td className="py-2 text-right">
-                        {typeof svc.price === "number" ? `Rp${svc.price.toLocaleString("id-ID")}` : "Minta Penawaran"}
+                        {typeof svc.price === "number"
+                          ? `Rp${svc.price.toLocaleString("id-ID")}`
+                          : "Minta Penawaran"}
                       </td>
                     </tr>
                     <tr>
                       <td className="py-2 text-slate-500">Biaya lain</td>
-                      <td className="py-2 text-right text-slate-500">Sesuai kebutuhan & regulasi</td>
+                      <td className="py-2 text-right text-slate-500">
+                        Sesuai kebutuhan & regulasi
+                      </td>
                     </tr>
                   </tbody>
                 </table>
@@ -110,19 +131,22 @@ export default async function LayananDetail({
         {/* Sidebar Ringkasan */}
         <aside className="card p-5 h-fit space-y-4">
           <div className="text-sm text-slate-500">Ringkasan</div>
-          <div className="text-2xl font-bold">
-            {typeof svc.price === "number" ? `Rp${svc.price.toLocaleString("id-ID")}` : "Minta Penawaran"}
-          </div>
 
-          <div className="flex flex-col gap-2">
+          {/* TAMPILKAN HARGA BESAR HANYA JIKA ADA PRICE */}
+          {typeof svc.price === "number" && (
+            <div className="text-2xl font-bold">
+              {`Rp${svc.price.toLocaleString("id-ID")}`}
+            </div>
+          )}
+
+          <div className="flex flex-col gap-2" id="ajukan">
             <Link
               prefetch
               href={`/checkout/${svc.slug}`}
-              className={`w-full btn ${typeof svc.price === "number" ? "btn-primary" : ""}`}
+              className={`w-full btn ${typeof svc.price === "number" ? "btn-primary" : "btn-outline"}`}
             >
               {typeof svc.price === "number" ? "Ajukan Proses" : "Minta Penawaran"}
             </Link>
-
             <a
               href={`https://wa.me/${wa}?text=${waText}`}
               target="_blank"
