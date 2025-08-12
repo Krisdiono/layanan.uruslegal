@@ -8,7 +8,7 @@ export interface OrderRecord {
   status: OrderStatus;                // success / pending / error / initiated
   createdAt: string;                  // ISO date
   service: { slug: string; title: string; price: number | null };
-  amounts: { subtotal: number | null; gatewayFee: number; total: number | null };
+  amounts: { subtotal: number | null; total: number | null; extras?: number; gatewayFee?: number };
   customer: { name: string; email: string; phone?: string };
   uploadId?: string;
   files?: string[];

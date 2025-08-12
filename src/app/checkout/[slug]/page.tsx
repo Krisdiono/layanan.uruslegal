@@ -127,7 +127,6 @@ export default function Checkout({ params }) {
         <aside className="card p-5 h-fit space-y-3">
           <div className="font-medium">Ringkasan</div>
           <div className="flex justify-between text-sm"><span>Harga</span><span>Rp{price.toLocaleString("id-ID")}</span></div>
-          <div className="flex justify-between text-sm"><span>Biaya gateway (±{Math.round(feePct*100)}%)</span><span>Rp{fee.toLocaleString("id-ID")}</span></div>
           <div className="flex justify-between text-base font-semibold border-t pt-2"><span>Total</span><span>Rp{total.toLocaleString("id-ID")}</span></div>
 
           {hasPrice ? (
