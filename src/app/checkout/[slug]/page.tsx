@@ -121,15 +121,45 @@ export default function Checkout({ params }: { params: { slug: string } }) {
         </section>
 
         {/* Ringkasan kanan */}
-        <aside className="rounded-xl border p-4 h-fit">
+               <aside className="rounded-xl border p-4 h-fit">
           <div className="font-medium mb-3">Ringkasan</div>
-          <div className="flex justify-between"><span>Harga</span><span>Rp{subtotal.toLocaleString("id-ID")}</span></div>
-          <div className="flex justify-between text-slate-700"><span>Extras (e-Materai & e-Sign)</span><span>Rp{extras.toLocaleString("id-ID")}</span></div>
-          <div className="flex justify-between text-slate-500"><span>Biaya Pemerintah</span><span>Belum termasuk</span></div>
-          <hr className="my-2" />
-          <div className="flex justify-between font-semibold text-lg"><span>Total</span><span>Rp{total.toLocaleString("id-ID")}</span></div>
 
-          <button className="btn btn-primary w-full mt-3" onClick={onPay}>Bayar Sekarang</button>
+          {/* angka dasar */}
+          <div className="flex justify-between text-sm">
+            <span>Harga</span>
+            <span>Rp{(svc.price ?? 0).toLocaleString("id-ID")}</span>
+          </div>
+
+          {/* === Extras (e-Materai & e-Sign) === */}
+          {/* letakkan state & hitungan di atas component: 
+              const E_STAMP_PRICE = 10000;
+              const E_SIGN_PRICE  = 5000;
+              const [eStampQty, setEStampQty] = useState(0);
+              const [eSignQty,  setESignQty ] = useState(0);
+              const subtotal = svc.price ?? 0;
+              const extras   = eStampQty*E_STAMP_PRICE + eSignQty*E_SIGN_PRICE;
+              const total    = subtotal + extras;
+          */}
+          <div className="flex justify-between text-slate-700">
+            <span>Extras (e-Materai & e-Sign)</span>
+            <span>Rp{extras.toLocaleString("id-ID")}</span>
+          </div>
+
+          <div className="flex justify-between text-slate-500">
+            <span>Biaya Pemerintah</span>
+            <span>Belum termasuk</span>
+          </div>
+
+          <hr className="my-2" />
+          <div className="flex justify-between font-semibold text-lg">
+            <span>Total</span>
+            <span>Rp{total.toLocaleString("id-ID")}</span>
+          </div>
+
+          <button className="btn btn-primary w-full mt-3" onClick={onPay}>
+            Bayar Sekarang
+          </button>
+
           <a
             className="btn w-full mt-2"
             target="_blank"
@@ -140,6 +170,7 @@ export default function Checkout({ params }: { params: { slug: string } }) {
             Tanya via WhatsApp
           </a>
         </aside>
+
       </div>
 
       <Script
