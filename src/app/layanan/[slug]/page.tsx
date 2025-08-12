@@ -28,9 +28,10 @@ export default async function LayananDetail({
   );
 
   const tabs = ["Informasi", "Persyaratan", "Proses", "Biaya"] as const;
-  const active = (searchParams?.tab && tabs.includes(searchParams.tab as any))
-    ? (searchParams!.tab as typeof tabs[number])
-    : "Informasi";
+  const active =
+    (searchParams?.tab && tabs.includes(searchParams.tab as any))
+      ? (searchParams!.tab as typeof tabs[number])
+      : "Informasi";
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -38,7 +39,7 @@ export default async function LayananDetail({
       <h1 className="text-3xl font-semibold mt-4">{svc.title}</h1>
 
       <div className="grid lg:grid-cols-3 gap-6 mt-6">
-        {/* Konten dengan tabs */}
+        {/* Tabs */}
         <div className="lg:col-span-2 card">
           <div className="flex gap-2 p-2 border-b overflow-x-auto">
             {tabs.map((t) => (
@@ -58,9 +59,12 @@ export default async function LayananDetail({
             {active === "Informasi" && (
               <>
                 {(svc.description || svc.summary) && (
-                  <p className="text-slate-700 leading-relaxed">
-                    {svc.description || svc.summary}
-                  </p>
+                  <div
+                    className="prose max-w-none text-slate-700"
+                    dangerouslySetInnerHTML={{
+                      __html: String(svc.description || svc.summary),
+                    }}
+                  />
                 )}
                 {svc.detail?.inclusions?.length ? (
                   <>
@@ -129,33 +133,38 @@ export default async function LayananDetail({
         </div>
 
         {/* Sidebar Ringkasan */}
-<aside className="card p-5 h-fit space-y-4">
-  <div className="text-sm text-slate-500">Ringkasan</div>
+        <aside className="card p-5 h-fit space-y-4">
+          <div className="text-sm text-slate-500">Ringkasan</div>
+          <div className="text-2xl font-bold">
+            {typeof svc.price === "number"
+              ? `Rp${svc.price.toLocaleString("id-ID")}`
+              : "Minta Penawaran"}
+          </div>
 
-  {typeof svc.price === "number" && (
-    <div className="text-2xl font-bold">
-      {`Rp${svc.price.toLocaleString("id-ID")}`}
-    </div>
-  )}
+          <div className="flex flex-col gap-2">
+            {typeof svc.price === "number" ? (
+              <Link href={`/checkout/${svc.slug}`} className="btn btn-primary w-full">
+                Ajukan Proses
+              </Link>
+            ) : (
+              <a
+                href={`https://wa.me/${wa}?text=${waText}`}
+                target="_blank"
+                className="btn btn-primary w-full"
+              >
+                Minta Penawaran
+              </a>
+            )}
 
-  <div className="flex flex-col gap-2" id="ajukan">
-    <Link
-      prefetch
-      href={`/checkout/${svc.slug}`}
-      className={`w-full btn ${typeof svc.price === "number" ? "btn-primary" : "btn-outline"}`}
-    >
-      {typeof svc.price === "number" ? "Ajukan Proses" : "Minta Penawaran"}
-    </Link>
-    <a
-      href={`https://wa.me/${wa}?text=${waText}`}
-      target="_blank"
-      className="btn w-full"
-    >
-      Tanya via WhatsApp
-    </a>
-  </div>
-</aside>
-
+            <a
+              href={`https://wa.me/${wa}?text=${waText}`}
+              target="_blank"
+              className="btn w-full"
+            >
+              Tanya via WhatsApp
+            </a>
+          </div>
+        </aside>
       </div>
     </div>
   );
