@@ -131,9 +131,24 @@ const total    = subtotal + extras;
         <aside className="rounded-xl border p-4 h-fit">
           <div className="font-medium mb-3">Ringkasan</div>
           <div className="flex justify-between text-sm py-1"><span>Harga</span><span>Rp{price.toLocaleString("id-ID")}</span></div>
-          <div className="flex justify-between text-sm py-1"><span>Biaya gateway (3%)</span><span>Rp{fee.toLocaleString("id-ID")}</span></div>
-          <div className="flex justify-between py-2 font-semibold border-t mt-2">
-            <span>Total</span><span>Rp{total.toLocaleString("id-ID")}</span>
+         <div className="flex justify-between">
+  <span>Harga</span>
+  <span>Rp{subtotal.toLocaleString("id-ID")}</span>
+</div>
+<div className="flex justify-between text-slate-700">
+  <span>Extras (e-Materai & e-Sign)</span>
+  <span>Rp{extras.toLocaleString("id-ID")}</span>
+</div>
+<div className="flex justify-between text-slate-500">
+  <span>Biaya Pemerintah</span>
+  <span>Belum termasuk</span>
+</div>
+<hr className="my-2" />
+<div className="flex justify-between font-semibold text-lg">
+  <span>Total</span>
+  <span>Rp{total.toLocaleString("id-ID")}</span>
+</div>
+
           </div>
 
           <button className="btn btn-primary w-full mt-3" onClick={onPay}>Bayar Sekarang</button>
