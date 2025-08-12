@@ -103,30 +103,49 @@ export default async function LayananDetail({
               )
             )}
 
-            {active === "Biaya" && (
-              <div className="overflow-x-auto">
-                <table className="w-full text-sm table-zebra">
-                  <tbody>
-                    <tr className="border-b">
-                      <td className="py-2">Harga Layanan</td>
-                      <td className="py-2 text-right">
-                        {typeof svc.price === "number"
-                          ? `Rp${svc.price.toLocaleString("id-ID")}`
-                          : "Minta Penawaran"}
-                      </td>
-                    </tr>
-                    <tr>
-                      <td className="py-2 text-slate-500">Biaya lain</td>
-                      <td className="py-2 text-right text-slate-500">
-                        Sesuai kebutuhan & regulasi
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-            )}
-          </div>
-        </div>
+        {active === "Biaya" && (
+  <div className="overflow-x-auto">
+    <table className="w-full text-sm">
+      <tbody>
+        <tr className="border-b">
+          <td className="py-2">Harga Layanan</td>
+          <td className="py-2 text-right">
+            {typeof svc.price === "number"
+              ? `Rp${svc.price.toLocaleString("id-ID")}`
+              : "Minta Penawaran"}
+          </td>
+        </tr>
+
+        {/* Biaya lain: e-Materai & e-Sign (opsional) */}
+        <tr className="border-b">
+          <td className="py-2">e-Materai</td>
+          <td className="py-2 text-right">
+            {`Rp${(await import("@/lib/costs")).E_STAMP_PRICE.toLocaleString("id-ID")}/lembar (opsional)`}
+          </td>
+        </tr>
+        <tr className="border-b">
+          <td className="py-2">e-Sign</td>
+          <td className="py-2 text-right">
+            {`Rp${(await import("@/lib/costs")).E_SIGN_PRICE.toLocaleString("id-ID")}/tanda tangan (opsional)`}
+          </td>
+        </tr>
+
+        {/* Biaya pemerintah */}
+        <tr>
+          <td className="py-2 text-slate-500">Biaya Pemerintah</td>
+          <td className="py-2 text-right text-slate-500">
+            Sesuai kebutuhan & regulasi
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <p className="mt-2 text-xs text-slate-500">
+      e-Materai & e-Sign ditambahkan saat checkout sesuai kebutuhan dokumen.
+    </p>
+  </div>
+)}
+
 
         {/* Sidebar Ringkasan */}
 <aside className="card p-5 h-fit space-y-4">
