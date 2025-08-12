@@ -1,3 +1,4 @@
+// /src/app/layanan/[slug]/page.tsx
 // @ts-nocheck
 import Link from "next/link";
 import { getLayananBySlug } from "@/lib/solusi";
@@ -37,7 +38,7 @@ export default async function LayananDetail({
       <h1 className="text-3xl font-semibold mt-4">{svc.title}</h1>
 
       <div className="grid lg:grid-cols-3 gap-6 mt-6">
-        {/* Tabs */}
+        {/* Konten dengan tabs */}
         <div className="lg:col-span-2 card">
           <div className="flex gap-2 p-2 border-b overflow-x-auto">
             {tabs.map((t) => (
@@ -135,20 +136,28 @@ export default async function LayananDetail({
               ? `Rp${svc.price.toLocaleString("id-ID")}`
               : "Minta Penawaran"}
           </div>
-<div className="flex flex-col gap-2">
-  <Link href={`/checkout/${svc.slug}`} className="btn btn-primary w-full">
-    {typeof svc.price === "number" ? "Ajukan Proses" : "Minta Penawaran"}
-  </Link>
 
-  <a
-    href={`https://wa.me/${wa}?text=${waText}`}
-    target="_blank"
-    className="btn w-full"
-  >
-    Tanya via WhatsApp
-  </a>
-</div>
-
+          {/* CTA */}
+          <div className="flex flex-col gap-2" id="ajukan">
+            <Link
+              prefetch
+              href={`/checkout/${svc.slug}`}
+              className={`w-full btn ${
+                typeof svc.price === "number"
+                  ? "btn-primary"
+                  : "border-emerald-600 text-emerald-700 hover:bg-emerald-50"
+              }`}
+            >
+              {typeof svc.price === "number" ? "Ajukan Proses" : "Minta Penawaran"}
+            </Link>
+            <a
+              href={`https://wa.me/${wa}?text=${waText}`}
+              target="_blank"
+              className="btn w-full"
+            >
+              Tanya via WhatsApp
+            </a>
+          </div>
         </aside>
       </div>
     </div>
