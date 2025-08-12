@@ -1,49 +1,40 @@
+// /src/app/page.tsx
 import Link from "next/link";
-import { listCatalog } from "@/lib/catalog";
-import { getPrice, computeFinal } from "@/lib/prices";
-
-const idr = (n: number) =>
-  new Intl.NumberFormat("id-ID", { style: "currency", currency: "IDR", maximumFractionDigits: 0 }).format(n);
+import { listLayanan } from "@/lib/solusi";
+import { toIDR } from "@/lib/format";
 
 export const revalidate = 300;
 
-export default async function Page() {
-  const items = listCatalog();
+export default async function Home() {
+  const items = await listLayanan();
 
   return (
     <main className="max-w-6xl mx-auto p-6">
-      <h1 className="text-2xl font-semibold mb-6">Katalog Layanan</h1>
-      <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
+      <header className="flex items-center justify-between mb-6">
+        <h1 className="text-2xl font-semibold">Katalog Layanan</h1>
+        <nav className="text-sm">
+          <Link href="https://wa.me/6281142677700" className="hover:underline">Tanya</Link>
+        </nav>
+      </header>
+
+      <section className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
         {items.map((s) => {
-          const row = getPrice(s.slug);
-          const calc = computeFinal(row);
+          const harga = toIDR(s.price ?? null);
           return (
-            <article key={s.slug} className="rounded-2xl border p-5 hover:shadow-md transition">
-              <h2 className="font-medium">{s.title}</h2>
-
-              {/* Harga */}
-              <div className="mt-1 min-h-[24px]">
-                {calc.rfq ? (
-                  <span className="text-slate-600 text-sm">Minta Penawaran</span>
-                ) : calc.discount > 0 ? (
-                  <div className="flex items-baseline gap-2">
-                    <span className="text-emerald-700 font-semibold">{idr(calc.final)}</span>
-                    <span className="text-sm text-gray-500 line-through">{idr(calc.base)}</span>
-                  </div>
-                ) : (
-                  <span className="text-emerald-700 font-semibold">{idr(calc.base)}</span>
-                )}
+            <article key={s.slug} className="card">
+              <h2 className="font-medium text-lg">{s.title}</h2>
+              <div className="mt-1 text-emerald-700 font-semibold">
+                {harga ? <>Rp {harga}</> : <span className="text-slate-500">Minta Penawaran</span>}
               </div>
+              <p className="text-sm text-slate-600 mt-2 line-clamp-3">{s.summary}</p>
 
-              {s.summary && <p className="text-sm text-gray-600 line-clamp-3 mt-2">{s.summary}</p>}
-
-              <div className="mt-4 flex gap-2">
-                <Link href={`/layanan/${s.slug}`} className="rounded-lg border px-3 py-1.5 text-sm hover:bg-gray-50">
+              <div className="flex gap-2 mt-4">
+                <Link href={`/layanan/${s.slug}`} className="px-3 py-2 rounded-xl border text-sm">
                   Detail
                 </Link>
                 <Link
-                  href={`/layanan/${s.slug}#bayar`}
-                  className="rounded-lg bg-emerald-600 px-3 py-1.5 text-sm text-white hover:bg-emerald-700"
+                  href={`/layanan/${s.slug}#ajukan`}
+                  className="btn-brand text-sm"
                 >
                   Ajukan Proses
                 </Link>
@@ -51,7 +42,7 @@ export default async function Page() {
             </article>
           );
         })}
-      </div>
+      </section>
     </main>
   );
 }
