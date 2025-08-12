@@ -27,14 +27,18 @@ export default async function DetailPage({ params }: { params: { slug: string } 
         {!!svc.detail?.inclusions?.length && (
           <div>
             <h3 className="font-semibold mb-2">Yang Anda Dapatkan</h3>
-            <ul className="list-disc ml-5 space-y-1">{svc.detail!.inclusions!.map((it, i) => <li key={i}>{it}</li>)}</ul>
+            <ul className="list-disc ml-5 space-y-1">
+              {svc.detail!.inclusions!.map((it, i) => <li key={i}>{it}</li>)}
+            </ul>
           </div>
         )}
 
         {!!svc.detail?.process?.length && (
           <div>
             <h3 className="font-semibold mb-2">Proses Pengajuan</h3>
-            <ol className="list-decimal ml-5 space-y-1">{svc.detail!.process!.map((it, i) => <li key={i}>{it}</li>)}</ol>
+            <ol className="list-decimal ml-5 space-y-1">
+              {svc.detail!.process!.map((it, i) => <li key={i}>{it}</li>)}
+            </ol>
           </div>
         )}
       </section>
