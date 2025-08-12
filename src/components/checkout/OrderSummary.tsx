@@ -36,7 +36,7 @@ export default function OrderSummary({ svc }: { svc: CatalogItem }) {
         </span>
       </div>
       <div className="flex justify-between text-sm">
-        <span>Biaya Gateway (±{Math.round(feePct*100)}%)</span><span>{idr(fee)}</span>
+       
       </div>
       <div className="flex justify-between text-base font-semibold border-t pt-2">
         <span>Total</span><span>{idr(total)}</span>
