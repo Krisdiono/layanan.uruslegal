@@ -9,9 +9,16 @@ export default function Checkout({ params }) {
   const [files, setFiles] = useState<File[]>([]);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
-  const price = typeof svc?.price === "number" ? svc.price : 0;
-  const fee = Math.round(price * 0.03);
-  const total = price + fee;
+ const [eStampQty, setEStampQty] = useState(0);   // e-Materai
+const [eSignQty, setESignQty] = useState(0);     // e-Sign
+
+const E_STAMP_PRICE = 10000; // Rp10.000/lembar
+const E_SIGN_PRICE  = 5000;  // contoh Rp5.000/tanda tangan
+
+const subtotal = svc.price ?? 0; // atau angka yang kamu pakai
+const extras   = eStampQty * E_STAMP_PRICE + eSignQty * E_SIGN_PRICE;
+const total    = subtotal + extras;
+
 
   const onPay = async () => {
     const res = await fetch("/api/midtrans/create-transaction", {
