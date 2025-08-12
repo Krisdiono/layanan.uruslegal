@@ -25,8 +25,58 @@ export default function Checkout({ params }) {
       })
     });
     const { token } = await res.json();
-    window.snap.pay(token);
+    async function logOrder(status: "success"|"pending"|"error", snapResult: any, extra: {
+  service: { slug: string; title: string; price: number|null },
+  amounts: { subtotal: number|null; gatewayFee: number; total: number|null },
+  customer: { name: string; email: string; phone?: string },
+  uploadId?: string,
+  files?: string[],
+}) {
+  const payload = {
+    id: snapResult?.order_id ?? `UL-${Date.now()}`,
+    status,
+    ...extra,
+    midtrans: snapResult,
   };
+  await fetch("/api/orders/create", {
+    method: "POST",
+    headers: { "content-type": "application/json" },
+    body: JSON.stringify(payload),
+  }).catch(() => {});
+}
+
+    window.snap.pay(token, {
+  onSuccess: async (result: any) => {
+    await logOrder("success", result, {
+      service: { slug: svc.slug, title: svc.title, price: svc.price ?? null },
+      amounts: { subtotal, gatewayFee, total },         // pakai nilai yang sudah kamu hitung di page ini
+      customer: { name, email, phone },
+      uploadId,                                         // kalau kamu pakai API /api/uploads
+      files: uploadedFiles?.map(f => f.name) || [],
+    });
+    window.location.href = `/payment/success?order_id=${encodeURIComponent(result.order_id)}`;
+  },
+  onPending: async (result: any) => {
+    await logOrder("pending", result, {
+      service: { slug: svc.slug, title: svc.title, price: svc.price ?? null },
+      amounts: { subtotal, gatewayFee, total },
+      customer: { name, email, phone },
+      uploadId,
+      files: uploadedFiles?.map(f => f.name) || [],
+    });
+    window.location.href = `/payment/pending?order_id=${encodeURIComponent(result.order_id)}`;
+  },
+  onError: async (result: any) => {
+    await logOrder("error", result, {
+      service: { slug: svc.slug, title: svc.title, price: svc.price ?? null },
+      amounts: { subtotal, gatewayFee, total },
+      customer: { name, email, phone },
+      uploadId,
+      files: uploadedFiles?.map(f => f.name) || [],
+    });
+    window.location.href = `/payment/error?order_id=${encodeURIComponent(result.order_id || "")}`;
+  },
+});
 
   return (
     <div className="container mx-auto px-4 py-8">
