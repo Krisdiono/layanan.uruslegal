@@ -1,6 +1,6 @@
 import "server-only";
 import { svcListSchema, svcSchema } from "@/lib/schema";
-import fallback from "@/data/services.fallback.json";
+import fallback from "@/data/services_fallback.json";
 import { SERVER_SERVICES_BASE } from "@/lib/env";
 
 // --- SERVER FETCHERS (dipanggil dari Server Component / Route Handler) ---
