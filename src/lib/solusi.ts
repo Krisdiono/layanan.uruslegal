@@ -24,3 +24,16 @@ export async function listLayanan(): Promise<Layanan[]> {
 export async function getLayanan(slug: string): Promise<Layanan | undefined> {
   return all.find(s => s.slug === String(slug));
 }
+export type PriceItem = { label: string; amount: number };
+
+export type Layanan = {
+  id: string | number;
+  slug: string;
+  title: string;
+  summary?: string;
+  price?: number;                 // base price
+  description?: string;
+  requirements?: string[];        // Persyaratan
+  timeline?: string[];            // Langkah / estimasi
+  priceBreakdown?: PriceItem[];   // Rincian biaya
+};
