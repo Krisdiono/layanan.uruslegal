@@ -1,11 +1,24 @@
-// lib/price.ts
-export function effectivePrice(svc: { price: number; fee_discount?: number; discount_percent?: number }) {
-  const base = svc.price || 0;
-  // dukung dua pola: nominal atau persen
-  const byNominal = Math.max(0, base - (svc.fee_discount ?? 0));
-  const byPercent = typeof svc.discount_percent === "number"
-    ? Math.max(0, base - Math.round(base * (svc.discount_percent / 100)))
-    : byNominal;
-  return { base, final: byPercent, discountAmount: base - byPercent };
+import rows from "@/data/prices.json";
+
+export type PriceRow = {
+  slug: string;
+  base_price?: number;
+  discount_amount?: number;
+  discount_percent?: number;
+  rfq?: boolean;
+  active?: boolean;
+};
+
+export function getPrice(slug: string): PriceRow | undefined {
+  return (rows as PriceRow[]).find(x => x.slug === slug && x.active !== false);
 }
-export const idr = (n: number) => new Intl.NumberFormat("id-ID", { style: "currency", currency: "IDR", maximumFractionDigits: 0 }).format(n);
+
+export function computeFinal(row?: PriceRow) {
+  if (!row || row.rfq) return { base: 0, final: 0, discount: 0, rfq: true as const };
+  const base = row.base_price || 0;
+  const byNom = Math.max(0, base - (row.discount_amount || 0));
+  const byPct = typeof row.discount_percent === "number"
+    ? Math.max(0, base - Math.round(base * (row.discount_percent / 100)))
+    : byNom;
+  return { base, final: byPct, discount: base - byPct, rfq: false as const };
+}
