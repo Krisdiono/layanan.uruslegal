@@ -135,20 +135,20 @@ export default async function LayananDetail({
               ? `Rp${svc.price.toLocaleString("id-ID")}`
               : "Minta Penawaran"}
           </div>
-          <div className="flex flex-col gap-2">
-            {typeof svc.price === "number" && (
-              <Link href={`/checkout/${svc.slug}`} className="btn btn-primary w-full">
-                Ajukan Proses
-              </Link>
-            )}
-            <a
-              href={`https://wa.me/${wa}?text=${waText}`}
-              target="_blank"
-              className="btn w-full"
-            >
-              Tanya via WhatsApp
-            </a>
-          </div>
+<div className="flex flex-col gap-2">
+  <Link href={`/checkout/${svc.slug}`} className="btn btn-primary w-full">
+    {typeof svc.price === "number" ? "Ajukan Proses" : "Minta Penawaran"}
+  </Link>
+
+  <a
+    href={`https://wa.me/${wa}?text=${waText}`}
+    target="_blank"
+    className="btn w-full"
+  >
+    Tanya via WhatsApp
+  </a>
+</div>
+
         </aside>
       </div>
     </div>
