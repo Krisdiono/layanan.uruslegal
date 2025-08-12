@@ -4,7 +4,13 @@ import { getLayananBySlug } from "@/lib/solusi";
 
 export const revalidate = 300;
 
-export default async function LayananDetail({ params, searchParams }) {
+export default async function LayananDetail({
+  params,
+  searchParams,
+}: {
+  params: { slug: string };
+  searchParams?: { tab?: string };
+}) {
   const svc = await getLayananBySlug(params.slug);
   if (!svc) {
     return (
@@ -16,10 +22,14 @@ export default async function LayananDetail({ params, searchParams }) {
   }
 
   const wa = process.env.NEXT_PUBLIC_WA_NUMBER || "6281142677700";
-  const waText = encodeURIComponent(`Halo UrusLegal, saya ingin konsultasi: ${svc.title} (${svc.slug})`);
+  const waText = encodeURIComponent(
+    `Halo UrusLegal, saya ingin konsultasi: ${svc.title} (${svc.slug})`
+  );
 
-  const tabs = ["Informasi","Persyaratan","Proses","Biaya"] as const;
-  const active = tabs.includes(searchParams?.tab) ? searchParams.tab : "Informasi";
+  const tabs = ["Informasi", "Persyaratan", "Proses", "Biaya"] as const;
+  const active = (searchParams?.tab && tabs.includes(searchParams.tab as any))
+    ? (searchParams!.tab as typeof tabs[number])
+    : "Informasi";
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -30,11 +40,11 @@ export default async function LayananDetail({ params, searchParams }) {
         {/* Tabs */}
         <div className="lg:col-span-2 card">
           <div className="flex gap-2 p-2 border-b overflow-x-auto">
-            {tabs.map(t => (
+            {tabs.map((t) => (
               <Link
                 key={t}
                 href={`?tab=${t}`}
-                className={`px-4 py-2 rounded-lg ${active===t ? "bg-emerald-600 text-white" : "hover:bg-gray-100"}`}
+                className={`px-4 py-2 rounded-lg ${active === t ? "bg-emerald-600 text-white" : "hover:bg-gray-100"}`}
               >
                 {t}
               </Link>
@@ -42,46 +52,48 @@ export default async function LayananDetail({ params, searchParams }) {
           </div>
 
           <div className="p-5 space-y-4">
-            {active==="Informasi" && (
+            {active === "Informasi" && (
               <>
                 {(svc.description || svc.summary) && (
-                  <p className="text-slate-700 leading-relaxed">{svc.description || svc.summary}</p>
+                  <p className="text-slate-700 leading-relaxed">
+                    {svc.description || svc.summary}
+                  </p>
                 )}
                 {svc.detail?.inclusions?.length ? (
                   <>
                     <h3 className="text-lg font-semibold">Yang Anda Dapatkan</h3>
                     <ul className="list-disc pl-6 space-y-1">
-                      {svc.detail.inclusions.map((x,i)=><li key={i}>{x}</li>)}
+                      {svc.detail.inclusions.map((x: string, i: number) => <li key={i}>{x}</li>)}
                     </ul>
                   </>
-                ):null}
+                ) : null}
               </>
             )}
 
-            {active==="Persyaratan" && (
+            {active === "Persyaratan" && (
               svc.detail?.requirements?.length ? (
                 <ul className="list-disc pl-6 space-y-1">
-                  {svc.detail.requirements.map((x,i)=><li key={i}>{x}</li>)}
+                  {svc.detail.requirements.map((x: string, i: number) => <li key={i}>{x}</li>)}
                 </ul>
               ) : <div className="text-slate-500">Persyaratan akan diinformasikan saat konsultasi.</div>
             )}
 
-            {active==="Proses" && (
+            {active === "Proses" && (
               svc.detail?.process?.length ? (
                 <ol className="list-decimal pl-6 space-y-1">
-                  {svc.detail.process.map((x,i)=><li key={i}>{x}</li>)}
+                  {svc.detail.process.map((x: string, i: number) => <li key={i}>{x}</li>)}
                 </ol>
               ) : <div className="text-slate-500">Proses pengajuan mengikuti regulasi terbaru.</div>
             )}
 
-            {active==="Biaya" && (
+            {active === "Biaya" && (
               <div className="overflow-x-auto">
                 <table className="w-full text-sm table-zebra">
                   <tbody>
                     <tr className="border-b">
                       <td className="py-2">Harga Layanan</td>
                       <td className="py-2 text-right">
-                        {typeof svc.price==="number" ? `Rp${svc.price.toLocaleString("id-ID")}` : "Minta Penawaran"}
+                        {typeof svc.price === "number" ? `Rp${svc.price.toLocaleString("id-ID")}` : "Minta Penawaran"}
                       </td>
                     </tr>
                     <tr>
@@ -101,11 +113,23 @@ export default async function LayananDetail({ params, searchParams }) {
           <div className="text-2xl font-bold">
             {typeof svc.price === "number" ? `Rp${svc.price.toLocaleString("id-ID")}` : "Minta Penawaran"}
           </div>
+
           <div className="flex flex-col gap-2">
-            {typeof svc.price === "number" && (
-              <Link href={`/checkout/${svc.slug}`} className="btn btn-primary w-full">Ajukan Proses</Link>
-            )}
-            <a href={`https://wa.me/${wa}?text=${waText}`} target="_blank" className="btn w-full">Tanya via WhatsApp</a>
+            <Link
+              prefetch
+              href={`/checkout/${svc.slug}`}
+              className={`w-full btn ${typeof svc.price === "number" ? "btn-primary" : ""}`}
+            >
+              {typeof svc.price === "number" ? "Ajukan Proses" : "Minta Penawaran"}
+            </Link>
+
+            <a
+              href={`https://wa.me/${wa}?text=${waText}`}
+              target="_blank"
+              className="btn w-full"
+            >
+              Tanya via WhatsApp
+            </a>
           </div>
         </aside>
       </div>

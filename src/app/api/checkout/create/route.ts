@@ -1,45 +1,53 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { getPrice, computeFinal } from "@/lib/prices";
 
-export async function POST(req: Request) {
+export async function POST(req: NextRequest) {
   try {
-    const { slug } = (await req.json()) as { slug?: string };
-    if (!slug) return NextResponse.json({ error: "Missing slug" }, { status: 400 });
+    const body = await req.json();
+    const slug = String(body?.slug || "");
+    const metaId = body?.metaId ? String(body.metaId) : null;
 
-    const row = getPrice(slug);
-    const calc = computeFinal(row);
-    if (calc.rfq) {
-      return NextResponse.json({ error: "RFQ_ONLY" }, { status: 400 });
+    const pr = getPrice(slug);
+    const calc = computeFinal(pr);
+    if (!pr || calc.rfq) {
+      return NextResponse.json({ error: "no-price" }, { status: 400 });
     }
 
-    const feePct = parseFloat(process.env.GATEWAY_FEE_PCT ?? "0.03");
-    const fee = Math.round(calc.final * feePct);
-    const grossAmount = calc.final + fee;
+    const feePct = Number(process.env.GATEWAY_FEE_PCT || "0.03");
+    const gross = Math.round(calc.final * (1 + feePct));
 
-    const orderId = `${slug}-${Date.now()}`;
     const serverKey = process.env.MIDTRANS_SERVER_KEY!;
+    if (!serverKey) return NextResponse.json({ error: "missing-server-key" }, { status: 500 });
     const auth = Buffer.from(serverKey + ":").toString("base64");
 
-    const body = {
-      transaction_details: { order_id: orderId, gross_amount: grossAmount },
-      item_details: [
-        { id: slug, name: slug, price: calc.final, quantity: 1 },
-        { id: "fee", name: "Biaya Gateway", price: fee, quantity: 1 }
-      ],
-      callbacks: { finish: `${process.env.NEXT_PUBLIC_BASE_URL}/payment/success` },
-      credit_card: { secure: true }
-    };
-
-    const r = await fetch("https://app.sandbox.midtrans.com/snap/v1/transactions", {
+    const res = await fetch("https://app.sandbox.midtrans.com/snap/v1/transactions", {
       method: "POST",
-      headers: { "Content-Type": "application/json", Authorization: `Basic ${auth}` },
-      body: JSON.stringify(body)
+      headers: {
+        "Authorization": `Basic ${auth}`,
+        "Content-Type": "application/json",
+        "Accept": "application/json"
+      },
+      body: JSON.stringify({
+        transaction_details: {
+          order_id: `UL-${slug}-${metaId || Date.now()}`,
+          gross_amount: gross
+        },
+        item_details: [
+          { id: slug, price: gross, quantity: 1, name: slug }
+        ],
+        customer_details: {
+          first_name: "UrusLegal",
+          email: "customer@uruslegal.id"
+        }
+      })
     });
 
-    const j = await r.json();
-    if (!r.ok) return NextResponse.json({ error: j?.status_message || "Midtrans error" }, { status: r.status });
-    return NextResponse.json({ token: j.token, redirect_url: j.redirect_url });
-  } catch (e: any) {
-    return NextResponse.json({ error: e?.message || "Unexpected error" }, { status: 500 });
+    const json = await res.json().catch(()=>null);
+    if (!res.ok || !json?.token) {
+      return NextResponse.json({ error: json?.status_message || "midtrans-error", details: json }, { status: 400 });
+    }
+    return NextResponse.json({ token: json.token });
+  } catch (e:any) {
+    return NextResponse.json({ error: e?.message || "unexpected" }, { status: 500 });
   }
 }
