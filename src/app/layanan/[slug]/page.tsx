@@ -1,43 +1,49 @@
 import Link from "next/link";
-import { getLayanan } from "@/lib/solusi";
+import { getCatalog } from "@/lib/catalog";
+import OrderSummary from "@/components/checkout/OrderSummary";
+import OrderActions from "@/components/checkout/OrderActions";
 
-type Props = { params: Promise<{ slug: string }> }; // <- perbaiki di sini
+export const revalidate = 300;
 
-export default async function DetailPage({ params }: Props) {
-  const { slug } = await params;                      // <- await params
-  
-export { revalidate } from "../../[slug]/page";
-export { default } from "../../[slug]/page";
+export default async function DetailPage({ params }: { params: { slug: string } }) {
+  const svc = getCatalog(params.slug);
+  if (!svc) return <div className="p-6">Layanan tidak ditemukan.</div>;
 
-  const svc = await getLayanan(slug);
-  if (!svc) {
-    // optional: notFound();
-    return <div className="p-6">Layanan tidak ditemukan.</div>;
-  }
-
-  const wa = `https://wa.me/6281142677700?text=${encodeURIComponent(
-    `Halo UrusLegal, saya ingin tanya tentang: ${svc.title}`
-  )}`;
+  const desc = svc.description || "Deskripsi belum tersedia.";
 
   return (
-    <main className="max-w-3xl mx-auto p-6 space-y-6">
-      <Link href="/" className="inline-flex items-center gap-2 text-sm border rounded-xl px-3 py-2">← Kembali</Link>
-      <h1 className="text-3xl font-semibold">{svc.title}</h1>
-      {svc.price ? (
-        <div className="text-emerald-700 font-semibold">
-          Mulai Rp {Number(svc.price).toLocaleString("id-ID")}
-        </div>
-      ) : null}
-      <p className="text-slate-700">Deskripsi belum tersedia.</p>
-      <div className="flex gap-3">
-        <Link
-          href={`https://solusi.uruslegal.id/checkout?service=${encodeURIComponent(svc.slug)}`}
-          className="px-4 py-2 rounded-xl bg-emerald-600 text-white"
-        >
-          Ajukan Proses
+    <main className="max-w-6xl mx-auto p-6 grid lg:grid-cols-3 gap-6">
+      <section className="lg:col-span-2 space-y-6">
+        <Link href="/" className="inline-flex items-center gap-2 text-sm border rounded-xl px-3 py-2">
+          ← Kembali
         </Link>
-        <Link href={wa} className="px-4 py-2 rounded-xl border">Tanya via WhatsApp</Link>
-      </div>
+        <h1 className="text-3xl font-semibold">{svc.title}</h1>
+
+        <div>
+          <h2 className="font-semibold mb-2">Informasi Layanan</h2>
+          <div className="prose max-w-none text-gray-700" dangerouslySetInnerHTML={{ __html: desc }} />
+        </div>
+
+        {!!svc.detail?.inclusions?.length && (
+          <div>
+            <h3 className="font-semibold mb-2">Yang Anda Dapatkan</h3>
+            <ul className="list-disc ml-5 space-y-1">{svc.detail!.inclusions!.map((it, i) => <li key={i}>{it}</li>)}</ul>
+          </div>
+        )}
+
+        {!!svc.detail?.process?.length && (
+          <div>
+            <h3 className="font-semibold mb-2">Proses Pengajuan</h3>
+            <ol className="list-decimal ml-5 space-y-1">{svc.detail!.process!.map((it, i) => <li key={i}>{it}</li>)}</ol>
+          </div>
+        )}
+      </section>
+
+      <aside className="space-y-4">
+        <div id="bayar" />
+        <OrderSummary svc={svc as any} />
+        <OrderActions svc={svc as any} />
+      </aside>
     </main>
   );
 }
