@@ -1,52 +1,29 @@
-// src/lib/solusi.ts
+cat > src/lib/solusi.ts <<'TS'
 import type { Svc } from "@/types/service";
+import catalog from "@/data/catalog.json";
+import prices from "@/data/prices.json";
 
-const layanan: Svc[] = [
-  {
-    slug: "pendirian-pt",
-    title: "Pendirian PT",
-    price: 3500000,
-    summary: "Paket lengkap pendirian Perseroan Terbatas.",
-    description: "Deskripsi lengkap pendirian PT...",
-    detail: {
-      inclusions: ["Draft akta", "SK Kemenkumham", "NPWP", "NIB"],
-      process: ["Pengumpulan dokumen", "Drafting akta", "Pengesahan"],
-    },
-    timeline: "7-10 hari kerja",
-    category: "Badan Usaha"
-  },
-  {
-    slug: "pendirian-cv",
-    title: "Pendirian CV",
-    price: 2500000,
-    summary: "Layanan pendirian CV cepat & ringkas.",
-    description: "Deskripsi lengkap pendirian CV...",
-    detail: {
-      inclusions: ["Draft akta", "SK Kemenkumham", "NPWP", "NIB"],
-      process: ["Pengumpulan dokumen", "Drafting akta", "Pengesahan"],
-    },
-    timeline: "5-7 hari kerja",
-    category: "Badan Usaha"
-  },
-  {
-    slug: "pendaftaran-merek",
-    title: "Pendaftaran Merek",
-    price: 1800000,
-    summary: "Urus merek dagang sampai submit DJKI.",
-    description: "Deskripsi lengkap pendaftaran merek...",
-    detail: {
-      inclusions: ["Pengecekan awal", "Penyusunan dokumen", "Submit DJKI"],
-      process: ["Cek ketersediaan", "Pengajuan", "Monitoring"],
-    },
-    timeline: "2-3 hari kerja",
-    category: "Kekayaan Intelektual"
-  }
-];
+// prices: { slug, price }[]
+const priceMap = new Map<string, number | null>();
+(prices as any[]).forEach(p => priceMap.set(String(p.slug), p.price ?? null));
+
+const all: Svc[] = (catalog as any[]).map((it) => ({
+  slug: String(it.slug),
+  title: String(it.title),
+  summary: it.summary ?? "",
+  description: it.description ?? "",
+  detail: it.detail ?? undefined,
+  timeline: it.timeline ?? "",
+  category: it.category ?? "",
+  price: priceMap.has(String(it.slug)) ? (priceMap.get(String(it.slug)) as any) : null,
+}));
 
 export async function listLayanan(): Promise<Svc[]> {
-  return layanan;
+  return all;
 }
 
 export async function getLayanan(slug: string): Promise<Svc | undefined> {
-  return layanan.find(s => s.slug === slug);
+  const key = String(slug);
+  return all.find(s => s.slug === key);
 }
+TS
