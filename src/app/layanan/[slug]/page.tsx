@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 // @ts-nocheck
 import { getLayananBySlug } from "@/lib/services"; // helper ambil dari json
 import Link from "next/link";
@@ -95,5 +96,67 @@ function Tabs({ svc }) {
         )}
       </div>
     </div>
+=======
+import { getLayanan } from "@/lib/solusi";
+import Link from "next/link";
+
+export default async function LayananDetail({ params }: { params: { slug: string } }) {
+  const svc = await getLayanan(params.slug);
+
+  if (!svc) {
+    return (
+      <main className="max-w-3xl mx-auto p-6">
+        <p>Layanan tidak ditemukan.</p>
+      </main>
+    );
+  }
+
+  return (
+    <main className="max-w-6xl mx-auto p-6 grid lg:grid-cols-3 gap-6">
+      <section className="lg:col-span-2 space-y-6">
+        <Link href="/" className="inline-flex items-center gap-2 text-sm border rounded-xl px-3 py-2">← Kembali</Link>
+        <h1 className="text-3xl font-semibold">{svc.title}</h1>
+        {svc.price != null ? (
+          <div className="text-emerald-700 font-semibold">Mulai Rp {Number(svc.price).toLocaleString("id-ID")}</div>
+        ) : (
+          <div className="text-slate-600">Minta Penawaran</div>
+        )}
+        <p className="text-slate-700">{svc.description || svc.summary || "Deskripsi belum tersedia."}</p>
+
+        {!!svc.detail?.inclusions?.length && (
+          <div>
+            <h3 className="font-semibold mb-2">Yang Anda Dapatkan</h3>
+            <ul className="list-disc ml-5 space-y-1">
+              {svc.detail.inclusions.map((it, i) => <li key={i}>{it}</li>)}
+            </ul>
+          </div>
+        )}
+
+        {!!svc.detail?.process?.length && (
+          <div>
+            <h3 className="font-semibold mb-2">Proses Pengajuan</h3>
+            <ol className="list-decimal ml-5 space-y-1">
+              {svc.detail.process.map((it, i) => <li key={i}>{it}</li>)}
+            </ol>
+          </div>
+        )}
+      </section>
+
+      <aside className="border rounded-2xl p-4 h-fit space-y-3" id="bayar">
+        <div className="font-medium">Ringkasan</div>
+        {svc.price != null ? (
+          <>
+            <div>Harga: <b>Rp {Number(svc.price).toLocaleString("id-ID")}</b></div>
+            <a href="#todo-pay" className="btn-brand block text-center">Ajukan Proses</a>
+          </>
+        ) : (
+          <a
+            className="px-4 py-2 rounded-xl border block text-center"
+            href={`https://wa.me/6281142677700?text=${encodeURIComponent("Halo, saya tertarik dengan " + svc.title)}`}
+            target="_blank">Tanya via WhatsApp</a>
+        )}
+      </aside>
+    </main>
+>>>>>>> be6706a (Update project (checkout + Midtrans + env example))
   );
 }

@@ -1,11 +1,14 @@
+<<<<<<< HEAD
 /* src/app/globals.css */
+=======
+>>>>>>> be6706a (Update project (checkout + Midtrans + env example))
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 :root{
-  --brand:#1ab69d;      /* primary */
-  --brand-2:#31b978;    /* secondary */
+  --brand:#1ab69d;
+  --brand-2:#31b978;
 }
 body{ background:#f8fafc; }
 
