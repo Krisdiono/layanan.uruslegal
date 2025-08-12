@@ -1,5 +1,6 @@
 // /src/app/layanan/[slug]/page.tsx
 // @ts-nocheck
+import { E_STAMP_PRICE, E_SIGN_PRICE } from "@/lib/costs";
 import Link from "next/link";
 import { getLayananBySlug } from "@/lib/solusi";
 
