@@ -1,19 +1,24 @@
-<<<<<<< HEAD
-/* src/app/globals.css */
-=======
->>>>>>> be6706a (Update project (checkout + Midtrans + env example))
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
+/* Brand */
 :root{
-  --brand:#1ab69d;
-  --brand-2:#31b978;
+  --brand: #1ab69d;
+  --brand-2: #31b978;
 }
-body{ background:#f8fafc; }
 
-/* helper */
-.btn-brand{ @apply px-5 py-3 rounded-lg text-white font-medium shadow; background:var(--brand); }
-.btn-brand:hover{ background:var(--brand-2); }
-.card{ @apply border rounded-2xl p-5 bg-white shadow-sm hover:shadow transition; }
+/* Base */
+html, body { @apply bg-gray-50 text-slate-800 antialiased; }
 
+/* Links */
+a { @apply text-emerald-700 hover:text-emerald-800; }
+
+/* Buttons */
+.btn { @apply inline-flex items-center justify-center gap-2 px-4 py-2 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-sm font-medium transition; }
+.btn-primary { @apply bg-emerald-600 text-white border-emerald-600 hover:bg-emerald-700; }
+.btn-ghost { @apply bg-transparent border-transparent hover:bg-slate-100; }
+
+/* Cards & tables */
+.card { @apply rounded-2xl border bg-white shadow-sm; }
+.table-zebra tr:nth-child(even) td { @apply bg-slate-50; }
