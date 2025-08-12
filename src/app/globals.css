@@ -1,5 +1,7 @@
 /* src/app/globals.css */
-@import "tailwindcss";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
 :root{
   --brand:#1ab69d;      /* primary */
@@ -11,3 +13,4 @@ body{ background:#f8fafc; }
 .btn-brand{ @apply px-5 py-3 rounded-lg text-white font-medium shadow; background:var(--brand); }
 .btn-brand:hover{ background:var(--brand-2); }
 .card{ @apply border rounded-2xl p-5 bg-white shadow-sm hover:shadow transition; }
+
