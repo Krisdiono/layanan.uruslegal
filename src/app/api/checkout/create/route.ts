@@ -32,13 +32,11 @@ export async function POST(req: NextRequest) {
     const slug = body?.service?.slug || 'unknown';
     const title = body?.service?.title || slug;
     const total =
-      parseAmount(body?.amounts?.total) || parseAmount(body?.amount);
+  parseInt(String(body?.amounts?.total ?? body?.amount).replace(/[^\d]/g,''),10) || 0;
 
-    if (!total || total <= 0) {
-      return NextResponse.json(
-        { ok: false, error: 'Invalid total amount' },
-        { status: 400 }
-      );
+if (!total || total <= 0) {
+  return NextResponse.json({ ok:false, error:'Invalid total amount' }, { status:400 });
+}
     }
 
     const payload = {
