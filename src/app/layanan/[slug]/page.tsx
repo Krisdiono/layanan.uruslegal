@@ -101,9 +101,9 @@ const requirements = toArray(
             )}
 
             {active === "Persyaratan" && (
-  svc.detail?.requirements?.length ? (
+  requirements.length > 0 ? (
     <ul className="list-disc pl-6 space-y-1">
-      {svc.detail.requirements.map((x: string, i: number) => (
+      {requirements.map((x: string, i: number) => (
         <li key={i}>{x}</li>
       ))}
     </ul>
@@ -113,6 +113,7 @@ const requirements = toArray(
     </div>
   )
 )}
+
 
 
             {active === "Proses" && (
