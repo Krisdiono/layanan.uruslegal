@@ -1,21 +1,23 @@
-import type { Metadata } from 'next';
-import { getService } from '@/lib/perfex';
-import CheckoutButton from './CheckoutButton';
+import { listServices } from '@/lib/catalog';
+import ServiceCard from '@/components/ServiceCard';
+import FallbackBanner from '@/components/FallbackBanner';
 
-export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
-  const s = await getService(params.slug);
-  const title = `${s.title} — UrusLegal`;
-  const desc = s.summary || 'Layanan UrusLegal';
-  const url = `https://layanan.uruslegal.id/layanan/${s.slug}`;
-  return {
-    title,
-    description: desc,
-    alternates: { canonical: url },
-    openGraph: {
-      title, description: desc, url, type: 'article',
-      images: s.image_url ? [{ url: s.image_url }] : undefined,
-    },
-  };
+export const dynamic = 'force-static';
+
+export default async function Page() {
+  const services = await listServices();
+
+  return (
+    <div className="max-w-6xl mx-auto p-6">
+      <h1 className="text-3xl font-semibold mb-6">Layanan</h1>
+      <FallbackBanner />
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        {services.map((s) => (
+          <ServiceCard key={s.slug} service={s as any} />
+        ))}
+      </div>
+    </div>
+  );
 }
 
 export default async function Page({ params }: { params: { slug: string } }) {
