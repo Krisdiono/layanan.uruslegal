@@ -15,7 +15,12 @@
         "Pengesahan di Kemenkumham. Tidak memerlukan akta notaris fisik."
       ]
     },
-    "timeline": "2 Jam Selesai"
+    "timeline": "2 Jam Selesai",
+    "persyaratan": [
+      "KTP Pendiri",
+      "NPWP Pendiri",
+      "Alamat Lengkap Usaha"
+    ]
   },
   {
     "title": "Pendirian PT Biasa (Non-Perorangan)",
@@ -36,7 +41,14 @@
         "Pengurusan NIB"
       ]
     },
-    "timeline": "3 hari kerja"
+    "timeline": "3 hari kerja",
+    "persyaratan": [
+      "KTP Direksi & Komisiaris",
+      "KTP Pemegang Saham",
+      "Nama PT (3 alternatif)",
+      "Alamat Usaha",
+      "Kegiatan Usaha (KBLI)"
+    ]
   },
   {
     "title": "Pendirian CV",
@@ -55,7 +67,12 @@
         "Pengurusan NIB"
       ]
     },
-    "timeline": "3 hari kerja"
+    "timeline": "3 hari kerja",
+    "persyaratan": [
+      "KTP Pendiri",
+      "Nama CV",
+      "Alamat Usaha"
+    ]
   },
   {
     "title": "Pendirian PT PMA (Asing)",
@@ -74,7 +91,14 @@
         "Kepatuhan terhadap daftar negatif investasi (DNI) atau Daftar Prioritas Investasi"
       ]
     },
-    "timeline": "3 hari kerja"
+    "timeline": "3 hari kerja",
+    "persyaratan": [
+      "Passport Direksi & Pemegang Saham (Asing)",
+      "KTP Direksi & Pemegang Saham (Lokal)",
+      "Nama PT (3 Alternatif)",
+      "Alamat Usaha",
+      "Kegiatan Usaha (KBLI)"
+    ]
   },
   {
     "title": "Pendirian Yayasan",
@@ -93,7 +117,12 @@
         "Pendaftaran di instansi terkait lainnya"
       ]
     },
-    "timeline": "3 hari kerja"
+    "timeline": "3 hari kerja",
+    "persyaratan": [
+      "KTP Pendiri",
+      "Nama Yayasan",
+      "Tujuan Sosial/Agama/Kemanusiaan"
+    ]
   },
   {
     "title": "Pendirian Perkumpulan",
@@ -111,7 +140,12 @@
         "Pengesahan di Kemenkumham"
       ]
     },
-    "timeline": "3 hari kerja"
+    "timeline": "3 hari kerja",
+    "persyaratan": [
+      "KTP Pengurus",
+      "Nama Perkumpulan",
+      "AD/ART Perkumpulan"
+    ]
   },
   {
     "title": "Pendirian Koperasi",
@@ -130,7 +164,12 @@
         "Pengesahan di Kemenkumham"
       ]
     },
-    "timeline": "3 hari kerja"
+    "timeline": "3 hari kerja",
+    "persyaratan": [
+      "Daftar Anggota Koperasi",
+      "Rencana Kegiatan Usaha",
+      "AD/ART Koperasi"
+    ]
   },
   {
     "title": "Pembubaran PT",
@@ -150,7 +189,12 @@
         "Pencabutan status badan hukum di Kemenkumham"
       ]
     },
-    "timeline": "Berdasarkan konsultasi"
+    "timeline": "Berdasarkan konsultasi",
+    "persyaratan": [
+      "Akta Pendirian PT & Perubahan Terakhir",
+      "Laporan Keuangan Terakhir",
+      "Surat Keterangan Domisili Perusahaan"
+    ]
   },
   {
     "title": "Asisten Pajak & Pembukuan Bulanan",
@@ -159,13 +203,17 @@
     "detail": {
       "inclusions": [
         "Laporan Pajak Bulanan",
-        "Laporan Keuangan (sesuai kesepakatan)."
+        "Laporan Keuangan (sesuai kesepakatan).."
       ],
       "process": [
         "Proses rutin sesuai kebutuhan bulanan"
       ]
     },
-    "timeline": "5 hari kerja"
+    "timeline": "5 hari kerja",
+    "persyaratan": [
+      "Data Transaksi Keuangan Bulanan",
+      "Bukti Potong Pajak"
+    ]
   },
   {
     "title": "Pelaporan LKPM (Laporan Kegiatan Penanaman Modal)",
@@ -181,7 +229,11 @@
         "Pelaporan ke instansi terkait"
       ]
     },
-    "timeline": "3 hari kerja"
+    "timeline": "3 hari kerja",
+    "persyaratan": [
+      "Data Investasi Perusahaan",
+      "Laporan Keuangan Perusahaan"
+    ]
   },
   {
     "title": "Paket Kepatuhan Tahunan",
@@ -198,7 +250,12 @@
         "Pengajuan ke instansi terkait"
       ]
     },
-    "timeline": "5 hari kerja"
+    "timeline": "5 hari kerja",
+    "persyaratan": [
+      "Akta Perusahaan Terakhir",
+      "NPWP Perusahaan",
+      "NIB Perusahaan"
+    ]
   },
   {
     "title": "Asisten Legal On-Demand",
@@ -213,7 +270,10 @@
         "Sesi konsultasi singkat atau review dokumen sesuai permintaan"
       ]
     },
-    "timeline": "30 menit"
+    "timeline": "30 menit",
+    "persyaratan": [
+      "Topik Konsultasi/Dokumen yang akan direview"
+    ]
   },
   {
     "title": "Media Release / Pengumuman Koran",
@@ -230,7 +290,11 @@
         "Monitoring."
       ]
     },
-    "timeline": "3-5 hari kerja"
+    "timeline": "3-5 hari kerja",
+    "persyaratan": [
+      "Materi Pengumuman/Berita",
+      "Detail Media Target"
+    ]
   },
   {
     "title": "Pendaftaran NIB",
@@ -244,7 +308,13 @@
         "Pendaftaran online melalui sistem OSS."
       ]
     },
-    "timeline": "1 hari kerja"
+    "timeline": "1 hari kerja",
+    "persyaratan": [
+      "KTP Penanggung Jawab",
+      "NPWP Pribadi",
+      "Alamat Usaha",
+      "Email & No. Telepon Aktif"
+    ]
   },
   {
     "title": "Pendaftaran PSE",
@@ -252,14 +322,19 @@
     "description": "Pendaftaran Penyelenggara Sistem Elektronik ke Kominfo.",
     "detail": {
       "inclusions": [
-        "Tanda Daftar Penyelenggara Sistem Elektronik (TD PSE).."
+        "Tanda Daftar Penyelenggara Sistem Elektronik (TD PSE)."
       ],
       "process": [
         "Pengajuan permohonan melalui sistem OSS",
         "Melengkapi data."
       ]
     },
-    "timeline": "1 hari kerja"
+    "timeline": "1 hari kerja",
+    "persyaratan": [
+      "Nama PSE",
+      "URL Website/Aplikasi",
+      "Deskripsi Fungsi PSE"
+    ]
   },
   {
     "title": "Pendaftaran Merk Dagang",
@@ -276,7 +351,13 @@
         "Penerbitan sertifikat merek"
       ]
     },
-    "timeline": "3 hari kerja"
+    "timeline": "3 hari kerja",
+    "persyaratan": [
+      "Contoh Label/Logo Merek",
+      "KTP Pemohon (jika perorangan)",
+      "Akta Perusahaan (jika badan hukum)",
+      "Kelas Barang/Jasa"
+    ]
   },
   {
     "title": "Pendaftaran Hak Cipta",
@@ -292,7 +373,11 @@
         "Penerbitan surat pencatatan ciptaan"
       ]
     },
-    "timeline": "2 hari kerja"
+    "timeline": "2 hari kerja",
+    "persyaratan": [
+      "Contoh Karya Ciptaan (buku, musik, software)",
+      "KTP Pencipta"
+    ]
   },
   {
     "title": "Pendaftaran PATEN",
@@ -310,7 +395,12 @@
         "Penerbitan sertifikat paten"
       ]
     },
-    "timeline": "5 hari kerja"
+    "timeline": "5 hari kerja",
+    "persyaratan": [
+      "Deskripsi Invensi (masalah, solusi, cara kerja)",
+      "Gambar/Diagram Invensi",
+      "KTP Inventor"
+    ]
   },
   {
     "title": "Pendaftaran Desain Industri",
@@ -327,7 +417,11 @@
         "Penerbitan sertifikat desain industri"
       ]
     },
-    "timeline": "3 hari kerja"
+    "timeline": "3 hari kerja",
+    "persyaratan": [
+      "Gambar Desain Industri (tampak depan, samping, atas)",
+      "KTP Desainer"
+    ]
   },
   {
     "title": "Perpanjangan Merk",
@@ -341,7 +435,11 @@
         "Pengajuan permohonan perpanjangan ke DJKI sebelum masa berlaku habis."
       ]
     },
-    "timeline": "3 hari kerja"
+    "timeline": "3 hari kerja",
+    "persyaratan": [
+      "Sertifikat Merek Asli",
+      "KTP Pemilik Merek"
+    ]
   },
   {
     "title": "Pembuatan Perjanjian Kerja (PKWT/PKWTT)",
@@ -357,7 +455,11 @@
         "Penandatanganan"
       ]
     },
-    "timeline": "2 hari kerja"
+    "timeline": "2 hari kerja",
+    "persyaratan": [
+      "Data Karyawan (Nama, Jabatan, Gaji)",
+      "Masa Berlaku Perjanjian"
+    ]
   },
   {
     "title": "Penyusunan Peraturan Perusahaan (PP)",
@@ -373,7 +475,11 @@
         "Pengesahan/pelaporan ke instansi terkait"
       ]
     },
-    "timeline": "5 hari kerja"
+    "timeline": "5 hari kerja",
+    "persyaratan": [
+      "Struktur Organisasi Perusahaan",
+      "Kebijakan Internal Perusahaan (jika ada)"
+    ]
   },
   {
     "title": "Konsultasi Hukum Ketenagakerjaan",
@@ -387,7 +493,11 @@
         "Sesi konsultasi (online/offline) dengan ahli hukum"
       ]
     },
-    "timeline": "30 menit"
+    "timeline": "30 menit",
+    "persyaratan": [
+      "Ringkasan Masalah Ketenagakerjaan",
+      "Dokumen Terkait (jika ada)"
+    ]
   },
   {
     "title": "Pembuatan Perjanjian Outsource",
@@ -404,7 +514,11 @@
         "Penandatanganan."
       ]
     },
-    "timeline": "3 hari kerja"
+    "timeline": "3 hari kerja",
+    "persyaratan": [
+      "Detail Perusahaan Penyedia Outsource",
+      "Ruang Lingkup Pekerjaan"
+    ]
   },
   {
     "title": "Pembuatan Surat PHK",
@@ -420,7 +534,11 @@
         "Perhitungan hak-hak karyawan."
       ]
     },
-    "timeline": "1 hari kerja"
+    "timeline": "1 hari kerja",
+    "persyaratan": [
+      "Data Karyawan yang di-PHK",
+      "Alasan PHK"
+    ]
   },
   {
     "title": "Pembuatan Akta Kuasa",
@@ -436,7 +554,11 @@
         "Tanda tangan di hadapan Notaris"
       ]
     },
-    "timeline": "1 hari kerja"
+    "timeline": "1 hari kerja",
+    "persyaratan": [
+      "KTP Pemberi Kuasa & Penerima Kuasa",
+      "Objek dan Batas Kuasa"
+    ]
   },
   {
     "title": "Pembuatan Akta Perjanjian Umum",
@@ -452,7 +574,12 @@
         "Tanda tangan di hadapan Notaris"
       ]
     },
-    "timeline": "1 hari kerja"
+    "timeline": "1 hari kerja",
+    "persyaratan": [
+      "KTP Para Pihak",
+      "Detail Objek Perjanjian",
+      "Draft Perjanjian (jika ada)"
+    ]
   },
   {
     "title": "Legalisir Dokumen",
@@ -466,7 +593,11 @@
         "Penyerahan dokumen asli dan/atau salinan kepada Notaris untuk proses legalisir/waarmerking"
       ]
     },
-    "timeline": "30 menit"
+    "timeline": "30 menit",
+    "persyaratan": [
+      "Dokumen Asli yang Akan Dilegalisir",
+      "Salinan Dokumen (jika ada)"
+    ]
   },
   {
     "title": "Akta Hibah / Akta Pengakuan / Pengesahan Anak",
@@ -481,7 +612,12 @@
         "Tanda tangan di hadapan Notaris"
       ]
     },
-    "timeline": "2 hari kerja"
+    "timeline": "2 hari kerja",
+    "persyaratan": [
+      "KTP Pemberi & Penerima Hibah/Pihak Terkait",
+      "Detail Objek Hibah (jika ada)",
+      "Akta Lahir Anak (untuk pengesahan anak)"
+    ]
   },
   {
     "title": "Perubahan KBLI",
@@ -500,7 +636,11 @@
         "Update OSS."
       ]
     },
-    "timeline": "2-3 hari kerja"
+    "timeline": "2-3 hari kerja",
+    "persyaratan": [
+      "Akta Pendirian & Perubahan Terakhir",
+      "KBLI Lama & Baru"
+    ]
   },
   {
     "title": "Perubahan Struktur Direksi",
@@ -517,7 +657,11 @@
         "Pemberitahuan/Pengesahan Kemenkumham."
       ]
     },
-    "timeline": "2-3 hari kerja"
+    "timeline": "2-3 hari kerja",
+    "persyaratan": [
+      "Akta Pendirian & Perubahan Terakhir",
+      "KTP Pengurus Lama & Baru"
+    ]
   },
   {
     "title": "Peralihan Saham",
@@ -532,7 +676,12 @@
         "Pencatatan dalam Daftar Pemegang Saham."
       ]
     },
-    "timeline": "1-2 hari kerja"
+    "timeline": "1-2 hari kerja",
+    "persyaratan": [
+      "Akta Pendirian & Perubahan Terakhir",
+      "KTP Pihak yang Terlibat",
+      "Jumlah Saham yang Dialihkan"
+    ]
   },
   {
     "title": "Perubahan Akta",
@@ -549,7 +698,11 @@
         "Pengesahan/Pemberitahuan Kemenkumham."
       ]
     },
-    "timeline": "2-3 hari kerja"
+    "timeline": "2-3 hari kerja",
+    "persyaratan": [
+      "Akta Pendirian & Perubahan Terakhir",
+      "Materi Perubahan Anggaran Dasar"
+    ]
   },
   {
     "title": "Perubahan Modal Dasar",
@@ -566,7 +719,11 @@
         "Pengesahan Kemenkumham."
       ]
     },
-    "timeline": "2-3 hari kerja"
+    "timeline": "2-3 hari kerja",
+    "persyaratan": [
+      "Akta Pendirian & Perubahan Terakhir",
+      "Rencana Perubahan Modal Dasar"
+    ]
   },
   {
     "title": "Pendampingan RUPS",
@@ -584,7 +741,12 @@
         "Pengesahan notulen RUPS oleh notaris (jika diperlukan)."
       ]
     },
-    "timeline": "Berdasarkan jadwal RUPS"
+    "timeline": "Berdasarkan jadwal RUPS",
+    "persyaratan": [
+      "Agenda RUPS",
+      "Daftar Pemegang Saham",
+      "AD/ART Perusahaan"
+    ]
   },
   {
     "title": "Jasa Apostile",
@@ -599,7 +761,10 @@
         "Penerbitan sertifikat Apostile."
       ]
     },
-    "timeline": "3 hari kerja"
+    "timeline": "3 hari kerja",
+    "persyaratan": [
+      "Dokumen Asli yang Akan di-Apostile (sudah dilegalisir notaris jika diperlukan)"
+    ]
   },
   {
     "title": "Jasa Waarmerking",
@@ -614,7 +779,11 @@
         "Pencatatan dalam register notaris."
       ]
     },
-    "timeline": "5 hari kerja"
+    "timeline": "5 hari kerja",
+    "persyaratan": [
+      "Dokumen Asli yang Akan di-Waarmerking",
+      "KTP Pihak yang Bertanda Tangan"
+    ]
   },
   {
     "title": "Pengurusan NIB & Perizinan Usaha",
@@ -631,7 +800,13 @@
         "Penerbitan NIB dan perizinan berusaha"
       ]
     },
-    "timeline": "1 hari kerja"
+    "timeline": "1 hari kerja",
+    "persyaratan": [
+      "KTP Penanggung Jawab",
+      "NPWP Pribadi",
+      "Alamat Usaha",
+      "Email & No. Telepon Aktif"
+    ]
   },
   {
     "title": "Pengurusan NPWP (Orang & Badan)",
@@ -646,7 +821,11 @@
         "Melengkapi dokumen persyaratan (KTP, akta pendirian untuk badan usaha, dll.)"
       ]
     },
-    "timeline": "1 hari kerja"
+    "timeline": "1 hari kerja",
+    "persyaratan": [
+      "KTP (perorangan) / Akta Pendirian (badan)",
+      "Surat Keterangan Domisili"
+    ]
   },
   {
     "title": "Perubahan Data Perusahaan",
@@ -663,7 +842,11 @@
         "Update data di OSS."
       ]
     },
-    "timeline": "2 hari kerja"
+    "timeline": "2 hari kerja",
+    "persyaratan": [
+      "Akta Pendirian & Perubahan Terakhir",
+      "Dokumen Bukti Perubahan (misal: KTP pengurus baru)"
+    ]
   },
   {
     "title": "Pengukuhan PKP",
@@ -679,7 +862,12 @@
         "Verifikasi dokumen"
       ]
     },
-    "timeline": "1 hari kerja (Pengajuan) | 10-12 hari kerja (Proses Survey KPP)"
+    "timeline": "1 hari kerja (Pengajuan) | 10-12 hari kerja (Proses Survey KPP)",
+    "persyaratan": [
+      "NPWP Perusahaan",
+      "Surat Keterangan Domisili",
+      "Rekapitulasi Omzet"
+    ]
   },
   {
     "title": "Pengurusan PBG / IMB",
@@ -695,7 +883,12 @@
         "Verifikasi oleh dinas terkait"
       ]
     },
-    "timeline": "30 hari kerja"
+    "timeline": "30 hari kerja",
+    "persyaratan": [
+      "Gambar Teknis Bangunan",
+      "Sertifikat Tanah",
+      "KTP Pemilik"
+    ]
   },
   {
     "title": "Pengurusan SBUJK",
@@ -711,7 +904,12 @@
         "Penilaian kualifikasi dan klasifikasi"
       ]
     },
-    "timeline": "30 hari kerja"
+    "timeline": "30 hari kerja",
+    "persyaratan": [
+      "Akta Pendirian Perusahaan",
+      "NIB",
+      "Kualifikasi Tenaga Ahli"
+    ]
   },
   {
     "title": "Pengurusan IUJP",
@@ -728,7 +926,12 @@
         "Penerbitan IUJP"
       ]
     },
-    "timeline": "20 hari kerja"
+    "timeline": "20 hari kerja",
+    "persyaratan": [
+      "Akta Pendirian Perusahaan",
+      "NIB",
+      "Sertifikat Kompetensi Tenaga Ahli"
+    ]
   },
   {
     "title": "Pengurusan Izin Sektoral / Khusus",
@@ -743,7 +946,10 @@
         "Melibatkan berbagai kementerian/lembaga teknis"
       ]
     },
-    "timeline": "30 hari kerja"
+    "timeline": "30 hari kerja",
+    "persyaratan": [
+      "Disesuaikan dengan jenis izin sektoral yang dibutuhkan."
+    ]
   },
   {
     "title": "Pembuatan Akta Jual beli (AJB)",
@@ -760,7 +966,13 @@
         "Pendaftaran balik nama di Kantor Pertanahan"
       ]
     },
-    "timeline": "Berdasarkan konsultasi"
+    "timeline": "Berdasarkan konsultasi",
+    "persyaratan": [
+      "Sertifikat Tanah Asli",
+      "KTP Penjual & Pembeli",
+      "PBB Terakhir",
+      "SPPT PBB Terakhir"
+    ]
   },
   {
     "title": "Balik Nama Sertifikat",
@@ -774,7 +986,12 @@
         "Pendaftaran perubahan nama pemilik di sertifikat di Kantor Pertanahan"
       ]
     },
-    "timeline": "Berdasarkan konsultasi"
+    "timeline": "Berdasarkan konsultasi",
+    "persyaratan": [
+      "Sertifikat Tanah Asli",
+      "Akta Jual Beli/Hibah",
+      "KTP Pemilik Baru"
+    ]
   },
   {
     "title": "Pengurusan Hak Tanggungan / ROYA",
@@ -789,7 +1006,12 @@
         "Untuk Roya, pengajuan permohonan ke Kantor Pertanahan setelah pelunasan utang"
       ]
     },
-    "timeline": "Berdasarkan konsultasi"
+    "timeline": "Berdasarkan konsultasi",
+    "persyaratan": [
+      "Sertifikat Tanah Asli",
+      "Akta Pemberian Hak Tanggungan (APHT)",
+      "Surat Lunas dari Bank (untuk Roya)"
+    ]
   },
   {
     "title": "Peningkatan Hak (HGB ke SHM)",
@@ -805,7 +1027,12 @@
         "Pembayaran biaya"
       ]
     },
-    "timeline": "5 hari kerja"
+    "timeline": "5 hari kerja",
+    "persyaratan": [
+      "Sertifikat HGB Asli",
+      "KTP Pemilik",
+      "Surat Keterangan Bangunan (jika ada)"
+    ]
   },
   {
     "title": "Pengecekan Sertifikat Tanah",
@@ -819,7 +1046,11 @@
         "Pengajuan permohonan pengecekan ke Kantor Pertanahan dengan membawa sertifikat asli"
       ]
     },
-    "timeline": "1 hari kerja"
+    "timeline": "1 hari kerja",
+    "persyaratan": [
+      "Sertifikat Tanah Asli",
+      "KTP Pemilik"
+    ]
   },
   {
     "title": "Perubahan Zona Tanah / Tata Ruang",
@@ -835,7 +1066,12 @@
         "Proses persetujuan"
       ]
     },
-    "timeline": "30 hari kerja"
+    "timeline": "30 hari kerja",
+    "persyaratan": [
+      "Sertifikat Tanah",
+      "Rencana Penggunaan Lahan",
+      "Peta Lokasi"
+    ]
   },
   {
     "title": "Pengurusan LSD (Lahan Sawah Dilindungi)",
@@ -851,7 +1087,12 @@
         "Pemerintah daerah"
       ]
     },
-    "timeline": "30 hari kerja"
+    "timeline": "30 hari kerja",
+    "persyaratan": [
+      "Sertifikat Tanah",
+      "Data Teknis Lahan",
+      "Rencana Proyek"
+    ]
   },
   {
     "title": "Pemisahan / Pecah Sertifikat",
@@ -867,7 +1108,12 @@
         "Penerbitan sertifikat pecah"
       ]
     },
-    "timeline": "5 hari kerja"
+    "timeline": "5 hari kerja",
+    "persyaratan": [
+      "Sertifikat Tanah Asli",
+      "Peta Bidang Tanah (jika ada)",
+      "KTP Pemilik"
+    ]
   },
   {
     "title": "Perubahan Sertifikat Tanah Elektronik",
@@ -884,7 +1130,12 @@
         "Penerbitan sertifikat elektronik."
       ]
     },
-    "timeline": "45 hari kerja"
+    "timeline": "45 hari kerja",
+    "persyaratan": [
+      "Sertifikat Tanah Asli",
+      "KTP Pemilik",
+      "Nomor Identifikasi Bidang (NIB)"
+    ]
   },
   {
     "title": "Pengurusan Girik Menjadi SHM",
@@ -902,7 +1153,12 @@
         "Pendaftaran hak di Kantor Pertanahan dan penerbitan SHM"
       ]
     },
-    "timeline": "45 hari kerja"
+    "timeline": "45 hari kerja",
+    "persyaratan": [
+      "Girik Asli",
+      "KTP Pemilik",
+      "Surat Keterangan Riwayat Tanah dari Desa/Kelurahan"
+    ]
   },
   {
     "title": "Penyusunan Kebijakan Privasi & Syarat Ketentuan (Website/Aplikasi)",
@@ -916,7 +1172,12 @@
         "Penyusunan draf dokumen yang komprehensif sesuai regulasi dan praktik terbaik"
       ]
     },
-    "timeline": "3 hari kerja"
+    "timeline": "3 hari kerja",
+    "persyaratan": [
+      "URL Website/Nama Aplikasi",
+      "Jenis Data yang Dikumpulkan",
+      "Tujuan Penggunaan Data"
+    ]
   },
   {
     "title": "Perjanjian Lisensi Software / Aplikasi",
@@ -932,7 +1193,12 @@
         "dan ketentuan hukum"
       ]
     },
-    "timeline": "3 hari kerja"
+    "timeline": "3 hari kerja",
+    "persyaratan": [
+      "Deskripsi Software/Aplikasi",
+      "Model Lisensi yang Diinginkan",
+      "Hak dan Kewajiban Pihak Terlibat"
+    ]
   },
   {
     "title": "Pendaftaran Penyelenggara Sistem Elektronik (PSE)",
@@ -947,7 +1213,13 @@
         "Melengkapi data."
       ]
     },
-    "timeline": "1 hari kerja"
+    "timeline": "1 hari kerja",
+    "persyaratan": [
+      "Nama PSE",
+      "URL Website/Aplikasi",
+      "Deskripsi Fungsi PSE",
+      "Akta Pendirian Perusahaan"
+    ]
   },
   {
     "title": "Review Legal untuk Aplikasi/Platform Digital",
@@ -963,7 +1235,12 @@
         "Dokumen legal platform digital Anda"
       ]
     },
-    "timeline": "3 hari kerja"
+    "timeline": "3 hari kerja",
+    "persyaratan": [
+      "Akses ke Aplikasi/Platform Digital",
+      "Dokumen Kebijakan Privasi/S&K (jika ada)",
+      "Model Bisnis"
+    ]
   },
   {
     "title": "Penyusunan Perjanjian Kerjasama IT/Developer",
@@ -979,7 +1256,12 @@
         "dan ketentuan hukum"
       ]
     },
-    "timeline": "3 hari kerja"
+    "timeline": "3 hari kerja",
+    "persyaratan": [
+      "Deskripsi Proyek IT",
+      "Detail Pihak Terlibat (KTP/Akta)",
+      "Ketentuan Pembayaran"
+    ]
   },
   {
     "title": "Pembuatan Web Company Profile",
@@ -996,7 +1278,12 @@
         "Peluncuran website"
       ]
     },
-    "timeline": "2-4 hari kerja"
+    "timeline": "2-4 hari kerja",
+    "persyaratan": [
+      "Logo Perusahaan",
+      "Konten Teks (Profil, Layanan)",
+      "Gambar/Foto Relevan"
+    ]
   },
   {
     "title": "Pendaftaran D-U-N-S",
@@ -1011,7 +1298,11 @@
         "Verifikasi data perusahaan."
       ]
     },
-    "timeline": "5-10 hari kerja"
+    "timeline": "5-10 hari kerja",
+    "persyaratan": [
+      "Nama Lengkap Perusahaan",
+      "Alamat Lengkap Perusahaan",
+      "Nomor Telepon Perusahaan"
+    ]
   }
 ]
-
