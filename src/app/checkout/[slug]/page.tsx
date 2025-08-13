@@ -1,22 +1,24 @@
+// src/app/checkout/[slug]/page.tsx
 import rawCatalog from '@/data/catalog.json';
 import InlineSnap from './InlineSnap';
 
 type Svc = {
-  slug: string; title: string; price?: number; sale_price?: number; base_price?: number;
+  slug: string; title: string;
+  price?: number; sale_price?: number; base_price?: number;
   currency?: string;
 };
 
 const catalog = rawCatalog as Svc[];
 
 function findService(slug: string): Svc {
-  const svc = catalog.find((x) => x.slug === slug);
+  const svc = catalog.find(x => x.slug === slug);
   if (!svc) throw new Error(`Service not found: ${slug}`);
   return svc;
 }
 
 export default async function Page({ params }: { params: { slug: string } }) {
   const s = findService(params.slug);
-  const amount = s.price ?? s.sale_price ?? s.base_price ?? 0;
+  const amount = s.price ?? s.sale_price ?? s.base_price ?? 0;  // <— PAKAI FALLBACK
 
   return (
     <div className="max-w-3xl mx-auto p-6">
