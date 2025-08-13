@@ -29,9 +29,22 @@ export default async function LayananDetail({
   );
 
   const tabs = ["Informasi", "Persyaratan", "Proses", "Biaya"] as const;
-  const active = (searchParams?.tab && tabs.includes(searchParams.tab as any))
-    ? (searchParams!.tab as typeof tabs[number])
-    : "Informasi";
+  const active =
+    (searchParams?.tab && (tabs as readonly string[]).includes(searchParams.tab)) ?
+    (searchParams!.tab as string) :
+    "Informasi";
+
+  // normalizer kecil biar aman
+  const toArray = (v: unknown) => (Array.isArray(v) ? v : v ? [String(v)] : []);
+  const inclusions   = toArray(svc.detail?.inclusions);
+  const requirements = toArray(
+    // prioritas ambil dari catalog.json terbaru
+    (svc as any).persyaratan ??
+    (svc as any).requirements ??
+    (svc as any).detail?.persyaratan ??
+    (svc as any).detail?.requirements
+  );
+  const processSteps = toArray(svc.detail?.process);
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -63,23 +76,23 @@ export default async function LayananDetail({
                     {svc.description || svc.summary}
                   </p>
                 )}
-                {svc.detail?.inclusions?.length ? (
+                {inclusions.length > 0 && (
                   <>
                     <h3 className="text-lg font-semibold">Yang Anda Dapatkan</h3>
                     <ul className="list-disc pl-6 space-y-1">
-                      {svc.detail.inclusions.map((x: string, i: number) => (
+                      {inclusions.map((x: string, i: number) => (
                         <li key={i}>{x}</li>
                       ))}
                     </ul>
                   </>
-                ) : null}
+                )}
               </>
             )}
 
             {active === "Persyaratan" && (
-              svc.detail?.requirements?.length ? (
+              requirements.length > 0 ? (
                 <ul className="list-disc pl-6 space-y-1">
-                  {svc.detail.requirements.map((x: string, i: number) => (
+                  {requirements.map((x: string, i: number) => (
                     <li key={i}>{x}</li>
                   ))}
                 </ul>
@@ -91,9 +104,9 @@ export default async function LayananDetail({
             )}
 
             {active === "Proses" && (
-              svc.detail?.process?.length ? (
+              processSteps.length > 0 ? (
                 <ol className="list-decimal pl-6 space-y-1">
-                  {svc.detail.process.map((x: string, i: number) => (
+                  {processSteps.map((x: string, i: number) => (
                     <li key={i}>{x}</li>
                   ))}
                 </ol>
@@ -104,70 +117,76 @@ export default async function LayananDetail({
               )
             )}
 
-        {active === "Biaya" && (
-  <div className="overflow-x-auto">
-    <table className="w-full text-sm">
-<tbody>
-  <tr className="border-b">
-    <td className="py-2">Harga Layanan</td>
-    <td className="py-2 text-right">
-      {typeof svc.price === "number" ? `Rp${svc.price.toLocaleString("id-ID")}` : "Minta Penawaran"}
-    </td>
-  </tr>
+            {active === "Biaya" && (
+              <div className="overflow-x-auto">
+                <table className="w-full text-sm">
+                  <tbody>
+                    <tr className="border-b">
+                      <td className="py-2">Harga Layanan</td>
+                      <td className="py-2 text-right">
+                        {typeof svc.price === "number"
+                          ? `Rp${svc.price.toLocaleString("id-ID")}`
+                          : "Minta Penawaran"}
+                      </td>
+                    </tr>
+                    <tr className="border-b">
+                      <td className="py-2">e-Materai</td>
+                      <td className="py-2 text-right">
+                        Rp{E_STAMP_PRICE.toLocaleString("id-ID")}/lembar (opsional)
+                      </td>
+                    </tr>
+                    <tr className="border-b">
+                      <td className="py-2">e-Sign</td>
+                      <td className="py-2 text-right">
+                        Rp{E_SIGN_PRICE.toLocaleString("id-ID")}/tanda tangan (opsional)
+                      </td>
+                    </tr>
+                    <tr>
+                      <td className="py-2 text-slate-500">Biaya Pemerintah</td>
+                      <td className="py-2 text-right text-slate-500">
+                        Sesuai kebutuhan & regulasi
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
 
-  {/* Biaya lain (opsional) */}
-  <tr className="border-b">
-    <td className="py-2">e-Materai</td>
-    <td className="py-2 text-right">Rp{(await import("@/lib/costs")).E_STAMP_PRICE.toLocaleString("id-ID")}/lembar (opsional)</td>
-  </tr>
-  <tr className="border-b">
-    <td className="py-2">e-Sign</td>
-    <td className="py-2 text-right">Rp{(await import("@/lib/costs")).E_SIGN_PRICE.toLocaleString("id-ID")}/tanda tangan (opsional)</td>
-  </tr>
-
-  {/* Pemerintah */}
-  <tr>
-    <td className="py-2 text-slate-500">Biaya Pemerintah</td>
-    <td className="py-2 text-right text-slate-500">Sesuai kebutuhan & regulasi</td>
-  </tr>
-</tbody>
-
-<p className="mt-2 text-xs text-slate-500">
-  e-Materai & e-Sign ditambahkan saat checkout sesuai kebutuhan dokumen.
-</p>
-
-  </div>
-)}
-
+                <p className="mt-2 text-xs text-slate-500">
+                  e-Materai & e-Sign ditambahkan saat checkout sesuai kebutuhan dokumen.
+                </p>
+              </div>
+            )}
+          </div>
+        </div>
 
         {/* Sidebar Ringkasan */}
-<aside className="card p-5 h-fit space-y-4">
-  <div className="text-sm text-slate-500">Ringkasan</div>
+        <aside className="card p-5 h-fit space-y-4">
+          <div className="text-sm text-slate-500">Ringkasan</div>
 
-  {typeof svc.price === "number" && (
-    <div className="text-2xl font-bold">
-      {`Rp${svc.price.toLocaleString("id-ID")}`}
-    </div>
-  )}
+          {typeof svc.price === "number" && (
+            <div className="text-2xl font-bold">
+              {`Rp${svc.price.toLocaleString("id-ID")}`}
+            </div>
+          )}
 
-  <div className="flex flex-col gap-2" id="ajukan">
-    <Link
-      prefetch
-      href={`/checkout/${svc.slug}`}
-      className={`w-full btn ${typeof svc.price === "number" ? "btn-primary" : "btn-outline"}`}
-    >
-      {typeof svc.price === "number" ? "Ajukan Proses" : "Minta Penawaran"}
-    </Link>
-    <a
-      href={`https://wa.me/${wa}?text=${waText}`}
-      target="_blank"
-      className="btn w-full"
-    >
-      Tanya via WhatsApp
-    </a>
-  </div>
-</aside>
-
+          <div className="flex flex-col gap-2" id="ajukan">
+            <Link
+              prefetch
+              href={`/checkout/${svc.slug}`}
+              className={`w-full btn ${
+                typeof svc.price === "number" ? "btn-primary" : "btn-outline"
+              }`}
+            >
+              {typeof svc.price === "number" ? "Ajukan Proses" : "Minta Penawaran"}
+            </Link>
+            <a
+              href={`https://wa.me/${wa}?text=${waText}`}
+              target="_blank"
+              className="btn w-full"
+            >
+              Tanya via WhatsApp
+            </a>
+          </div>
+        </aside>
       </div>
     </div>
   );
