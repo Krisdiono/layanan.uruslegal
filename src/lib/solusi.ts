@@ -3,6 +3,7 @@
 import type { Layanan } from "@/types/service";
 import catalog from "@/data/catalog.json";
 import prices from "@/data/prices.json";
+export * from './perfex';
 
 const priceMap = new Map<string, number | null>();
 (prices as any[]).forEach(p => priceMap.set(String(p.slug), p.price ?? null));
