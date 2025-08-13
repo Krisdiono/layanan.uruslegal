@@ -1,11 +1,11 @@
-import { listServices } from '@/lib/catalog';
+import Catalog from '@/lib/catalog';
 import ServiceCard from '@/components/ServiceCard';
 import FallbackBanner from '@/components/FallbackBanner';
 
 export const dynamic = 'force-static';
 
 export default async function Page() {
-  const services = await listServices();
+  const s = await Catalog.getService(params.slug);
 
   return (
     <div className="max-w-6xl mx-auto p-6">
