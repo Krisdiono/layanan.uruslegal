@@ -12,7 +12,6 @@ export default function InlineSnap({ service, amount }: { service: { slug: strin
         headers: { 'content-type': 'application/json' },
         body: JSON.stringify({
           service: { slug: service.slug, title: service.title },
-          amounts: { subtotal: amount, total: amount }, // TANPA fee
           customer: { name: 'Guest', email: 'guest@uruslegal.id' },
           metadata: { source: 'layanan.uruslegal' },
         }),
