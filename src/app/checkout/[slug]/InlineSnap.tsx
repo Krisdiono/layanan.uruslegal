@@ -1,64 +1,64 @@
+// src/app/checkout/[slug]/InlineSnap.tsx
 'use client';
-import Script from 'next/script';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
+
+function normalizeAmount(a: unknown): number {
+  const n = parseInt(String(a ?? '').replace(/[^\d]/g, ''), 10);
+  return Number.isFinite(n) && n > 0 ? n : 0;
+}
 
 export default function InlineSnap({
-  service, amount,
-}: { service: { slug: string; title: string }, amount: number }) {
+  service,
+  amount,
+}: {
+  service: { slug: string; title: string };
+  amount: number | string;
+}) {
   const [loading, setLoading] = useState(false);
 
-  async function pay() {
-    setLoading(true);
+  async function handlePay() {
     try {
+      setLoading(true);
+      const total = normalizeAmount(amount); // <— DI SINI
+      if (!total) {
+        alert('Invalid total amount');
+        return;
+      }
+
       const res = await fetch('/api/checkout', {
         method: 'POST',
-        headers: { 'content-type': 'application/json' },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           service: { slug: service.slug, title: service.title },
-          amounts: { subtotal: amount, total: amount }, // <-- TANPA FEE
-          customer: { name: 'Guest', email: 'guest@uruslegal.id' },
-          metadata: { source: 'layanan.uruslegal' },
+          amounts: { subtotal: total, total }, // TANPA fee
         }),
       });
-      const data = await res.json();
-      if (!res.ok) throw new Error(data?.error || 'Checkout gagal');
 
-      const snap = (window as any).snap;
-      if (data?.midtrans?.token && snap) {
-        snap.pay(data.midtrans.token, {
-          onSuccess: (r: any) => console.log('success', r),
-          onPending: (r: any) => console.log('pending', r),
-          onError: (r: any) => console.error('error', r),
-          onClose: () => console.log('popup closed'),
-        });
-      } else if (data?.midtrans?.redirect_url) {
-        window.location.href = data.midtrans.redirect_url; // fallback VT-Web
+      const data = await res.json();
+      if (!res.ok) throw new Error(data?.error || 'checkout-failed');
+
+      // Snap (redirect atau popup)
+      if (data?.redirect_url) {
+        window.location.href = data.redirect_url;
+      } else if (window.snap && data?.token) {
+        window.snap.pay(data.token);
       } else {
-        throw new Error('Token Midtrans tidak tersedia');
+        alert('Checkout berhasil dibuat, tapi token/redirect tidak ditemukan.');
       }
     } catch (e: any) {
-      alert(e.message || 'Checkout gagal. Coba lagi ya.');
+      alert(e?.message || 'Gagal membuat transaksi');
     } finally {
       setLoading(false);
     }
   }
 
-  useEffect(() => { pay(); }, []); // auto-run Snap saat halaman dibuka
-
   return (
-    <>
-      <Script
-        src="https://app.sandbox.midtrans.com/snap/snap.js"
-        data-client-key={process.env.NEXT_PUBLIC_MIDTRANS_CLIENT_KEY}
-        strategy="afterInteractive"
-      />
-      <button
-        onClick={pay}
-        disabled={loading}
-        className="px-4 py-2 rounded-2xl bg-emerald-600 text-white shadow disabled:opacity-60"
-      >
-        {loading ? 'Memproses…' : 'Bayar sekarang'}
-      </button>
-    </>
+    <button
+      onClick={handlePay}
+      disabled={loading}
+      className="px-4 py-2 rounded-2xl bg-emerald-600 text-white"
+    >
+      {loading ? 'Memproses…' : 'Bayar Sekarang'}
+    </button>
   );
 }
