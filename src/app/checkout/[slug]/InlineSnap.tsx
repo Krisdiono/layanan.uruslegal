@@ -3,10 +3,11 @@
 import { useState } from 'react';
 
 function normalizeAmount(a: unknown): number {
-  const n = parseInt(String(a ?? '').replace(/[^\d]/g, ''), 10);
+  const n = parseInt(String(a ?? '').replace(/[^\d]/g,''), 10);
   return Number.isFinite(n) && n > 0 ? n : 0;
 }
 
+// ... di tempat memanggil fetch:
 const total = normalizeAmount(amount);
 if (!total) { alert('Invalid total amount'); return; }
 
@@ -18,6 +19,7 @@ await fetch('/api/checkout', {
     amounts: { subtotal: total, total }, // TANPA fee
   }),
 });
+
 
 export default function InlineSnap({
   service,
