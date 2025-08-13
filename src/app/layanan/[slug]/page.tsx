@@ -39,7 +39,7 @@ const requirements = toArray(
     `Halo UrusLegal, saya ingin konsultasi: ${svc.title} (${svc.slug})`
   );
 
-  const tabs = ["Informasi", "Persyaratan", "Proses", "Biaya"] as const;
+  const tabs = ["Informasi", "", "Proses", "Biaya"] as const;
   const active =
     (searchParams?.tab && (tabs as readonly string[]).includes(searchParams.tab)) ?
     (searchParams!.tab as string) :
@@ -50,9 +50,9 @@ const requirements = toArray(
   const inclusions   = toArray(svc.detail?.inclusions);
   const requirements = toArray(
     // prioritas ambil dari catalog.json terbaru
-    (svc as any).persyaratan ??
+    (svc as any). ??
     (svc as any).requirements ??
-    (svc as any).detail?.persyaratan ??
+    (svc as any).detail?. ??
     (svc as any).detail?.requirements
   );
   const processSteps = toArray(svc.detail?.process);
@@ -101,18 +101,19 @@ const requirements = toArray(
             )}
 
             {active === "Persyaratan" && (
-              requirements.length > 0 ? (
-                <ul className="list-disc pl-6 space-y-1">
-                  {requirements.map((x: string, i: number) => (
-                    <li key={i}>{x}</li>
-                  ))}
-                </ul>
-              ) : (
-                <div className="text-slate-500">
-                  Persyaratan akan diinformasikan saat konsultasi.
-                </div>
-              )
-            )}
+  svc.detail?.requirements?.length ? (
+    <ul className="list-disc pl-6 space-y-1">
+      {svc.detail.requirements.map((x: string, i: number) => (
+        <li key={i}>{x}</li>
+      ))}
+    </ul>
+  ) : (
+    <div className="text-slate-500">
+      Persyaratan akan diinformasikan saat konsultasi.
+    </div>
+  )
+)}
+
 
             {active === "Proses" && (
               processSteps.length > 0 ? (
