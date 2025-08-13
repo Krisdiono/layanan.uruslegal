@@ -1,45 +1,76 @@
-import { NextResponse } from "next/server";
-import { getPrice, computeFinal } from "@/lib/prices";
+import { NextRequest, NextResponse } from 'next/server';
 
-export async function POST(req: Request) {
+const MIDTRANS_SERVER_KEY = process.env.MIDTRANS_SERVER_KEY!;
+const MIDTRANS_SNAP_BASE = 'https://app.sandbox.midtrans.com'; // ganti ke prod saat live
+
+function basicAuthHeader(): string {
+  const token = Buffer.from(`${MIDTRANS_SERVER_KEY}:`).toString('base64');
+  return `Basic ${token}`;
+}
+
+function generateOrderId(): string {
+  const dt = new Date();
+  const pad = (n: number) => n.toString().padStart(2, '0');
+  const stamp = `${dt.getFullYear()}${pad(dt.getMonth() + 1)}${pad(dt.getDate())}-${pad(dt.getHours())}${pad(dt.getMinutes())}${pad(dt.getSeconds())}`;
+  const rand = Math.random().toString(36).slice(2, 6).toUpperCase();
+  return `UL-${stamp}-${rand}`;
+}
+
+export async function POST(req: NextRequest) {
   try {
-    const { slug } = (await req.json()) as { slug?: string };
-    if (!slug) return NextResponse.json({ error: "Missing slug" }, { status: 400 });
+    const body = await req.json();
+    const service = body?.service || {};
+    const amounts = body?.amounts || {};
+    const customer = body?.customer || {};
 
-    const row = getPrice(slug);
-    const calc = computeFinal(row);
-    if (calc.rfq) {
-      return NextResponse.json({ error: "RFQ_ONLY" }, { status: 400 });
+    const total = Math.round(Number(amounts?.total || 0));
+    if (!total || total <= 0) {
+      return NextResponse.json({ error: 'Invalid total amount' }, { status: 400 });
     }
 
-    const feePct = parseFloat(process.env.GATEWAY_FEE_PCT ?? "0.03");
-    const fee = Math.round(calc.final * feePct);
-    const grossAmount = calc.final + fee;
+    const order_id = generateOrderId();
 
-    const orderId = `${slug}-${Date.now()}`;
-    const serverKey = process.env.MIDTRANS_SERVER_KEY!;
-    const auth = Buffer.from(serverKey + ":").toString("base64");
-
-    const body = {
-      transaction_details: { order_id: orderId, gross_amount: grossAmount },
+    const payload = {
+      transaction_details: {
+        order_id,
+        gross_amount: total,
+      },
       item_details: [
-        { id: slug, name: slug, price: calc.final, quantity: 1 },
-        { id: "fee", name: "Biaya Gateway", price: fee, quantity: 1 }
+        {
+          id: service?.slug || 'service',
+          price: total,
+          quantity: 1,
+          name: service?.title || 'UrusLegal Service',
+        },
       ],
-      callbacks: { finish: `${process.env.NEXT_PUBLIC_BASE_URL}/payment/success` },
-      credit_card: { secure: true }
+      customer_details: {
+        first_name: customer?.name || 'Guest',
+        email: customer?.email || 'guest@uruslegal.id',
+        phone: customer?.phone || undefined,
+      },
+      credit_card: { secure: true },
+      callbacks: {
+        finish: `https://layanan.uruslegal.id/thanks?order_id=${order_id}`,
+      },
     };
 
-    const r = await fetch("https://app.sandbox.midtrans.com/snap/v1/transactions", {
-      method: "POST",
-      headers: { "Content-Type": "application/json", Authorization: `Basic ${auth}` },
-      body: JSON.stringify(body)
+    const res = await fetch(`${MIDTRANS_SNAP_BASE}/snap/v1/transactions`, {
+      method: 'POST',
+      headers: {
+        'content-type': 'application/json',
+        authorization: basicAuthHeader(),
+      },
+      body: JSON.stringify(payload),
     });
 
-    const j = await r.json();
-    if (!r.ok) return NextResponse.json({ error: j?.status_message || "Midtrans error" }, { status: r.status });
-    return NextResponse.json({ token: j.token, redirect_url: j.redirect_url });
+    if (!res.ok) {
+      const text = await res.text();
+      return NextResponse.json({ error: 'Midtrans error', detail: text }, { status: 502 });
+    }
+
+    const data = await res.json(); // { token, redirect_url }
+    return NextResponse.json({ order_id, midtrans: data }, { status: 200 });
   } catch (e: any) {
-    return NextResponse.json({ error: e?.message || "Unexpected error" }, { status: 500 });
+    return NextResponse.json({ error: e?.message || 'Bad Request' }, { status: 400 });
   }
 }
