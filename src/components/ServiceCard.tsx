@@ -37,7 +37,7 @@ export default function ServiceCard({ s }: { s: ServiceItem }) {
         )}
 
         <div className="mt-auto flex items-center justify-between">
-          <Price value={s.price} currency={s.currency || 'IDR'} />
+          <Price value={s.price ?? (s as any).sale_price ?? (s as any).base_price} currency={s.currency || 'IDR'} />
           <div className="flex gap-2">
             <Link
               href={`/layanan/${s.slug}`}
