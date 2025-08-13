@@ -1,5 +1,5 @@
 // src/app/checkout/[slug]/page.tsx
-import { getService } from '@/lib/catalog';
++ import Catalog from '@/lib/catalog';
 import InlineSnap from './InlineSnap';
 
 export default async function Page({ params }: { params: { slug: string } }) {
