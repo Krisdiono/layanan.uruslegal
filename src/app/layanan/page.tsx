@@ -1,4 +1,4 @@
-import Catalog from '@/lib/catalog';
+import * as Catalog from '@/lib/catalog';
 import ServiceCard from '@/components/ServiceCard';
 import FallbackBanner from '@/components/FallbackBanner';
 
