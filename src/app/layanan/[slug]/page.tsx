@@ -1,4 +1,4 @@
-import Catalog from '@/lib/catalog';
+import * as Catalog from '@/lib/catalog';
 import CheckoutButton from './CheckoutButton';
 
 export default async function Page({ params }: { params: { slug: string } }) {
