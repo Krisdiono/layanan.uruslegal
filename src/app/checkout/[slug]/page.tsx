@@ -3,7 +3,7 @@
 import InlineSnap from './InlineSnap';
 
 export default async function Page({ params }: { params: { slug: string } }) {
-  const s = await getService(params.slug);
+  const s = await Catalog.getService(params.slug);
   const price: number = (s as any).price ?? (s as any).sale_price ?? (s as any).base_price ?? 0;
 
   return (
