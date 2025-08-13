@@ -7,6 +7,18 @@ function normalizeAmount(a: unknown): number {
   return Number.isFinite(n) && n > 0 ? n : 0;
 }
 
+const total = normalizeAmount(amount);
+if (!total) { alert('Invalid total amount'); return; }
+
+await fetch('/api/checkout', {
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify({
+    service: { slug: service.slug, title: service.title },
+    amounts: { subtotal: total, total }, // TANPA fee
+  }),
+});
+
 export default function InlineSnap({
   service,
   amount,
