@@ -41,3 +41,11 @@ yarn-error.log*
 next-env.d.ts
 .uploads
 data/catalog.enriched.json
+.env
+.env.*
+.next
+node_modules
+coverage
+*.log
+*.local
+Thumbs.db
