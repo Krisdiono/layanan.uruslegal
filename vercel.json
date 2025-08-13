@@ -1,7 +1,7 @@
 {
   "functions": {
     "app/**": {
-      "excludeFiles": "{.uploads/**,examples/**,scripts/**,tools/**,**/*.log,build.log,tsc.log}"
+      "excludeFiles": "{.uploads/**,**/*.log}"
     }
   }
 }

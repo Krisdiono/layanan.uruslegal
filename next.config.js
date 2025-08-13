@@ -3,19 +3,12 @@ const nextConfig = {
   experimental: {
     outputFileTracingExcludes: {
       '*': [
-        '**/.uploads/**',
-        '**/examples/**',
-        '**/scripts/**',
-        '**/tools/**',
-        '**/*.log',
-        'build.log',
-        'tsc.log'
+        '**/.uploads/**',   // ini biang paling sering
+        '**/*.log'
       ]
     }
   },
-  // (opsional) kalau kamu memang sengaja skip cek di CI:
   eslint: { ignoreDuringBuilds: true },
   typescript: { ignoreBuildErrors: true }
 };
-
 module.exports = nextConfig;
