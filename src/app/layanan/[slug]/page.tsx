@@ -5,7 +5,7 @@ import FallbackBanner from '@/components/FallbackBanner';
 export const dynamic = 'force-static';
 
 export default async function Page() {
-  const s = await Catalog.getService(params.slug);
+  const services = await Catalog.listServices();
 
   return (
     <div className="max-w-6xl mx-auto p-6">
