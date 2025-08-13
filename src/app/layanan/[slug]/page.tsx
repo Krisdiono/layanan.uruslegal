@@ -14,6 +14,17 @@ export default async function LayananDetail({
   searchParams?: { tab?: string };
 }) {
   const svc = await getLayananBySlug(params.slug);
+  // helper kecil
+const toArray = (v: unknown): string[] => Array.isArray(v) ? v : v ? [String(v)] : [];
+
+// normalisasi sumber persyaratan → standar jadi array "requirements"
+const requirements = toArray(
+  (svc as any).persyaratan ??        // dari catalog.json barumu
+  (svc as any).requirements ??       // kalau nanti pakai nama ini
+  (svc as any).detail?.persyaratan ??// kalau ada di dalam detail
+  (svc as any).detail?.requirements
+);
+
   if (!svc) {
     return (
       <div className="container mx-auto px-4 py-10">
