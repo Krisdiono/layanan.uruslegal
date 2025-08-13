@@ -20,6 +20,7 @@ export default async function Page() {
   );
 }
 
+
 export default async function Page({ params }: { params: { slug: string } }) {
   const s = await getService(params.slug);
   const price: number = s.price ?? s.sale_price ?? s.base_price ?? 0;
