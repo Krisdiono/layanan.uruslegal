@@ -1,36 +1,27 @@
-// /src/app/api/orders/create/route.ts
 import { NextResponse } from "next/server";
-import { promises as fs } from "fs";
-import path from "path";
-
-const ROOT = process.cwd();
-const UPLOAD_DIR = path.join(ROOT, ".uploads");
-const ORDERS_FILE = path.join(UPLOAD_DIR, "orders.json");
+import { upsertOrder, type Order } from "@/lib/orders";
 
 export async function POST(req: Request) {
   try {
-    const body = await req.json();
+    const body = (await req.json()) as Partial<Order>;
+    if (!body?.id) return NextResponse.json({ ok:false, error:"missing id" }, { status:400 });
 
-    await fs.mkdir(UPLOAD_DIR, { recursive: true }).catch(() => {});
-
-    let rows: any[] = [];
-    try {
-      const raw = await fs.readFile(ORDERS_FILE, "utf-8");
-      rows = JSON.parse(raw || "[]");
-      if (!Array.isArray(rows)) rows = [];
-    } catch {
-      rows = [];
-    }
-
-    rows.push({
-      ...body,
-      createdAt: new Date().toISOString(),
-    });
-
-    await fs.writeFile(ORDERS_FILE, JSON.stringify(rows, null, 2), "utf-8");
-
-    return NextResponse.json({ ok: true, path: ORDERS_FILE, count: rows.length });
-  } catch (e: any) {
-    return NextResponse.json({ ok: false, error: e?.message || "unknown" }, { status: 500 });
+    const order: Order = {
+      id: String(body.id),
+      status: (body.status as any) ?? "pending",
+      service: body.service as any,
+      amounts: body.amounts as any,
+      customer: body.customer as any,
+      uploadId: body.uploadId,
+      files: body.files ?? [],
+      midtrans: body.midtrans,
+      createdAt: body.createdAt,
+      updatedAt: body.updatedAt,
+      paidAt: (body as any).paidAt ?? null,
+    };
+    upsertOrder(order);
+    return NextResponse.json({ ok:true, id: order.id });
+  } catch (e:any) {
+    return NextResponse.json({ ok:false, error: e?.message || "bad_request" }, { status:400 });
   }
 }

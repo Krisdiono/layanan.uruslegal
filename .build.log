@@ -1,0 +1,10 @@
+
+> layanan.uruslegal@1.0.0 build /workspaces/layanan.uruslegal
+> next build
+
+   ▲ Next.js 14.0.4
+   - Environments: .env.local
+
+   Creating an optimized production build ...
+   Linting and checking validity of types ...
+ ELIFECYCLE  Command failed with exit code 1.
