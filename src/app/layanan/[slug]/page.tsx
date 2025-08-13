@@ -1,10 +1,18 @@
-// /src/app/layanan/[slug]/page.tsx
 // @ts-nocheck
+// /src/app/layanan/[slug]/page.tsx
 import { E_STAMP_PRICE, E_SIGN_PRICE } from "@/lib/costs";
 import Link from "next/link";
 import { getLayananBySlug } from "@/lib/solusi";
 
 export const revalidate = 300;
+
+// Helper & tipe ringkas
+type ServiceDetails = {
+  inclusions?: string[];
+  process?: string[];
+  requirements?: string[];
+};
+const toArray = (v: unknown): string[] => (Array.isArray(v) ? v : v ? [String(v)] : []);
 
 export default async function LayananDetail({
   params,
@@ -14,17 +22,6 @@ export default async function LayananDetail({
   searchParams?: { tab?: string };
 }) {
   const svc = await getLayananBySlug(params.slug);
-  // helper kecil
-const toArray = (v: unknown): string[] => Array.isArray(v) ? v : v ? [String(v)] : [];
-
-// normalisasi sumber persyaratan → standar jadi array "requirements"
-const requirements = toArray(
-  (svc as any).persyaratan ??        // dari catalog.json barumu
-  (svc as any).requirements ??       // kalau nanti pakai nama ini
-  (svc as any).detail?.persyaratan ??// kalau ada di dalam detail
-  (svc as any).detail?.requirements
-);
-
   if (!svc) {
     return (
       <div className="container mx-auto px-4 py-10">
@@ -39,23 +36,24 @@ const requirements = toArray(
     `Halo UrusLegal, saya ingin konsultasi: ${svc.title} (${svc.slug})`
   );
 
-  const tabs = ["Informasi", "", "Proses", "Biaya"] as const;
+  const tabs = ["Informasi", "Persyaratan", "Proses", "Biaya"] as const;
   const active =
     (searchParams?.tab && (tabs as readonly string[]).includes(searchParams.tab)) ?
     (searchParams!.tab as string) :
     "Informasi";
 
-  // normalizer kecil biar aman
-  const toArray = (v: unknown) => (Array.isArray(v) ? v : v ? [String(v)] : []);
-  const inclusions   = toArray(svc.detail?.inclusions);
-  const requirements = toArray(
-    // prioritas ambil dari catalog.json terbaru
-    (svc as any). ??
-    (svc as any).requirements ??
-    (svc as any).detail?. ??
-    (svc as any).detail?.requirements
-  );
-  const processSteps = toArray(svc.detail?.process);
+  // Normalisasi detail supaya aman di TS & UI
+  const rawDetail = (svc as any)?.detail ?? {};
+  const detail: ServiceDetails = {
+    inclusions: toArray((rawDetail as any).inclusions),
+    process: toArray((rawDetail as any).process),
+    requirements: toArray(
+      (svc as any).persyaratan ??            // dari catalog.json terbaru
+      (svc as any).requirements ??           // alternatif nama
+      (rawDetail as any).persyaratan ??      // kalau ada di dalam detail
+      (rawDetail as any).requirements
+    ),
+  };
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -87,41 +85,33 @@ const requirements = toArray(
                     {svc.description || svc.summary}
                   </p>
                 )}
-                {inclusions.length > 0 && (
+                {detail.inclusions?.length ? (
                   <>
                     <h3 className="text-lg font-semibold">Yang Anda Dapatkan</h3>
                     <ul className="list-disc pl-6 space-y-1">
-                      {inclusions.map((x: string, i: number) => (
-                        <li key={i}>{x}</li>
-                      ))}
+                      {detail.inclusions.map((x, i) => <li key={i}>{x}</li>)}
                     </ul>
                   </>
-                )}
+                ) : null}
               </>
             )}
 
             {active === "Persyaratan" && (
-  requirements.length > 0 ? (
-    <ul className="list-disc pl-6 space-y-1">
-      {requirements.map((x: string, i: number) => (
-        <li key={i}>{x}</li>
-      ))}
-    </ul>
-  ) : (
-    <div className="text-slate-500">
-      Persyaratan akan diinformasikan saat konsultasi.
-    </div>
-  )
-)}
-
-
+              detail.requirements?.length ? (
+                <ul className="list-disc pl-6 space-y-1">
+                  {detail.requirements.map((x, i) => <li key={i}>{x}</li>)}
+                </ul>
+              ) : (
+                <div className="text-slate-500">
+                  Persyaratan akan diinformasikan saat konsultasi.
+                </div>
+              )
+            )}
 
             {active === "Proses" && (
-              processSteps.length > 0 ? (
+              detail.process?.length ? (
                 <ol className="list-decimal pl-6 space-y-1">
-                  {processSteps.map((x: string, i: number) => (
-                    <li key={i}>{x}</li>
-                  ))}
+                  {detail.process.map((x, i) => <li key={i}>{x}</li>)}
                 </ol>
               ) : (
                 <div className="text-slate-500">
@@ -162,7 +152,6 @@ const requirements = toArray(
                     </tr>
                   </tbody>
                 </table>
-
                 <p className="mt-2 text-xs text-slate-500">
                   e-Materai & e-Sign ditambahkan saat checkout sesuai kebutuhan dokumen.
                 </p>
