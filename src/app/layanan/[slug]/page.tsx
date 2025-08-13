@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import { getService } from '@/lib/perfex';
+import CheckoutButton from './CheckoutButton';
 
 export async function generateMetadata(
   { params }: { params: { slug: string } }
@@ -32,7 +33,7 @@ export default async function Page({ params }: { params: { slug: string } }) {
     name: s.title,
     description: s.summary,
     category: s.category,
-    offers: s.price ? {
+    offers: typeof s.price === 'number' ? {
       '@type': 'Offer',
       price: s.price,
       priceCurrency: s.currency || 'IDR',
@@ -61,14 +62,7 @@ export default async function Page({ params }: { params: { slug: string } }) {
       )}
 
       <div className="flex gap-3 mb-10">
-        <a
-          href={`https://wa.me/6281142677700?text=${encodeURIComponent(
-            `Halo UrusLegal, saya ingin ajukan proses untuk ${s.title}`
-          )}`}
-          className="px-4 py-2 rounded-2xl bg-emerald-600 text-white shadow"
-        >
-          Ajukan Proses
-        </a>
+        <CheckoutButton service={{ slug: s.slug, title: s.title }} amount={s.price || 0} />
         <a
           href={`https://wa.me/6281142677700?text=${encodeURIComponent(
             `Halo UrusLegal, saya ingin tanya tentang ${s.title}`
@@ -79,7 +73,6 @@ export default async function Page({ params }: { params: { slug: string } }) {
         </a>
       </div>
 
-      {/* Placeholder untuk tab Informasi / Persyaratan / Timeline */}
       {s.description && (
         <article
           className="prose max-w-none"
@@ -87,7 +80,6 @@ export default async function Page({ params }: { params: { slug: string } }) {
         />
       )}
 
-      {/* JSON-LD for SEO */}
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
