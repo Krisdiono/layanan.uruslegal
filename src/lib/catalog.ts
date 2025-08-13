@@ -37,4 +37,6 @@ export async function getService(slug: string): Promise<Svc> {
   if (!svc) notFound();
   return svc!;
 }
+const Catalog = { listServices, getService, listCatalog, getCatalog };
+export default Catalog;
 /* ================================================= */
