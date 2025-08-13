@@ -1,15 +1,10 @@
 'use client';
-
 import Script from 'next/script';
 import { useEffect, useState } from 'react';
 
 export default function InlineSnap({
-  service,
-  amount,
-}: {
-  service: { slug: string; title: string };
-  amount: number;
-}) {
+  service, amount,
+}: { service: { slug: string; title: string }, amount: number }) {
   const [loading, setLoading] = useState(false);
 
   async function pay() {
@@ -20,12 +15,11 @@ export default function InlineSnap({
         headers: { 'content-type': 'application/json' },
         body: JSON.stringify({
           service: { slug: service.slug, title: service.title },
-          amounts: { subtotal: amount, total: amount },
+          amounts: { subtotal: amount, total: amount }, // <-- TANPA FEE
           customer: { name: 'Guest', email: 'guest@uruslegal.id' },
           metadata: { source: 'layanan.uruslegal' },
         }),
       });
-
       const data = await res.json();
       if (!res.ok) throw new Error(data?.error || 'Checkout gagal');
 
@@ -49,7 +43,7 @@ export default function InlineSnap({
     }
   }
 
-  useEffect(() => { pay(); }, []); // auto-run saat halaman dibuka
+  useEffect(() => { pay(); }, []); // auto-run Snap saat halaman dibuka
 
   return (
     <>
