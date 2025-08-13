@@ -1,195 +1,97 @@
-// @ts-nocheck
-// /src/app/layanan/[slug]/page.tsx
-import { E_STAMP_PRICE, E_SIGN_PRICE } from "@/lib/costs";
-import Link from "next/link";
-import { getLayananBySlug } from "@/lib/solusi";
+import type { Metadata } from 'next';
+import { getService } from '@/lib/perfex';
 
-export const revalidate = 300;
+export async function generateMetadata(
+  { params }: { params: { slug: string } }
+): Promise<Metadata> {
+  const s = await getService(params.slug);
+  const title = `${s.title} — UrusLegal`;
+  const desc = s.summary || 'Layanan UrusLegal';
+  const url = `https://layanan.uruslegal.id/layanan/${s.slug}`;
 
-// Helper & tipe ringkas
-type ServiceDetails = {
-  inclusions?: string[];
-  process?: string[];
-  requirements?: string[];
-};
-const toArray = (v: unknown): string[] => (Array.isArray(v) ? v : v ? [String(v)] : []);
+  return {
+    title,
+    description: desc,
+    alternates: { canonical: url },
+    openGraph: {
+      title,
+      description: desc,
+      url,
+      type: 'article',
+      images: s.image_url ? [{ url: s.image_url }] : undefined,
+    },
+  };
+}
 
-export default async function LayananDetail({
-  params,
-  searchParams,
-}: {
-  params: { slug: string };
-  searchParams?: { tab?: string };
-}) {
-  const svc = await getLayananBySlug(params.slug);
-  if (!svc) {
-    return (
-      <div className="container mx-auto px-4 py-10">
-        <Link href="/" className="btn btn-ghost">← Kembali</Link>
-        <h1 className="text-2xl font-semibold mt-6">Layanan tidak ditemukan</h1>
-      </div>
-    );
-  }
+export default async function Page({ params }: { params: { slug: string } }) {
+  const s = await getService(params.slug);
 
-  const wa = process.env.NEXT_PUBLIC_WA_NUMBER || "6281142677700";
-  const waText = encodeURIComponent(
-    `Halo UrusLegal, saya ingin konsultasi: ${svc.title} (${svc.slug})`
-  );
-
-  const tabs = ["Informasi", "Persyaratan", "Proses", "Biaya"] as const;
-  const active =
-    (searchParams?.tab && (tabs as readonly string[]).includes(searchParams.tab)) ?
-    (searchParams!.tab as string) :
-    "Informasi";
-
-  // Normalisasi detail supaya aman di TS & UI
-  const rawDetail = (svc as any)?.detail ?? {};
-  const detail: ServiceDetails = {
-    inclusions: toArray((rawDetail as any).inclusions),
-    process: toArray((rawDetail as any).process),
-    requirements: toArray(
-      (svc as any).persyaratan ??            // dari catalog.json terbaru
-      (svc as any).requirements ??           // alternatif nama
-      (rawDetail as any).persyaratan ??      // kalau ada di dalam detail
-      (rawDetail as any).requirements
-    ),
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'Service',
+    name: s.title,
+    description: s.summary,
+    category: s.category,
+    offers: s.price ? {
+      '@type': 'Offer',
+      price: s.price,
+      priceCurrency: s.currency || 'IDR',
+      url: `https://layanan.uruslegal.id/layanan/${s.slug}`,
+      availability: 'https://schema.org/InStock',
+    } : undefined,
   };
 
   return (
-    <div className="container mx-auto px-4 py-8">
-      <Link href="/" className="btn btn-ghost">← Kembali</Link>
-      <h1 className="text-3xl font-semibold mt-4">{svc.title}</h1>
+    <div className="max-w-3xl mx-auto p-6">
+      <h1 className="text-3xl font-semibold mb-2">{s.title}</h1>
+      {s.image_url && (
+        <img
+          src={s.image_url}
+          alt={s.title}
+          className="rounded-2xl shadow mb-4"
+          loading="lazy"
+        />
+      )}
+      {s.summary && <p className="text-slate-700 mb-4">{s.summary}</p>}
 
-      <div className="grid lg:grid-cols-3 gap-6 mt-6">
-        {/* Konten dengan tabs */}
-        <div className="lg:col-span-2 card">
-          <div className="flex gap-2 p-2 border-b overflow-x-auto">
-            {tabs.map((t) => (
-              <Link
-                key={t}
-                href={`?tab=${t}`}
-                className={`px-4 py-2 rounded-lg ${
-                  active === t ? "bg-emerald-600 text-white" : "hover:bg-gray-100"
-                }`}
-              >
-                {t}
-              </Link>
-            ))}
-          </div>
-
-          <div className="p-5 space-y-4">
-            {active === "Informasi" && (
-              <>
-                {(svc.description || svc.summary) && (
-                  <p className="text-slate-700 leading-relaxed">
-                    {svc.description || svc.summary}
-                  </p>
-                )}
-                {detail.inclusions?.length ? (
-                  <>
-                    <h3 className="text-lg font-semibold">Yang Anda Dapatkan</h3>
-                    <ul className="list-disc pl-6 space-y-1">
-                      {detail.inclusions.map((x, i) => <li key={i}>{x}</li>)}
-                    </ul>
-                  </>
-                ) : null}
-              </>
-            )}
-
-            {active === "Persyaratan" && (
-              detail.requirements?.length ? (
-                <ul className="list-disc pl-6 space-y-1">
-                  {detail.requirements.map((x, i) => <li key={i}>{x}</li>)}
-                </ul>
-              ) : (
-                <div className="text-slate-500">
-                  Persyaratan akan diinformasikan saat konsultasi.
-                </div>
-              )
-            )}
-
-            {active === "Proses" && (
-              detail.process?.length ? (
-                <ol className="list-decimal pl-6 space-y-1">
-                  {detail.process.map((x, i) => <li key={i}>{x}</li>)}
-                </ol>
-              ) : (
-                <div className="text-slate-500">
-                  Proses pengajuan mengikuti regulasi terbaru.
-                </div>
-              )
-            )}
-
-            {active === "Biaya" && (
-              <div className="overflow-x-auto">
-                <table className="w-full text-sm">
-                  <tbody>
-                    <tr className="border-b">
-                      <td className="py-2">Harga Layanan</td>
-                      <td className="py-2 text-right">
-                        {typeof svc.price === "number"
-                          ? `Rp${svc.price.toLocaleString("id-ID")}`
-                          : "Minta Penawaran"}
-                      </td>
-                    </tr>
-                    <tr className="border-b">
-                      <td className="py-2">e-Materai</td>
-                      <td className="py-2 text-right">
-                        Rp{E_STAMP_PRICE.toLocaleString("id-ID")}/lembar (opsional)
-                      </td>
-                    </tr>
-                    <tr className="border-b">
-                      <td className="py-2">e-Sign</td>
-                      <td className="py-2 text-right">
-                        Rp{E_SIGN_PRICE.toLocaleString("id-ID")}/tanda tangan (opsional)
-                      </td>
-                    </tr>
-                    <tr>
-                      <td className="py-2 text-slate-500">Biaya Pemerintah</td>
-                      <td className="py-2 text-right text-slate-500">
-                        Sesuai kebutuhan & regulasi
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
-                <p className="mt-2 text-xs text-slate-500">
-                  e-Materai & e-Sign ditambahkan saat checkout sesuai kebutuhan dokumen.
-                </p>
-              </div>
-            )}
-          </div>
+      {typeof s.price === 'number' && (
+        <div className="text-xl font-bold mb-6">
+          {new Intl.NumberFormat('id-ID', { style: 'currency', currency: s.currency || 'IDR' }).format(s.price)}
         </div>
+      )}
 
-        {/* Sidebar Ringkasan */}
-        <aside className="card p-5 h-fit space-y-4">
-          <div className="text-sm text-slate-500">Ringkasan</div>
-
-          {typeof svc.price === "number" && (
-            <div className="text-2xl font-bold">
-              {`Rp${svc.price.toLocaleString("id-ID")}`}
-            </div>
-          )}
-
-          <div className="flex flex-col gap-2" id="ajukan">
-            <Link
-              prefetch
-              href={`/checkout/${svc.slug}`}
-              className={`w-full btn ${
-                typeof svc.price === "number" ? "btn-primary" : "btn-outline"
-              }`}
-            >
-              {typeof svc.price === "number" ? "Ajukan Proses" : "Minta Penawaran"}
-            </Link>
-            <a
-              href={`https://wa.me/${wa}?text=${waText}`}
-              target="_blank"
-              className="btn w-full"
-            >
-              Tanya via WhatsApp
-            </a>
-          </div>
-        </aside>
+      <div className="flex gap-3 mb-10">
+        <a
+          href={`https://wa.me/6281142677700?text=${encodeURIComponent(
+            `Halo UrusLegal, saya ingin ajukan proses untuk ${s.title}`
+          )}`}
+          className="px-4 py-2 rounded-2xl bg-emerald-600 text-white shadow"
+        >
+          Ajukan Proses
+        </a>
+        <a
+          href={`https://wa.me/6281142677700?text=${encodeURIComponent(
+            `Halo UrusLegal, saya ingin tanya tentang ${s.title}`
+          )}`}
+          className="px-4 py-2 rounded-2xl border border-emerald-500 text-emerald-600"
+        >
+          Tanya via WhatsApp
+        </a>
       </div>
+
+      {/* Placeholder untuk tab Informasi / Persyaratan / Timeline */}
+      {s.description && (
+        <article
+          className="prose max-w-none"
+          dangerouslySetInnerHTML={{ __html: s.description }}
+        />
+      )}
+
+      {/* JSON-LD for SEO */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
     </div>
   );
 }
