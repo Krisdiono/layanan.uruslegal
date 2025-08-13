@@ -1,0 +1,22 @@
+? How would you like to configure ESLint? https://nextjs.org/docs/basic-features/eslint
+[?25l❯  Strict (recommended)
+   Base
+   Cancel[2K[1A[2K[1A[2K[G[?25h
+Installing devDependencies (npm):
+- eslint
+- eslint-config-next
+
+
+added 237 packages, and audited 432 packages in 26s
+
+163 packages are looking for funding
+  run `npm fund` for details
+
+1 critical severity vulnerability
+
+To address all issues, run:
+  npm audit fix --force
+
+Run `npm audit` for details.
+
+ ▲ ESLint has successfully been configured. Run next lint again to view warnings and errors.

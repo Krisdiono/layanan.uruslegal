@@ -1,12 +1,12 @@
 // /src/app/page.tsx
 import Link from "next/link";
-import { listLayanan } from "@/lib/solusi";
+import { getLayananList, type CatalogItem } from "@/lib/solusi";
 import { toIDR } from "@/lib/format";
 
 export const revalidate = 300;
 
 export default async function Home() {
-  const items = await listLayanan();
+  const items = await getLayananList();
 
   return (
     <main className="max-w-6xl mx-auto p-6">
@@ -18,7 +18,7 @@ export default async function Home() {
       </header>
 
       <section className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-        {items.map((s) => {
+        {items.map((s: CatalogItem) => {
           const harga = toIDR(s.price ?? null);
           return (
             <article key={s.slug} className="card">

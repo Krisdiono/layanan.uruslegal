@@ -1,19 +1,30 @@
-import catalog from "@/data/catalog.json";
+import "server-only";
+import { promises as fs } from "fs";
+import path from "path";
 
-export type CatalogItem = {
-  slug: string;
-  category?: string;
-  title: string;
-  summary?: string;
-  description?: string;
-  detail?: { inclusions?: string[]; process?: string[] };
-  timeline?: string;
+export type ServiceItem = {
+  title?: string; slug?: string; summary?: string; description?: string; price?: number;
+  detail?: { inclusions?: string[]; process?: string[]; persyaratan?: string[]; requirements?: string[]; };
+  persyaratan?: string[]; requirements?: string[]; [key: string]: any;
 };
 
-export function listCatalog(): CatalogItem[] {
-  return catalog as CatalogItem[];
+async function readJson(candidatePaths: string[]) {
+  for (const p of candidatePaths) {
+    try { return JSON.parse(await fs.readFile(p, "utf8")); } catch { /* next */ }
+  }
+  return null;
 }
 
-export function getCatalog(slug: string): CatalogItem | undefined {
-  return (catalog as CatalogItem[]).find((x) => x.slug === slug);
+export async function loadCatalog(): Promise<ServiceItem[]> {
+  const root = process.cwd();
+  const candidates = [
+    path.join(root, "data", "catalog.json"),
+    path.join(root, "src", "data", "catalog.json"),
+    path.join(root, "data", "services.json"),
+    path.join(root, "src", "data", "services.json"),
+  ];
+  const j = await readJson(candidates);
+  if (!j) return [];
+  const arr = Array.isArray(j) ? j : (j.services ?? []);
+  return Array.isArray(arr) ? arr : [];
 }

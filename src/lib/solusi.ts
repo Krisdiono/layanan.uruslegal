@@ -1,24 +1,17 @@
-// compat wrapper untuk kode lama yang masih import "@/lib/solusi"
-import { listCatalog, getCatalog, type CatalogItem } from "@/lib/catalog";
-import { getPrice, computeFinal } from "@/lib/prices";
+import "server-only";
+import { loadCatalog, type ServiceItem } from "./catalog";
 
-export type Layanan = CatalogItem & { price?: number | null };
+export type CatalogItem = ServiceItem;
 
-export async function listLayanan(): Promise<Layanan[]> {
-  const rows = listCatalog();
-  return rows.map((it) => {
-    const pr = getPrice(it.slug);
-    const calc = computeFinal(pr);
-    return { ...it, price: calc.rfq ? null : calc.final };
-  });
+export async function getLayananList(): Promise<CatalogItem[]> {
+  return await loadCatalog();
+}
+export async function getLayananBySlug(slug: string): Promise<CatalogItem | undefined> {
+  const rows = await loadCatalog();
+  return rows.find((it) => (it as any)?.slug === slug);
 }
 
-export async function getLayananBySlug(
-  slug: string
-): Promise<Layanan | undefined> {
-  const it = getCatalog(slug);
-  if (!it) return undefined;
-  const pr = getPrice(it.slug);
-  const calc = computeFinal(pr);
-  return { ...it, price: calc.rfq ? null : calc.final };
-}
+/** Back-compat (kalau ada file lama pakai nama ini) */
+export async function listCatalog(): Promise<CatalogItem[]> { return getLayananList(); }
+export async function getCatalog(): Promise<CatalogItem[]> { return getLayananList(); }
+export async function getServiceBySlug(slug: string) { return getLayananBySlug(slug); }

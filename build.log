@@ -1,0 +1,47 @@
+
+> layanan.uruslegal@1.0.0 build
+> next build
+
+   ▲ Next.js 14.0.4
+   - Environments: .env.local
+
+   Creating an optimized production build ...
+ ✓ Compiled successfully
+   Skipping validation of types
+   Skipping linting
+   Collecting page data ...
+   Generating static pages (0/15) ...
+   Generating static pages (3/15) 
+   Generating static pages (7/15) 
+   Generating static pages (11/15) 
+ ⚠ Entire page /payment/pending deopted into client-side rendering. https://nextjs.org/docs/messages/deopted-into-client-rendering /payment/pending
+ ✓ Generating static pages (15/15) 
+   Finalizing page optimization ...
+   Collecting build traces ...
+
+Route (app)                              Size     First Load JS
+┌ ○ /                                    184 B          88.8 kB
+├ ○ /_not-found                          869 B          82.7 kB
+├ ○ /api/health                          0 B                0 B
+├ λ /api/midtrans/create-transaction     0 B                0 B
+├ ○ /api/orders                          0 B                0 B
+├ λ /api/orders/[id]                     0 B                0 B
+├ λ /api/orders/create                   0 B                0 B
+├ λ /api/partners/create                 0 B                0 B
+├ λ /api/webhooks/midtrans               0 B                0 B
+├ λ /checkout/[slug]                     11.9 kB        93.8 kB
+├ λ /layanan/[slug]                      184 B          88.8 kB
+├ ○ /mitra                               1.18 kB          83 kB
+├ λ /payment/error                       184 B          88.8 kB
+├ ○ /payment/pending                     1.33 kB          90 kB
+└ λ /payment/success                     184 B          88.8 kB
++ First Load JS shared by all            81.9 kB
+  ├ chunks/938-f464a3b2301c5ba9.js       26.7 kB
+  ├ chunks/fd9d1056-516b58327fb05db5.js  53.3 kB
+  ├ chunks/main-app-a4e78cee0bdc4df2.js  221 B
+  └ chunks/webpack-5df85fd333806a88.js   1.68 kB
+
+
+○  (Static)   prerendered as static content
+λ  (Dynamic)  server-rendered on demand using Node.js
+

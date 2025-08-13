@@ -2,7 +2,7 @@
 "use client";
 import { useState } from "react";
 import Script from "next/script";
-import { getLayananBySlugSync } from "@/lib/services"; // client-safe
+import { getLayananBySlugSync } from "@/lib/solusi.browser"; // client-safe
 import { E_STAMP_PRICE, E_SIGN_PRICE } from "@/lib/costs";
 
 export default function Checkout({ params }) {
