@@ -1,19 +1,23 @@
-import catalog from "@/data/catalog.json";
+import data from "@/data/catalog.json";
 
-export type CatalogItem = {
+export type Service = {
   slug: string;
-  category?: string;
   title: string;
   summary?: string;
-  description?: string;
-  detail?: { inclusions?: string[]; process?: string[] };
-  timeline?: string;
+  category?: string;
+  price?: number;
+  sale_price?: number;
+  base_price?: number;
+  currency?: string;
+  image_url?: string;
 };
 
-export function listCatalog(): CatalogItem[] {
-  return catalog as CatalogItem[];
+export function listServices(): Service[] {
+  return data as Service[];
 }
-
-export function getCatalog(slug: string): CatalogItem | undefined {
-  return (catalog as CatalogItem[]).find((x) => x.slug === slug);
+export function getService(slug: string): Service | undefined {
+  return (data as Service[]).find((s) => s.slug === slug);
+}
+export function getPrice(s: Service): number {
+  return s.price ?? s.sale_price ?? s.base_price ?? 0;
 }

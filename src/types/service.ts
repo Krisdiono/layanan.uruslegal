@@ -8,7 +8,7 @@ export type Layanan = {
   title: string;
   summary?: string;
   description?: string;
-  detail?: Detail;          // optional
+  detail?: Detail; // optional
   timeline?: string;
   category?: string;
   price?: number | null;

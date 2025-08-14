@@ -1,29 +1,22 @@
-// src/app/layout.tsx
 import "./globals.css";
-import type { Metadata, Viewport } from "next";
+import Script from "next/script";
 
-export const metadata: Metadata = {
-  title: "UrusLegal",
-  description: "Layanan legal yang cepat & mudah",
-};
+export const metadata = { title: "UrusLegal" };
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
     <html lang="id">
-      <body className="min-h-screen bg-slate-50 text-slate-900">
-        <header className="border-b">
-          <div className="max-w-6xl mx-auto p-4 flex items-center gap-6">
-            <a href="/" className="font-semibold">UrusLegal</a>
-            <nav className="text-sm ml-auto flex gap-4">
-              <a href="/">Layanan</a>
-              <a href="/tanya">Tanya</a>
-            </nav>
-          </div>
-        </header>
+      <body>
         {children}
-        <footer className="border-t mt-10">
-          <div className="max-w-6xl mx-auto p-4 text-sm text-slate-500">© {new Date().getFullYear()} UrusLegal</div>
-        </footer>
+        <Script
+          src="https://app.sandbox.midtrans.com/snap/snap.js"
+          data-client-key={process.env.NEXT_PUBLIC_MIDTRANS_CLIENT_KEY!}
+          strategy="afterInteractive"
+        />
       </body>
     </html>
   );

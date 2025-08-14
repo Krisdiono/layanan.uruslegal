@@ -14,7 +14,7 @@ export async function listLayanan(): Promise<Layanan[]> {
 }
 
 export async function getLayananBySlug(
-  slug: string
+  slug: string,
 ): Promise<Layanan | undefined> {
   const it = getCatalog(slug);
   if (!it) return undefined;

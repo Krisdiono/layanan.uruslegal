@@ -1,24 +1,25 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
-/* Brand */
-:root{
-  --brand: #1ab69d;
-  --brand-2: #31b978;
+:root {
+  color-scheme: light;
 }
-
-/* Base */
-html, body { @apply bg-gray-50 text-slate-800 antialiased; }
-
-/* Links */
-a { @apply text-emerald-700 hover:text-emerald-800; }
-
-/* Buttons */
-.btn { @apply inline-flex items-center justify-center gap-2 px-4 py-2 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-sm font-medium transition; }
-.btn-primary { @apply bg-emerald-600 text-white border-emerald-600 hover:bg-emerald-700; }
-.btn-ghost { @apply bg-transparent border-transparent hover:bg-slate-100; }
-
-/* Cards & tables */
-.card { @apply rounded-2xl border bg-white shadow-sm; }
-.table-zebra tr:nth-child(even) td { @apply bg-slate-50; }
+body {
+  font-family:
+    system-ui,
+    -apple-system,
+    Segoe UI,
+    Roboto,
+    Helvetica,
+    Arial,
+    sans-serif;
+}
+a {
+  color: #047857;
+}
+button {
+  cursor: pointer;
+}
+@media (prefers-color-scheme: dark) {
+  body {
+    background: #0b0f10;
+    color: #e5e7eb;
+  }
+}

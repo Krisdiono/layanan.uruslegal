@@ -10,11 +10,14 @@ export type PriceRow = {
 };
 
 export function getPrice(slug: string): PriceRow | undefined {
-  return (rows as PriceRow[]).find((x) => x.slug === slug && x.active !== false);
+  return (rows as PriceRow[]).find(
+    (x) => x.slug === slug && x.active !== false,
+  );
 }
 
 export function computeFinal(row?: PriceRow) {
-  if (!row || row.rfq) return { base: 0, final: 0, discount: 0, rfq: true as const };
+  if (!row || row.rfq)
+    return { base: 0, final: 0, discount: 0, rfq: true as const };
   const base = row.base_price || 0;
   const byNom = Math.max(0, base - (row.discount_amount || 0));
   const byPct =

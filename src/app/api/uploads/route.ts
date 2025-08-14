@@ -9,7 +9,7 @@ function sanitize(name: string) {
 export async function POST(req: NextRequest) {
   try {
     const { serviceSlug, customer, files } = await req.json();
-    const id = `${Date.now().toString(36)}${Math.random().toString(36).slice(2,6)}`;
+    const id = `${Date.now().toString(36)}${Math.random().toString(36).slice(2, 6)}`;
     const root = process.env.UPLOAD_DIR || ".uploads";
     const dir = path.join(process.cwd(), root, `${serviceSlug}-${id}`);
     await mkdir(dir, { recursive: true });
@@ -29,11 +29,22 @@ export async function POST(req: NextRequest) {
       }
     }
 
-    const meta = { serviceSlug, customer, uploaded, createdAt: new Date().toISOString() };
-    await writeFile(path.join(dir, "meta.json"), Buffer.from(JSON.stringify(meta, null, 2)));
+    const meta = {
+      serviceSlug,
+      customer,
+      uploaded,
+      createdAt: new Date().toISOString(),
+    };
+    await writeFile(
+      path.join(dir, "meta.json"),
+      Buffer.from(JSON.stringify(meta, null, 2)),
+    );
 
     return NextResponse.json({ ok: true, id, files: uploaded });
   } catch (e: any) {
-    return NextResponse.json({ ok: false, error: e?.message || "upload-failed" }, { status: 400 });
+    return NextResponse.json(
+      { ok: false, error: e?.message || "upload-failed" },
+      { status: 400 },
+    );
   }
 }

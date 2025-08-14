@@ -1,23 +1,31 @@
-import { getService } from '@/lib/perfex';
-import InlineSnap from './InlineSnap';
+import { getService, getPrice } from "@/lib/catalog";
+import { notFound } from "next/navigation";
+import InlineSnap from "./InlineSnap";
+
+export const dynamic = "force-static";
 
 export default async function Page({ params }: { params: { slug: string } }) {
-  const s = await getService(params.slug);
+  const svc = getService(params.slug);
+  if (!svc) notFound();
+  const price = getPrice(svc);
   return (
-    <div className="max-w-3xl mx-auto p-6">
-      <h1 className="text-2xl font-semibold mb-4">Checkout: {s.title}</h1>
-      <InlineSnap service={{ slug: s.slug, title: s.title }} amount={s.price || 0} />
+    <main className="max-w-3xl mx-auto p-6">
+      <h1 className="text-2xl font-semibold mb-4">Checkout: {svc.title}</h1>
+      <InlineSnap
+        service={{ slug: svc.slug, title: svc.title }}
+        amount={price}
+      />
       <div className="mt-6 p-4 rounded-xl border">
-        <div className="flex items-center justify-between">
+        <div className="flex justify-between">
           <span>Harga</span>
           <span className="font-semibold">
-            {typeof s.price === 'number'
-              ? new Intl.NumberFormat('id-ID', { style: 'currency', currency: s.currency || 'IDR' }).format(s.price)
-              : '-'}
+            {new Intl.NumberFormat("id-ID", {
+              style: "currency",
+              currency: svc.currency || "IDR",
+            }).format(price)}
           </span>
         </div>
       </div>
-      <p className="mt-4 text-slate-500 text-sm">Jika popup tidak muncul, klik tombol di atas lagi atau matikan popup blocker.</p>
-    </div>
+    </main>
   );
 }

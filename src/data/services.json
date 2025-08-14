@@ -1,5 +1,20 @@
 [
-  { "title": "Pendirian PT", "summary": "Paket lengkap pendirian Perseroan Terbatas.", "slug": "pendirian-pt", "price": 3500000 },
-  { "title": "Pendirian CV", "summary": "Layanan pendirian CV cepat & ringkas.", "slug": "pendirian-cv", "price": 2500000 },
-  { "title": "Pendaftaran Merek", "summary": "Urus merek dagang sampai submit DJKI.", "slug": "pendaftaran-merek", "price": 1800000 }
+  {
+    "title": "Pendirian PT",
+    "summary": "Paket lengkap pendirian Perseroan Terbatas.",
+    "slug": "pendirian-pt",
+    "price": 3500000
+  },
+  {
+    "title": "Pendirian CV",
+    "summary": "Layanan pendirian CV cepat & ringkas.",
+    "slug": "pendirian-cv",
+    "price": 2500000
+  },
+  {
+    "title": "Pendaftaran Merek",
+    "summary": "Urus merek dagang sampai submit DJKI.",
+    "slug": "pendaftaran-merek",
+    "price": 1800000
+  }
 ]

@@ -1,138 +1,28 @@
-// @ts-nocheck
 import Link from "next/link";
-import { getLayananBySlug } from "@/lib/solusi";
+import { getService, getPrice } from "@/lib/catalog";
+import { notFound } from "next/navigation";
 
-export const revalidate = 300;
+export const dynamic = "force-static";
 
-export default async function LayananDetail({
-  params,
-  searchParams,
-}: {
-  params: { slug: string };
-  searchParams?: { tab?: string };
-}) {
-  const svc = await getLayananBySlug(params.slug);
-  if (!svc) {
-    return (
-      <div className="container mx-auto px-4 py-10">
-        <Link href="/" className="btn btn-ghost">← Kembali</Link>
-        <h1 className="text-2xl font-semibold mt-6">Layanan tidak ditemukan</h1>
-      </div>
-    );
-  }
-
-  const wa = process.env.NEXT_PUBLIC_WA_NUMBER || "6281142677700";
-  const waText = encodeURIComponent(
-    `Halo UrusLegal, saya ingin konsultasi: ${svc.title} (${svc.slug})`
-  );
-
-  const tabs = ["Informasi", "Persyaratan", "Proses", "Biaya"] as const;
-  const active = (searchParams?.tab && tabs.includes(searchParams.tab as any))
-    ? (searchParams!.tab as typeof tabs[number])
-    : "Informasi";
-
+export default async function Page({ params }: { params: { slug: string } }) {
+  const svc = getService(params.slug);
+  if (!svc) notFound();
+  const price = getPrice(svc);
   return (
-    <div className="container mx-auto px-4 py-8">
-      <Link href="/" className="btn btn-ghost">← Kembali</Link>
-      <h1 className="text-3xl font-semibold mt-4">{svc.title}</h1>
-
-      <div className="grid lg:grid-cols-3 gap-6 mt-6">
-        {/* Tabs */}
-        <div className="lg:col-span-2 card">
-          <div className="flex gap-2 p-2 border-b overflow-x-auto">
-            {tabs.map((t) => (
-              <Link
-                key={t}
-                href={`?tab=${t}`}
-                className={`px-4 py-2 rounded-lg ${active === t ? "bg-emerald-600 text-white" : "hover:bg-gray-100"}`}
-              >
-                {t}
-              </Link>
-            ))}
-          </div>
-
-          <div className="p-5 space-y-4">
-            {active === "Informasi" && (
-              <>
-                {(svc.description || svc.summary) && (
-                  <p className="text-slate-700 leading-relaxed">
-                    {svc.description || svc.summary}
-                  </p>
-                )}
-                {svc.detail?.inclusions?.length ? (
-                  <>
-                    <h3 className="text-lg font-semibold">Yang Anda Dapatkan</h3>
-                    <ul className="list-disc pl-6 space-y-1">
-                      {svc.detail.inclusions.map((x: string, i: number) => <li key={i}>{x}</li>)}
-                    </ul>
-                  </>
-                ) : null}
-              </>
-            )}
-
-            {active === "Persyaratan" && (
-              svc.detail?.requirements?.length ? (
-                <ul className="list-disc pl-6 space-y-1">
-                  {svc.detail.requirements.map((x: string, i: number) => <li key={i}>{x}</li>)}
-                </ul>
-              ) : <div className="text-slate-500">Persyaratan akan diinformasikan saat konsultasi.</div>
-            )}
-
-            {active === "Proses" && (
-              svc.detail?.process?.length ? (
-                <ol className="list-decimal pl-6 space-y-1">
-                  {svc.detail.process.map((x: string, i: number) => <li key={i}>{x}</li>)}
-                </ol>
-              ) : <div className="text-slate-500">Proses pengajuan mengikuti regulasi terbaru.</div>
-            )}
-
-            {active === "Biaya" && (
-              <div className="overflow-x-auto">
-                <table className="w-full text-sm table-zebra">
-                  <tbody>
-                    <tr className="border-b">
-                      <td className="py-2">Harga Layanan</td>
-                      <td className="py-2 text-right">
-                        {typeof svc.price === "number" ? `Rp${svc.price.toLocaleString("id-ID")}` : "Minta Penawaran"}
-                      </td>
-                    </tr>
-                    <tr>
-                      <td className="py-2 text-slate-500">Biaya lain</td>
-                      <td className="py-2 text-right text-slate-500">Sesuai kebutuhan & regulasi</td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-            )}
-          </div>
-        </div>
-
-        {/* Sidebar Ringkasan */}
-        <aside className="card p-5 h-fit space-y-4">
-          <div className="text-sm text-slate-500">Ringkasan</div>
-          <div className="text-2xl font-bold">
-            {typeof svc.price === "number" ? `Rp${svc.price.toLocaleString("id-ID")}` : "Minta Penawaran"}
-          </div>
-
-          <div className="flex flex-col gap-2">
-            <Link
-              prefetch
-              href={`/checkout/${svc.slug}`}
-              className={`w-full btn ${typeof svc.price === "number" ? "btn-primary" : ""}`}
-            >
-              {typeof svc.price === "number" ? "Ajukan Proses" : "Minta Penawaran"}
-            </Link>
-
-            <a
-              href={`https://wa.me/${wa}?text=${waText}`}
-              target="_blank"
-              className="btn w-full"
-            >
-              Tanya via WhatsApp
-            </a>
-          </div>
-        </aside>
+    <main className="max-w-3xl mx-auto p-6">
+      <h1 className="text-3xl font-semibold mb-2">{svc.title}</h1>
+      <div className="text-xl font-bold mb-6">
+        {new Intl.NumberFormat("id-ID", {
+          style: "currency",
+          currency: svc.currency || "IDR",
+        }).format(price)}
       </div>
-    </div>
+      <Link
+        className="px-4 py-2 rounded-2xl bg-emerald-600 text-white"
+        href={`/checkout/${svc.slug}`}
+      >
+        Ajukan Proses
+      </Link>
+    </main>
   );
 }

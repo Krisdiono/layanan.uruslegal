@@ -1,0 +1,31 @@
+[
+  {
+    "slug": "pendirian-pt-perorangan-umkm",
+    "category": "pendirian",
+    "title": "Pendirian PT Perorangan (UMKM)",
+    "summary": "Paket PT Perorangan untuk UMKM.",
+    "price": 3605000,
+    "currency": "IDR"
+  },
+  {
+    "slug": "pendirian-pt-biasa-non-perorangan",
+    "category": "pendirian",
+    "title": "Pendirian PT Biasa (Non Perorangan)",
+    "price": 5500000,
+    "currency": "IDR"
+  },
+  {
+    "slug": "pendirian-cv",
+    "category": "pendirian",
+    "title": "Pendirian CV",
+    "price": 4500000,
+    "currency": "IDR"
+  },
+  {
+    "slug": "pendirian-yayasan",
+    "category": "pendirian",
+    "title": "Pendirian Yayasan",
+    "price": 6000000,
+    "currency": "IDR"
+  }
+]
