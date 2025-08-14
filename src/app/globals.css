@@ -23,3 +23,11 @@ button {
     color: #e5e7eb;
   }
 }
+
+/* --- lightweight utilities for cards/buttons/layout --- */
+.container{max-width:72rem;margin-inline:auto;padding:1.5rem}
+.card{background:#fff;border-radius:1rem;border:1px solid #e5e7eb;padding:1rem}
+.btn{padding:.5rem 1rem;border-radius:1rem}
+.btn-primary{background:#059669;color:#fff}
+.btn-primary:disabled{opacity:.6}
+.price{color:#065f46;font-weight:700}

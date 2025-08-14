@@ -1,48 +1,54 @@
 "use client";
 import { useState } from "react";
 
-export default function InlineSnap({
-  service,
-  amount,
-}: {
-  service: { slug: string; title: string };
-  amount: number;
-}) {
+type Service = { slug: string; title: string };
+export default function InlineSnap({ service, amount }: { service: Service; amount: number }) {
   const [loading, setLoading] = useState(false);
-  async function pay() {
-    if (!amount || Number.isNaN(amount)) return alert("Nominal tidak valid");
-    setLoading(true);
+  const disabled = !amount || amount <= 0 || loading;
+
+  async function handlePay() {
     try {
-      const r = await fetch("/api/checkout", {
+      setLoading(true);
+      const res = await fetch("/api/checkout", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          service,
-          amounts: { subtotal: amount, total: amount },
-        }),
+        body: JSON.stringify({ service, amounts: { subtotal: amount, total: amount } }),
       });
-      const j = await r.json();
-      if (!r.ok)
-        return alert(j?.detail || j?.error || "Gagal membuat transaksi");
-      const token = j?.midtrans?.token;
-      const redirect = j?.midtrans?.redirect_url;
+      const data = await res.json();
+      if (!res.ok) throw new Error(data?.error || "Checkout error");
+
+      const token = data?.midtrans?.token || data?.token;
       // @ts-ignore
-      if (window.snap?.pay && token) window.snap.pay(token);
-      else if (redirect) window.open(redirect, "_blank", "noopener,noreferrer");
-      else alert("Token tidak tersedia");
+      if (!token || !window?.snap) throw new Error("Snap belum siap");
+
+      // @ts-ignore
+      window.snap.pay(token, {
+        onSuccess: (r: any) => {
+          const oid = encodeURIComponent(data?.order_id || r?.order_id || "");
+          window.location.href = ;
+        },
+        onPending: (r: any) => {
+          const oid = encodeURIComponent(data?.order_id || r?.order_id || "");
+          window.location.href = ;
+        },
+        onError: (r: any) => {
+          console.error("Midtrans error:", r);
+          alert("Pembayaran gagal. Coba lagi ya.");
+        },
+        onClose: () => {
+          /* user closed without paying — you can toast here if needed */
+        },
+      });
     } catch (e: any) {
-      alert(e?.message || "Kesalahan jaringan");
+      alert(e?.message || "Gagal memulai pembayaran");
     } finally {
       setLoading(false);
     }
   }
+
   return (
-    <button
-      onClick={pay}
-      disabled={loading}
-      className="px-4 py-2 rounded-2xl bg-emerald-600 text-white disabled:opacity-50"
-    >
-      {loading ? "Memproses..." : "Ajukan Proses"}
+    <button className="btn btn-primary" onClick={handlePay} disabled={disabled}>
+      {loading ? "Memproses…" : "Ajukan Proses"}
     </button>
   );
 }
