@@ -5,6 +5,9 @@ type Svc = { slug:string; title:string; price?:number; sale_price?:number; base_
 
 const catalog = rawCatalog as Svc[];
 
+const price: number =
+  (s as any).price ?? (s as any).sale_price ?? (s as any).base_price ?? 0;
+
 function findService(slug:string){
   const s = catalog.find(x => x.slug === slug);
   if (!s) throw new Error(`Service not found: ${slug}`);
