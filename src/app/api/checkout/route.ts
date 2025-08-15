@@ -1,60 +1,65 @@
 import { NextResponse } from "next/server";
 
+function makeOrderId() {
+  const ts = new Date().toISOString().replace(/[-:.TZ]/g, "").slice(0,14);
+  const rnd = Math.random().toString(36).slice(2,6).toUpperCase();
+  return `UL-${ts}-${rnd}`;
+}
+
 export async function POST(req: Request) {
-  try {
-    const body = await req.json();
-    const total: number = body?.amounts?.total;
-    const service = body?.service;
-    if (!total || Number.isNaN(total) || total <= 0)
-      return NextResponse.json({ error: "Invalid total" }, { status: 400 });
-
-    const isProd =
-      String(process.env.MIDTRANS_IS_PRODUCTION).toLowerCase() === "true";
-    const base = isProd
-      ? "https://api.midtrans.com"
-      : "https://app.sandbox.midtrans.com";
-    const serverKey = process.env.MIDTRANS_SERVER_KEY!;
-    const auth = "Basic " + Buffer.from(serverKey + ":").toString("base64");
-
-    const payload = {
-      transaction_details: {
-        order_id: `UL-${Date.now()}`,
-        gross_amount: Math.round(total),
-      },
-      item_details: [
-        {
-          id: service?.slug,
-          name: service?.title,
-          price: Math.round(total),
-          quantity: 1,
-        },
-      ],
-      callbacks: { finish: `${process.env.APP_URL}/payment/finish` },
-      credit_card: { secure: true },
-    };
-
-    const res = await fetch(`${base}/snap/v1/transactions`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json", Authorization: auth },
-      body: JSON.stringify(payload),
-      cache: "no-store",
-    });
-
-    const json = await res.json();
-    if (!res.ok) {
-      return NextResponse.json(
-        { error: "Midtrans error", detail: JSON.stringify(json) },
-        { status: 502 },
-      );
-    }
-    return NextResponse.json({
-      order_id: payload.transaction_details.order_id,
-      midtrans: json,
-    });
-  } catch (e: any) {
-    return NextResponse.json(
-      { error: "Server error", detail: e?.message },
-      { status: 500 },
-    );
+  const { service, amounts } = await req.json().catch(() => ({}));
+  const total = Number(amounts?.total) || 0;
+  if (!total || total < 1000) {
+    return NextResponse.json({ error: "Invalid total amount" }, { status: 400 });
   }
+
+  const serverKey = process.env.MIDTRANS_SERVER_KEY || "";
+  const isProd = String(process.env.MIDTRANS_IS_PRODUCTION) === "true";
+  const baseUrl = isProd
+    ? "https://app.midtrans.com/snap/v1/transactions"
+    : "https://app.sandbox.midtrans.com/snap/v1/transactions";
+  if (!serverKey) {
+    return NextResponse.json({ error: "Server key not configured" }, { status: 500 });
+  }
+
+  const order_id = makeOrderId();
+  const APP_URL = (process.env.APP_URL ?? "http://localhost:3000").replace(/\/+$/,"");
+
+  const payload = {
+    transaction_details: {
+      order_id,
+      gross_amount: total,
+    },
+    item_details: [
+      {
+        id: service?.slug ?? "service",
+        price: total,
+        quantity: 1,
+        name: service?.title ?? "Layanan",
+      },
+    ],
+    credit_card: { secure: true },
+    // Redirects
+    callbacks: { finish: `${APP_URL}/payment/success?order_id=${order_id}` },
+    finish_redirect_url: `${APP_URL}/payment/success?order_id=${order_id}`,
+    unfinish_redirect_url: `${APP_URL}/payment/pending?order_id=${order_id}`,
+    error_redirect_url: `${APP_URL}/payment/error?order_id=${order_id}`,
+  };
+
+  const res = await fetch(baseUrl, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Accept: "application/json",
+      Authorization: "Basic " + Buffer.from(serverKey + ":").toString("base64"),
+    },
+    body: JSON.stringify(payload),
+  });
+
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok) {
+    return NextResponse.json({ error: "Midtrans error", detail: JSON.stringify(data) }, { status: res.status });
+  }
+
+  return NextResponse.json({ order_id, midtrans: data });
 }
