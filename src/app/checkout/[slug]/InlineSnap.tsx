@@ -1,54 +1,43 @@
 "use client";
 import { useState } from "react";
 
-type Service = { slug: string; title: string };
-export default function InlineSnap({ service, amount }: { service: Service; amount: number }) {
+export default function InlineSnap({ service, amount }:{ service:{slug:string; title:string}; amount:number }){
   const [loading, setLoading] = useState(false);
-  const disabled = !amount || amount <= 0 || loading;
 
-  async function handlePay() {
-    try {
+  async function pay(){
+    try{
       setLoading(true);
+      const subtotal = Math.max(0, Math.round(Number(amount)||0));
+      if (!subtotal) { alert("Harga tidak valid"); return; }
+
       const res = await fetch("/api/checkout", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ service, amounts: { subtotal: amount, total: amount } }),
+        headers: { "Content-Type":"application/json" },
+        body: JSON.stringify({ service, amounts: { subtotal, total: subtotal } })
       });
+
       const data = await res.json();
-      if (!res.ok) throw new Error(data?.error || "Checkout error");
-
-      const token = data?.midtrans?.token || data?.token;
-      // @ts-ignore
-      if (!token || !window?.snap) throw new Error("Snap belum siap");
+      if(!res.ok){ alert(data?.error || "Gagal membuat transaksi"); return; }
 
       // @ts-ignore
-      window.snap.pay(token, {
-        onSuccess: (r: any) => {
-          const oid = encodeURIComponent(data?.order_id || r?.order_id || "");
-          window.location.href = ;
-        },
-        onPending: (r: any) => {
-          const oid = encodeURIComponent(data?.order_id || r?.order_id || "");
-          window.location.href = ;
-        },
-        onError: (r: any) => {
-          console.error("Midtrans error:", r);
-          alert("Pembayaran gagal. Coba lagi ya.");
-        },
-        onClose: () => {
-          /* user closed without paying — you can toast here if needed */
-        },
-      });
-    } catch (e: any) {
-      alert(e?.message || "Gagal memulai pembayaran");
-    } finally {
-      setLoading(false);
-    }
+      if (typeof window !== "undefined" && window.snap){
+        // @ts-ignore
+        window.snap.pay(data.midtrans.token, {
+          onError: (e:any)=> alert("Pembayaran gagal"),
+          onClose: ()=> {},
+        });
+      }else{
+        // fallback
+        if (data?.midtrans?.redirect_url) window.location.href = data.midtrans.redirect_url;
+        else alert("Token Snap tidak ditemukan");
+      }
+    }finally{ setLoading(false); }
   }
 
   return (
-    <button className="btn btn-primary" onClick={handlePay} disabled={disabled}>
-      {loading ? "Memproses…" : "Ajukan Proses"}
+    <button onClick={pay} disabled={loading}
+      className="px-4 py-2 rounded-2xl bg-emerald-600 text-white disabled:opacity-60">
+      {loading ? "Memproses..." : "Ajukan Proses"}
     </button>
   );
 }

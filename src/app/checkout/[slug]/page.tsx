@@ -1,30 +1,20 @@
-// src/app/checkout/[slug]/page.tsx
-import Catalog from "@/lib/catalog";
-import SnapLoader from "@/components/SnapLoader";
+import { getService, getPrice } from "@/lib/catalog";
 import InlineSnap from "./InlineSnap";
 
-export default async function Page({ params }: { params: { slug: string } }) {
-  const s: any = await Catalog.getService(params.slug);
-  const price: number = s?.price ?? s?.sale_price ?? s?.base_price ?? 0;
-
+export default async function Page({ params }:{ params:{ slug:string } }){
+  const s:any = await Promise.resolve(getService(params.slug));
+  const amount = getPrice(s) ?? 0;
   return (
     <div className="max-w-3xl mx-auto p-6">
-      <SnapLoader />
-      <h1 className="text-2xl font-semibold mb-4">Checkout: {s?.title}</h1>
-      <InlineSnap service={{ slug: s.slug, title: s.title }} amount={price} />
-      <div className="mt-6 p-4 rounded-xl border">
-        <div className="flex items-center justify-between">
-          <span>Harga</span>
-          <span className="font-semibold">
-            {price
-              ? new Intl.NumberFormat("id-ID", { style: "currency", currency: "IDR" }).format(price)
-              : "-"}
-          </span>
-        </div>
+      <h1 className="text-2xl font-semibold mb-4">Checkout: {s.title}</h1>
+      <InlineSnap service={{ slug: s.slug, title: s.title }} amount={amount} />
+      <div className="mt-4 flex items-center justify-between rounded-xl border p-4">
+        <span>Harga</span>
+        <span className="font-semibold">
+          {new Intl.NumberFormat("id-ID",{style:"currency",currency:"IDR"}).format(amount)}
+        </span>
       </div>
-      <p className="mt-4 text-slate-500 text-sm">
-        Jika popup tidak muncul, klik tombol di atas lagi atau matikan popup blocker.
-      </p>
+      <p className="mt-3 text-slate-500 text-sm">Jika popup tidak muncul, klik tombol lagi atau matikan popup blocker.</p>
     </div>
   );
 }
