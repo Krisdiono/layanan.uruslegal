@@ -1,10 +1,16 @@
 // src/app/layout.tsx
-import "./globals.css";
-import type { Metadata, Viewport } from "next";
+import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: "UrusLegal",
-  description: "Layanan legal yang cepat & mudah",
+  title: 'UrusLegal',
+  description: 'Layanan legal yang simpel',
+  // HAPUS property "theme" lama kalau ada
+  // Gunakan yang valid:
+  themeColor: [
+    { media: '(prefers-color-scheme: light)', color: '#ffffff' },
+    { media: '(prefers-color-scheme: dark)',  color: '#0b1115' },
+  ],
+  colorScheme: 'light dark',
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
