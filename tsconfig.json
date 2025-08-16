@@ -36,10 +36,12 @@
     ".next/types/**/*.ts"
   ],
   "exclude": [
+    "**/*.disabled.ts",
     ".next",
     "backup",
     "coverage",
     "dist",
-    "node_modules"
+    "node_modules",
+    "src/app/api/**/route.disabled.ts"
   ]
 }
