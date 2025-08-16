@@ -1,6 +1,0 @@
-[
-  { "slug": "pendirian-pt-perorangan-umkm",        "base_price": 3500000 },
-  { "slug": "pendirian-pt-biasa-non-perorangan",   "base_price": 9500000, "discount_percent": 10 },
-  { "slug": "pendirian-cv",                        "base_price": 4500000 },
-  { "slug": "pendirian-yayasan",                   "base_price": 12000000, "discount_amount": 500000 }
-]
